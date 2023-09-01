@@ -13,10 +13,8 @@ int main()
     printf("Examen 5: ");
     scanf("%d",&exam5);
 
-    if(exam1<exam2)
-    {
-        menor=exam1;
-    }
+    menor=exam1;
+    
     if(exam2<menor)
     {
         menor=exam2;
