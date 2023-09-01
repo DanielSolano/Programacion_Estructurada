@@ -33,32 +33,32 @@ int main()
     {
         menor=exam5;
     }
-    printf("%d",menor);
+
     if(menor==exam1)
     {
-        printf("Promedio= %d",(exam2+exam3+exam4+exam5)/4);
+        printf("Promedio= %.2f",((exam2+.0)+(exam3+.0)+(exam4+.0)+(exam5+.0))/4);
     }
     else
     {
         if (menor==exam2)
         {
-        printf("Promedio= %f",(exam1+exam3+exam4+exam5)/4);
+        printf("Promedio= %.2f",((exam1+.0)+(exam3+.0)+(exam4+.0)+(exam5+.0))/4);
         }
         else
         {
             if(menor==exam3)
             {
-                printf("Promedio= %f",(exam2+exam1+exam4+exam5)/4);
+                printf("Promedio= %.2f",((exam2+.0)+(exam1+.0)+(exam4+.0)+(exam5+.0))/4);
             }
             else
             {
                 if(menor==exam4)
                 {
-                    printf("Promedio= %f",(exam2+exam3+exam1+exam5)/4);
+                    printf("Promedio= %.2f",((exam2+.0)+(exam3+.0)+(exam1+.0)+(exam5+.0))/4);
                 }
                 else
                 {
-                    printf("Promedio= %f",(exam1+exam2+exam3+exam4)/4);
+                    printf("Promedio= %.2f",((exam1+.0)+(exam2+.0)+(exam3+.0)+(exam4+.0))/4);
                 }
             }
         }
