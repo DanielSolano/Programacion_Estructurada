@@ -5,7 +5,6 @@ int main()
     int j1, j2;
     srand(time(NULL));
     j2=rand()% 3 + 1;//El jugador 2 es controlado por la maquina
-    printf("\nJ2=%d",j2);
     printf("---Chichampu---\n1.-Piedra\n2.-Papel\n3.-Tijera\n");
     printf("Seleccione una opcion: ");
     scanf("%d",&j1);
