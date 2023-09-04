@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 03/09/2023
+// Identificar al numero mayor
+// ADSM_ACT4_3_932
 #include <stdio.h>
 int main()
 {

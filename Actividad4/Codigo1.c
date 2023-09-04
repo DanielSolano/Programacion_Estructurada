@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 03/09/2023
+// Calculadora de operaciones basicas
+// ADSM_ACT4_1_932
 #include <stdio.h>
 int main()
 {
@@ -9,29 +13,29 @@ int main()
     scanf("%d",&num1);
     printf("Numero 2: ");
     scanf("%d",&num2);
-    if(opc==1)
+    if(opc==1)//Suma
     {
         printf("La suma es: %d",num1+num2);
     }
     else
     {
-        if(opc==2)
+        if(opc==2)//Resta
         {
             printf("La resta es: %d",num1-num2);
         }
         else
         {
-            if(opc==3)
+            if(opc==3)//Multiplicacion
             {
                 printf("La multiplicacion es: %d",num1*num2);
             }
             else
             {
-                if(opc==4)
+                if(opc==4)//Division
                 {
                     printf("La division es: %.2f",(num1+0.0)/(num2+0.0));
                 }
-                else
+                else//No valido
                 {
                     printf("Opcion incorrecta");
                 }

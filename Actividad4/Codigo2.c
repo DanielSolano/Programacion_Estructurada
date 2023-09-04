@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 03/09/2023
+// Convertidor de unidades de medida
+// ADSM_ACT4_2_932
 #include <stdio.h>
 int main()
 {
@@ -5,7 +9,7 @@ int main()
     printf("---MENU---\n1.-cm a pulgadas\n2.-cm a pies\n3.-Km a millas\n4.-Pulgadas a cm\n5.-pies a cm\n6.-millas a Km\n");
     printf("Seleccione una opcion: ");
     scanf("%d",&opc);
-    if(opc==1)
+    if(opc==1) //CM a pulgadas
     {
         printf("CM: ");
         scanf("%d",&cm);
@@ -13,7 +17,7 @@ int main()
     }
     else
     {
-        if(opc==2)
+        if(opc==2) //CM a pies
         {
         printf("CM: ");
         scanf("%d",&cm);
@@ -21,7 +25,7 @@ int main()
         }
         else
         {
-            if(opc==3)
+            if(opc==3) //KM a millas
             {
                 printf("Kilometros: ");
                 scanf("%d",&km);
@@ -29,7 +33,7 @@ int main()
             }
             else
             {
-                if(opc==4)
+                if(opc==4) //Pulgadas a CM
                 {
                     printf("Pulgadas: ");
                     scanf("%d",&pulg);
@@ -37,7 +41,7 @@ int main()
                 }
                 else
                 {
-                    if(opc==5)
+                    if(opc==5) //Pies a CM
                     {
                         printf("Pies: ");
                         scanf("%d",&pie);
@@ -45,13 +49,13 @@ int main()
                     }
                     else
                     {
-                        if(opc==6)
+                        if(opc==6) //Millas a km
                         {
                             printf("Millas: ");
                             scanf("%d",&milla);
                             printf("Kilometro: %f",milla/0.609);
                         }
-                        else
+                        else //Opcion incorrecta
                         {
                             printf("Opcion incorrecta");
                         }

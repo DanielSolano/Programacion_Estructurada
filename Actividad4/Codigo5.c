@@ -1,7 +1,7 @@
 // Solano Meza Angel Daniel Matr. 372453
-// 27/08/2023
+// 03/09/2023
 // Dependiendo del tipo de llamada y duracion calcular el precio de la misma
-// ADSM_ACT1_11_932
+// ADSM_ACT4_5_932
 #include <stdio.h>
 #define iva 0.16
 #define loc 3
@@ -23,7 +23,7 @@ int main()
     {
         printf("Duracion de su llamada: ");
         scanf("%d",&duracion);
-        if(tipo==1)
+        if(tipo==1)//Local, se cobra igual siempre
         {
             subtotal=loc;
             p_iva=subtotal*iva;
@@ -32,9 +32,9 @@ int main()
         }
         else
         {
-            if (tipo==2)
+            if (tipo==2)//Nacional
             {
-                if(duracion<=3)
+                if(duracion<=3)//Sin cargo extra
                 {
                     subtotal=nac;
                     p_iva=subtotal*iva;
@@ -42,7 +42,7 @@ int main()
                 printf("Llamada nacional\nSubtotal: %d\nIva (16%%): %.2f\nTotal: %.2f",subtotal,p_iva,total);
 
                 }
-                else
+                else//Cargo por minuto
                 {
                     m_adicional=duracion-3;
                     subtotal=nac+(m_adicional*2);
@@ -51,9 +51,9 @@ int main()
                     printf("Llamada nacional\nSubtotal: %d\nIva (16%%): %.2f\nTotal: %.2f",subtotal,p_iva,total);
                 }
             }
-            else
+            else //Internacional
             {
-                if(duracion<=2)
+                if(duracion<=2)//Sin cargo extra
                 {
                     subtotal=inter;
                     p_iva=subtotal*iva;
@@ -61,7 +61,7 @@ int main()
                     printf("Llamada internacional\nSubtotal: %d\nIva (16%%): %.2f\nTotal: %.2f",subtotal,p_iva,total);
 
                 }
-                else
+                else//Cargo por minuto
                 {
                 m_adicional=duracion-2;
                 subtotal=inter+(m_adicional*4);
