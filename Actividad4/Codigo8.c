@@ -1,6 +1,6 @@
 // Solano Meza Angel Daniel Matr. 372453
 // 03/09/2023
-// Jugar chichampu con estructuras condicionales 
+// Jugar chichampu con estructuras condicionales compuestas
 // ADSM_ACT4_8_932
 #include <stdio.h>
 #include <time.h>
