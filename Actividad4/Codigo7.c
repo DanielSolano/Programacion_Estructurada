@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 03/09/2023
+// Leer 5 calificaciones, descartar la menor y obtener el promedio de los 4 restantes 
+// ADSM_ACT4_7_932
 #include <stdio.h>
 int main()
 {
@@ -12,9 +16,9 @@ int main()
     scanf("%d",&exam4);
     printf("Examen 5: ");
     scanf("%d",&exam5);
-
-    menor=exam1;
     
+    //Encontrar la calificacion menor
+    menor=exam1;
     if(exam2<menor)
     {
         menor=exam2;
@@ -32,6 +36,7 @@ int main()
         menor=exam5;
     }
 
+    //Obtiene el promedio ignorando al menor
     if(menor==exam1)
     {
         printf("Promedio= %.2f",((exam2+.0)+(exam3+.0)+(exam4+.0)+(exam5+.0))/4);
@@ -64,70 +69,3 @@ int main()
     }
     return 0;
 }
-/*
-    if(exam1<exam2)
-    {
-        menor=exam1;
-        if(exam3<menor)
-        {
-            exam3=menor;
-            if(exam4<menor)
-            {
-                menor=exam4;
-                if(exam5<menor)
-                {
-                    menor=exam5;
-                }
-            }
-            else
-            {
-                if(exam5<menor)
-                {
-                    menor=exam5;
-                }
-            }
-
-        }
-        else
-        {
-            if(exam4<menor)
-            {
-                menor=exam4;
-                if(exam5<menor)
-                {
-                    menor=exam5;
-                }
-            }
-            else
-            {
-                if(exam5<menor)
-                {
-                    menor=exam5;
-                }
-            }
-        }
-    }
-    else
-    {
-        menor=exam2;
-        if(exam3<menor)
-        {
-            menor=exam3;
-            if(exam4<menor)
-            {
-                menor=exam4;
-                if(exam5<menor)
-                {
-                    menor=exam5
-                }
-            }
-            else
-            {
-                if(exam5<menor)
-                {
-                    menor=exam5;
-                }
-            }
-        }
-    }
-*/

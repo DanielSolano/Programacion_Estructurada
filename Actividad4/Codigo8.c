@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 03/09/2023
+// Jugar chichampu con estructuras condicionales 
+// ADSM_ACT4_8_932
 #include <stdio.h>
 #include <time.h>
 int main()
@@ -8,7 +12,6 @@ int main()
     printf("---Chichampu---\n1.-Piedra\n2.-Papel\n3.-Tijera\n");
     printf("Seleccione una opcion: ");
     scanf("%d",&j1);
-    //1.-Piedra 2.-Papel 3.-Tijera
     if((j1 <= 0) && (j1 > 3))
     {
     printf("Opcion incorrecta");
