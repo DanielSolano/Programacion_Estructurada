@@ -10,7 +10,7 @@ int main() {
     srand(time(NULL)); 
     j2 = rand() % 3 + 1; //Genera un numero entre 1 y 3 que es la tirada de la computadora
 
-    printf("Ingresa tu jugada (1. Piedra, 2. Papel, 3. Tijera): ");
+    printf("Ingresa una opcion (1. Piedra, 2. Papel, 3. Tijera): ");
     scanf("%d", &j1);
 
     if((j1 <= 0) && (j1 > 3))
@@ -28,11 +28,11 @@ int main() {
                         break;
                     
                     case 2:
-                        printf("Gana J2, J1: Piedra J2: Papel)");
+                        printf("Gana J2, papel gana a piedra");
                         break;
                     
                     case 3:
-                        printf("Gana J1, J1: Piedra J2: Tijeras)");
+                        printf("Gana J1, piedra gana a tijeras");
                         break;
                 }
                 break;
@@ -40,7 +40,7 @@ int main() {
             case 2:
                 switch (j2) {
                     case 1:
-                        printf("Gana J1, J1: Papel J2 Piedra)");
+                        printf("Gana J1, papel gana a piedra");
                         break;
                     
                     case 2:
@@ -48,7 +48,7 @@ int main() {
                         break;
                     
                     case 3:
-                        printf("Gana J2, J1: Papel J2: Tijeras)");
+                        printf("Gana J2, tijeras gana a papel");
                         break;
                 }
                 break;
@@ -56,11 +56,11 @@ int main() {
             case 3:
                 switch (j2) {
                     case 1:
-                        printf("Gana J2, J1: Tijeras J2: Piedra)");
+                        printf("Gana J2, piedra gana a tijeras");
                         break;
                     
                     case 2:
-                        printf("Gana J1, J1: Tijeras J2: Papel)");
+                        printf("Gana J1, tijeras gana a papel)");
                         break;
                     
                     case 3:

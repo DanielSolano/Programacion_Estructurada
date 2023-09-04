@@ -34,6 +34,6 @@ int main()
         }
 
     }
-    printf("Salario por hora: %d\nHoras trabajadas: %d\nSalario normal: %d\nSalario extra: %d\nSalario total: %d",precio,horas,s_normal,s_extra,s_total);
+    printf("Horas trabajadas: %d\nSalario normal: %d\nSalario extra: %d\nSalario total: %d",horas,s_normal,s_extra,s_total);
     return 0;
 }

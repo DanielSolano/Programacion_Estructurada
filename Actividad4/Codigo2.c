@@ -45,7 +45,7 @@ int main()
                     {
                         printf("Pies: ");
                         scanf("%d",&pie);
-                        printf("Centimetro: %f",(pie+.0)/48);
+                        printf("Centimetro: %.2f",(pie+.0)*30.48);
                     }
                     else
                     {
