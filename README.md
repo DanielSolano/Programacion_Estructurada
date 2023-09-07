@@ -1,2 +1,2 @@
-# Reporsitorio de Programacion_Estructurada
+# Repositorio de Programacion_Estructurada
 Daniel Solano
