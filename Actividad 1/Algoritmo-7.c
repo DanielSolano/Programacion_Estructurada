@@ -1,0 +1,42 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 27/08/2023
+// Leer 3 numeros, imprimir el menor
+// ADSM_ACT1_7_932
+#include <stdio.h>
+int main()
+{
+    int num1, num2, num3;
+    printf("Numero 1: ");
+    scanf("%d",&num1);
+    printf("Numero 2: ");
+    scanf("%d",&num2);
+    printf("Numero 3: ");
+    scanf("%d",&num3);
+
+    if (num1>num2)
+    {
+        if (num3>num2)
+        {
+            printf("El 2do. numero es el menor con un valor de: %d",num2);
+        }
+        else
+        {
+            printf("El 3er. numero es el menor con un valor de: %d",num3);
+        }
+    }
+    else
+    {
+        if (num3>num1)
+        {
+            printf("El 1er. numero es el menor con un valor de: %d",num1);
+        }
+        else
+        {
+            if(num2>num3)
+            {
+            printf("El 3er. numero es el menor con un valor de: %d",num3);
+            }
+        }
+    }
+    return 0;
+}
