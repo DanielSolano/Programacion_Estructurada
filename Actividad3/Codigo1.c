@@ -92,60 +92,60 @@ void Promedio(void)
     prom = (c1 + c2 + c3) / 3;
     if (prom >= 80)
     {
-        if(prom>=90)
+        if (prom >= 90)
         {
-            if(prom>=98)
+            if (prom >= 98)
             {
-                if(prom>100)
+                if (prom > 100)
                 {
-                    //PROMEDIO INCORRECTO
+                    // PROMEDIO INCORRECTO
                     printf("Error en el promedio \nPromedio: %.2f \n,prom");
                 }
                 else
                 {
-                    //ES 98
-                    printf("Excelente \nPromedio: %.2f \n",prom);
+                    // ES 98
+                    printf("Excelente \nPromedio: %.2f \n", prom);
                 }
             }
             else
             {
-                //ES 90
-                printf("Muy bien \nPromedio: %.2f \n",prom);
+                // ES 90
+                printf("Muy bien \nPromedio: %.2f \n", prom);
             }
         }
         else
         {
-            //ES 80
-            printf("Bien \nPromedio: %.2f \n",prom);
+            // ES 80
+            printf("Bien \nPromedio: %.2f \n", prom);
         }
     }
     else
     {
-        if (prom<70)
+        if (prom < 70)
         {
-           if(prom<60)
+            if (prom < 60)
             {
-                if(prom<30)
+                if (prom < 30)
                 {
-                    //REPITES
-                    printf("Repetidor \nPromedio: %.2f \n",prom);
+                    // REPITES
+                    printf("Repetidor \nPromedio: %.2f \n", prom);
                 }
                 else
                 {
-                    //EXTRAORDINARIO
-                    printf("Extraordinario \nPromedio: %.2f \n",prom);
+                    // EXTRAORDINARIO
+                    printf("Extraordinario \nPromedio: %.2f \n", prom);
                 }
             }
             else
             {
-                //ES 60
-                printf("Suficiente \nPromedio: %.2f \n",prom);
-            } 
+                // ES 60
+                printf("Suficiente \nPromedio: %.2f \n", prom);
+            }
         }
         else
         {
-            //ES 70
-            printf("Regular \nPromedio: %.2f \n",prom);
+            // ES 70
+            printf("Regular \nPromedio: %.2f \n", prom);
         }
     }
     system("PAUSE");
@@ -156,9 +156,59 @@ void PPP_anidado(void)
 {
 
     //  VARIALES LOCALES
+    int j1, j2;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   FACTORIAL\n");
+    printf("   CHICHAMPU ANIDADO\n");
+    j2 = rand() % 3 + 1; // El jugador 2 es controlado por la maquina
+    printf("---Chichampu---\n1.-Piedra\n2.-Papel\n3.-Tijera\n");
+    printf("Seleccione una opcion: ");
+    scanf("%d", &j1);
+    if ((j1 <= 0) && (j1 > 3))
+    {
+        printf("Opcion incorrecta");
+    }
+    else
+    {
+        if ((j1 == 1 && j2 == 3) || (j1 == 2 && j2 == 1) || (j1 == 3 && j2 == 2))
+        {
+            if (j1 == 1)
+            {
+                printf("Gana jugador 1, piedra gana a tijera");
+            }
+
+            if (j1 == 2)
+            {
+                printf("Gana jugador 1, papel gana a piedra");
+            }
+            if (j1 == 3)
+            {
+                printf("Gana jugador 1, tijera gana a papel");
+            }
+        }
+        else
+        {
+            if ((j2 == 1 && j1 == 3) || (j2 == 2 && j1 == 1) || (j2 == 3 && j1 == 2))
+            {
+                if (j2 == 1)
+                {
+                    printf("Gana jugador 2, piedra gana a tijera");
+                }
+                if (j2 == 2)
+                {
+                    printf("Gana jugador 2, papel gana a piedra");
+                }
+                if (j2 == 3)
+                {
+                    printf("Gana jugador 2, tijera gana a papel");
+                }
+            }
+            else
+            {
+                printf("Empate");
+            }
+        }
+    }
     system("PAUSE");
 }
 //****************************
