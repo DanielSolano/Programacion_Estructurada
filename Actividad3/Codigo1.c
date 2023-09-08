@@ -161,8 +161,8 @@ void PPP_anidado(void)
     //  AQUI DESARROLLO PROGRAMA
     printf("   CHICHAMPU ANIDADO\n");
     j2 = rand() % 3 + 1; // El jugador 2 es controlado por la maquina
-    printf("---Chichampu---\n1.-Piedra\n2.-Papel\n3.-Tijera\n");
-    printf("Seleccione una opcion: ");
+    printf("1.-Piedra\n2.-Papel\n3.-Tijera\n");
+    printf("Seleccione una opcion: \n");
     scanf("%d", &j1);
     if ((j1 <= 0) && (j1 > 3))
     {
@@ -174,16 +174,16 @@ void PPP_anidado(void)
         {
             if (j1 == 1)
             {
-                printf("Gana jugador 1, piedra gana a tijera");
+                printf("Gana jugador 1, piedra gana a tijera\n");
             }
 
             if (j1 == 2)
             {
-                printf("Gana jugador 1, papel gana a piedra");
+                printf("Gana jugador 1, papel gana a piedra\n");
             }
             if (j1 == 3)
             {
-                printf("Gana jugador 1, tijera gana a papel");
+                printf("Gana jugador 1, tijera gana a papel\n");
             }
         }
         else
@@ -192,20 +192,20 @@ void PPP_anidado(void)
             {
                 if (j2 == 1)
                 {
-                    printf("Gana jugador 2, piedra gana a tijera");
+                    printf("Gana la computadora, piedra gana a tijera\n");
                 }
                 if (j2 == 2)
                 {
-                    printf("Gana jugador 2, papel gana a piedra");
+                    printf("Gana la computadora, papel gana a piedra\n");
                 }
                 if (j2 == 3)
                 {
-                    printf("Gana jugador 2, tijera gana a papel");
+                    printf("Gana la computadora, tijera gana a papel\n");
                 }
             }
             else
             {
-                printf("Empate");
+                printf("Empate\n");
             }
         }
     }
@@ -221,12 +221,12 @@ void PPP_multiple(void)
     printf("   CHICHAMPU SWITCH\n");
     j2 = rand() % 3 + 1; // Genera un numero entre 1 y 3 que es la tirada de la computadora
 
-    printf("Ingresa una opcion (1. Piedra, 2. Papel, 3. Tijera): ");
+    printf("Ingresa una opcion\n1.Piedra\n2.Papel\n3.Tijera: \n");
     scanf("%d", &j1);
 
     if ((j1 <= 0) && (j1 > 3))
     {
-        printf("Opcion incorrecta");
+        printf("Opcion incorrecta\n");
     }
     else
     {
@@ -237,15 +237,15 @@ void PPP_multiple(void)
             switch (j2)
             {
             case 1:
-                printf("Empate, ambos eligieron piedra");
+                printf("Empate, ambos eligieron piedra\n");
                 break;
 
             case 2:
-                printf("Gana J2, papel gana a piedra");
+                printf("Gana la computadora, papel gana a piedra\n");
                 break;
 
             case 3:
-                printf("Gana J1, piedra gana a tijeras");
+                printf("Gana jugador 1, piedra gana a tijeras\n");
                 break;
             }
             break;
@@ -254,15 +254,15 @@ void PPP_multiple(void)
             switch (j2)
             {
             case 1:
-                printf("Gana J1, papel gana a piedra");
+                printf("Gana jugador 1, papel gana a piedra\n");
                 break;
 
             case 2:
-                printf("Empate, ambos eligieron papel");
+                printf("Empate, ambos eligieron papel\n");
                 break;
 
             case 3:
-                printf("Gana J2, tijeras gana a papel");
+                printf("Gana la computadora, tijeras gana a papel\n");
                 break;
             }
             break;
@@ -271,15 +271,15 @@ void PPP_multiple(void)
             switch (j2)
             {
             case 1:
-                printf("Gana J2, piedra gana a tijeras");
+                printf("Gana la computadora, piedra gana a tijeras\n");
                 break;
 
             case 2:
-                printf("Gana J1, tijeras gana a papel)");
+                printf("Gana jugador 1, tijeras gana a papel\n");
                 break;
 
             case 3:
-                printf("Empate, ambos eligieron papel");
+                printf("Empate, ambos eligieron papel\n");
                 break;
             }
             break;
@@ -287,6 +287,7 @@ void PPP_multiple(void)
     }
     system("PAUSE");
 }
+//****************************
 void Mayor(void)
 {
     //  VARIALES LOCALES
@@ -294,25 +295,114 @@ void Mayor(void)
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
     printf("   IDENTIFICAR AL MAYOR\n");
-
+    printf("Numero 1: \n");
+    scanf("%d", &n1);
+    printf("Numero 2: \n");
+    scanf("%d", &n2);
+    printf("Numero 3: \n");
+    scanf("%d", &n3);
+    if (n1 > n2 && n1 > n3)
+    {
+        printf("%d es el mayor\n", n1);
+    }
+    else
+    {
+        if (n2 > n1 && n2 > n3)
+        {
+            printf("%d es el mayor\n", n2);
+        }
+        else
+        {
+            if (n3 > n1 && n3 > n2)
+            {
+                printf("%d es el mayor\n", n3);
+            }
+        }
+    }
     system("PAUSE");
 }
+//****************************
 void Medio(void)
 {
     //  VARIALES LOCALES
+    int n1, n2, n3;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   DIGITOS\n");
+    printf("   IDENTIFICAR AL NUMERO DE EN MEDIO\n");
+    printf("Numero 1: \n");
+    scanf("%d", &n1);
+    printf("Numero 2: \n");
+    scanf("%d", &n2);
+    printf("Numero 3: \n");
+    scanf("%d", &n3);
+    if ((n1 > n2 && n2 > n3) || (n3 > n2 && n2 > n1))
+    {
+        system("CLS");
+        printf("%d es el valor del medio\n", n2);
+    }
+    else
+    {
+        if ((n2 > n1 && n1 > n3) || (n3 > n1 && n1 > n2))
+        {
+            system("CLS");
+            printf("%d es el valor del medio\n", n1);
+        }
+        else
+        {
+            system("CLS");
+            printf("%d es el valor del medio\n", n3);
+        }
+    }
     system("PAUSE");
 }
+//****************************
 void Ascendentes(void)
 {
     //  VARIALES LOCALES
+    int n1, n2, n3;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   DIGITOS\n");
+    printf("   ASCENDENTES\n");
+    printf("Numero 1: \n");
+    scanf("%d", &n1);
+    printf("Numero 2: \n");
+    scanf("%d", &n2);
+    printf("Numero 3: \n");
+    scanf("%d", &n3);
+
+    if (n1 < n2 && n2 < n3)
+    {
+        printf("%d, %d, %d\n", n1, n2, n3);
+    }
+
+    if (n2 < n1 && n1 < n3)
+    {
+        printf("%d, %d, %d\n", n2, n1, n3);
+    }
+
+    if (n3 < n2 && n2 < n1)
+    {
+        printf("%.d, %d, %d\n", n3, n2, n1);
+    }
+
+    if (n1 < n3 && n3 < n2)
+    {
+        printf("%d, %d, %d\n", n1, n3, n2);
+    }
+
+    if (n2 < n3 && n3 < n1)
+    {
+        printf("%d, %d, %d\n", n2, n3, n1);
+    }
+
+    if (n3 < n1 && n1 < n2)
+    {
+        printf("%d, %d, %d\n", n3, n1, n2);
+    }
+
     system("PAUSE");
 }
+//****************************
 void Zodiacal(void)
 {
     //  VARIALES LOCALES
@@ -335,10 +425,12 @@ void Zodiacal(void)
         {
             if (dia >= 21)
             {
+                system("CLS");
                 printf("ACUARIO\nNo dejes de observar a tus hijos, porque alguno de ellos podria estar pasando por un momento dificil; quiza tenga problemas con sus amistades o le cueste adaptarse a una nueva situacion. Acuario, es posible que no te haya dicho nada pero te necesita. Salvo lo anterior, en el resto te ira bien.\n");
             }
             else
             {
+                system("CLS");
                 printf("CAPRICORNIO\nSi tu trabajo se encuentra lejos de tu hogar y pierdes mucho tiempo en el trayecto, cada vez se te hara más dificil. Ademas, el ambiente laboral no sera el más adecuado para sentirse a gusto trabajando, por eso podrias decidir buscar otro empleo. Bueno, Capricornio, por lo menos el resto de tu vida ira bien.\n");
             }
         }
@@ -347,10 +439,12 @@ void Zodiacal(void)
         {
             if (dia >= 20)
             {
+                system("CLS");
                 printf("PISCIS\nLa relacion con tu pareja o con algun pariente esta pasando por cierta crisis. Para ti la familia es algo importante y todo lo que sucede relacionado con ella te afecta sobremanera. Tienes que aprender a equilibrar y a fortalecer el plano emocional. Tu corazon es tu mayor debilidad, pero debes aprender a conseguir independencia y libertad personal.\n");
             }
             else
             {
+                system("CLS");
                 printf("ACUARIO\nNo dejes de observar a tus hijos, porque alguno de ellos podria estar pasando por un momento dificil; quiza tenga problemas con sus amistades o le cueste adaptarse a una nueva situacion. Acuario, es posible que no te haya dicho nada pero te necesita. Salvo lo anterior, en el resto te ira bien.\n");
             }
         }
@@ -359,10 +453,12 @@ void Zodiacal(void)
         {
             if (dia >= 21)
             {
+                system("CLS");
                 printf("ARIES\nSera un dia bastante variable; esta vez, seras tú quien se convertira en tu propio enemigo. El raciocinio pondra obstaculos a tu expresion personal, y asi, te mostraras demasiado introvertido-a y critico-a con todo. Aries, deberias procurar sumar a lo anterior un espiritu constructivo.\n");
             }
             else
             {
+                system("CLS");
                 printf("PISCIS\nLa relacion con tu pareja o con algun pariente esta pasando por cierta crisis. Para ti la familia es algo importante y todo lo que sucede relacionado con ella te afecta sobremanera. Tienes que aprender a equilibrar y a fortalecer el plano emocional. Tu corazon es tu mayor debilidad, pero debes aprender a conseguir independencia y libertad personal.\n");
             }
         }
@@ -370,10 +466,12 @@ void Zodiacal(void)
         {
             if (dia >= 21)
             {
+                system("CLS");
                 printf("TAURO\nComo perteneces a un signo fijo, algunas de tus acciones están basadas en una personalidad y unas ideas muy fijas e inamovibles. Precisamente por eso, te cuesta un esfuerzo enorme cambiar de actitud en determinados momentos... pero hoy, no te quedará más remedio que hacerlo o tendrás problemas.\n");
             }
             else
             {
+                system("CLS");
                 printf("ARIES\nSera un dia bastante variable; esta vez, seras tú quien se convertira en tu propio enemigo. El raciocinio pondra obstaculos a tu expresion personal, y asi, te mostraras demasiado introvertido-a y critico-a con todo. Aries, deberias procurar sumar a lo anterior un espiritu constructivo.\n");
             }
         }
@@ -381,10 +479,12 @@ void Zodiacal(void)
         {
             if (dia >= 22)
             {
+                system("CLS");
                 printf("GEMINIS\nLa relacion con tu padre o con algun otro miembro de la familia perteneciente al sexo masculino sera bastante tensa en el dia de hoy. Procura no discutir, porque no solamente no os entendereis, ademas empeoraras la situacion: recuerdalo. Geminis, tambien podrias tener algunos imprevistos que alteraran tus planes.\n");
             }
             else
             {
+                system("CLS");
                 printf("TAURO\nComo perteneces a un signo fijo, algunas de tus acciones están basadas en una personalidad y unas ideas muy fijas e inamovibles. Precisamente por eso, te cuesta un esfuerzo enorme cambiar de actitud en determinados momentos... pero hoy, no te quedará más remedio que hacerlo o tendrás problemas.\n");
             }
         }
@@ -392,10 +492,12 @@ void Zodiacal(void)
         {
             if (dia >= 22)
             {
+                system("CLS");
                 printf("CANCER\nHoy podrias encontrarte con algunos problemas, y quiza tu mismo-a provoques algunos de ellos. Tu vision de la vida sera muy negativa y radical; te creeras en posesion de la verdad, sin tener en cuenta la opinion de las personas que te rodeen. Esto podra molestar mucho a los demas. Tienes que aprender a ser mas tolerante.\n");
             }
             else
             {
+                system("CLS");
                 printf("GEMINIS\nLa relacion con tu padre o con algun otro miembro de la familia perteneciente al sexo masculino sera bastante tensa en el dia de hoy. Procura no discutir, porque no solamente no os entendereis, ademas empeoraras la situacion: recuerdalo. Geminis, tambien podrias tener algunos imprevistos que alteraran tus planes.\n");
             }
         }
@@ -403,10 +505,12 @@ void Zodiacal(void)
         {
             if (dia >= 23)
             {
+                system("CLS");
                 printf("LEO\nSi te ofrecen la oportunidad de participar en algun proyecto hoy, deberas tener mucho cuidado, aunque se trate de alguien en quien confias. El terreno economico podra darte algunos sustos, asi que te recomendamos que seas prudente. Leo, puede que una persona cercana a ti intente aprovecharse de tu buena fe.\n");
             }
             else
             {
+                system("CLS");
                 printf("CANCER\nHoy podrias encontrarte con algunos problemas, y quiza tu mismo-a provoques algunos de ellos. Tu vision de la vida sera muy negativa y radical; te creeras en posesion de la verdad, sin tener en cuenta la opinion de las personas que te rodeen. Esto podra molestar mucho a los demas. Tienes que aprender a ser mas tolerante.\n");
             }
         }
@@ -414,10 +518,12 @@ void Zodiacal(void)
         {
             if (dia >= 24)
             {
+                system("CLS");
                 printf("VIRGO\nSi todavía estás disfrutando de tus vacaciones y has decido desplazarte a algun lugar hoy, podrias tener problemas en ese lugar; puede que no salga segun tus planes, algo que te desanimara bastante. A veces, es mejor no hacerse demasiadas ilusiones. Animate, no todo será tan negativo, si tu no haces que lo sea.\n");
             }
             else
             {
+                system("CLS");
                 printf("LEO\ni te ofrecen la oportunidad de participar en algun proyecto hoy, deberas tener mucho cuidado, aunque se trate de alguien en quien confias. El terreno economico podra darte algunos sustos, asi que te recomendamos que seas prudente. Leo, puede que una persona cercana a ti intente aprovecharse de tu buena fe.\n");
             }
         }
@@ -425,10 +531,12 @@ void Zodiacal(void)
         {
             if (dia >= 24)
             {
+                system("CLS");
                 printf("LIBRA\nEs el tiempo de derribar muros; ¿quieres ir a algún lugar especial? Si es así, debes saber que este momento será el ideal para hacerlo. Sin embargo, si no te apetece viajar o no puedes hacerlo, tal vez ya sea hora de que cambies tus actitudes mentales. Dile adiós a ciertas ataduras del pasado para seguir un camino de mayor libertad e independencia personal.\n");
             }
             else
             {
+                system("CLS");
                 printf("VIRGO\nSi todavía estás disfrutando de tus vacaciones y has decido desplazarte a algun lugar hoy, podrias tener problemas en ese lugar; puede que no salga segun tus planes, algo que te desanimara bastante. A veces, es mejor no hacerse demasiadas ilusiones. Animate, no todo será tan negativo, si tu no haces que lo sea.\n");
             }
         }
@@ -436,10 +544,12 @@ void Zodiacal(void)
         {
             if (dia >= 24)
             {
+                system("CLS");
                 printf("ESCORPIO\nSentiras hoy cierta falta de equilibrio debido a la aparicion de factores extranos que no podras controlar. Ademas, corres el riesgo de perder tu relacion con alguien importante para ti, tal vez se trate del amor. Si sucede esto, necesitaras un periodo para olvidarlo, pero el tiempo cura las heridas. A lo mejor, aun podrias cambiar esto.\n");
             }
             else
             {
+                system("CLS");
                 printf("LIBRA\nEs el tiempo de derribar muros; ¿quieres ir a algún lugar especial? Si es así, debes saber que este momento será el ideal para hacerlo. Sin embargo, si no te apetece viajar o no puedes hacerlo, tal vez ya sea hora de que cambies tus actitudes mentales. Dile adiós a ciertas ataduras del pasado para seguir un camino de mayor libertad e independencia personal.\n");
             }
         }
@@ -447,10 +557,12 @@ void Zodiacal(void)
         {
             if (dia >= 23)
             {
+                system("CLS");
                 printf("SAGITARIO\nSi tienes un secreto bien guardado, hoy tu comportamiento hara sospechar a las personas que tienes mas cerca. Si tienes pareja desde hace tiempo, las tensiones se acentuaran, y si los problemas son con tus socios-as, puede que acabeis en los tribunales, porque será dificil que os pongáis de acuerdo por las buenas.\n");
             }
             else
             {
+                system("CLS");
                 printf("ESCORPIO\nSentiras hoy cierta falta de equilibrio debido a la aparicion de factores extranos que no podras controlar. Ademas, corres el riesgo de perder tu relacion con alguien importante para ti, tal vez se trate del amor. Si sucede esto, necesitaras un periodo para olvidarlo, pero el tiempo cura las heridas. A lo mejor, aun podrias cambiar esto.\n");
             }
         }
@@ -458,10 +570,12 @@ void Zodiacal(void)
         {
             if (dia >= 22)
             {
+                system("CLS");
                 printf("CAPRICORNIO\nSi tu trabajo se encuentra lejos de tu hogar y pierdes mucho tiempo en el trayecto, cada vez se te hara mas dificil. Ademas, el ambiente laboral no sera el mas adecuado para sentirse a gusto trabajando, por eso podrias decidir buscar otro empleo. Bueno, Capricornio, por lo menos el resto de tu vida ira bien.\n");
             }
             else
             {
+                system("CLS");
                 printf("SAGITARIO\nSi tienes un secreto bien guardado, hoy tu comportamiento hara sospechar a las personas que tienes mas cerca. Si tienes pareja desde hace tiempo, las tensiones se acentuaran, y si los problemas son con tus socios-as, puede que acabeis en los tribunales, porque será dificil que os pongais de acuerdo por las buenas..\n");
             }
         }
