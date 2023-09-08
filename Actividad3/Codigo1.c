@@ -20,7 +20,6 @@ int main()
     return 0;
 }
 //  *** DESARROLLO DE LAS FUNCIONES  ******
-//*********************
 int msges()
 {
     int op;
