@@ -1,3 +1,6 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 09/09/2023
+// ADSM_ACT3_932
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -73,7 +76,7 @@ void menu()
 }
 
 //*********************
-void Promedio(void)
+void Promedio(void) //Calcular el promedio con 3 calificaciones
 {
     //  VARIABLES LOCALES
     int c1, c2, c3;
@@ -151,7 +154,7 @@ void Promedio(void)
 }
 
 //*************************
-void PPP_anidado(void)
+void PPP_anidado(void) //Chichampu con if
 {
 
     //  VARIALES LOCALES
@@ -211,7 +214,7 @@ void PPP_anidado(void)
     system("PAUSE");
 }
 //****************************
-void PPP_multiple(void)
+void PPP_multiple(void) //Chichampu con switch
 {
     //  VARIALES LOCALES
     int j1, j2;
@@ -287,7 +290,7 @@ void PPP_multiple(void)
     system("PAUSE");
 }
 //****************************
-void Mayor(void)
+void Mayor(void) //Identificar al mayor
 {
     //  VARIALES LOCALES
     int n1, n2, n3;
@@ -321,7 +324,7 @@ void Mayor(void)
     system("PAUSE");
 }
 //****************************
-void Medio(void)
+void Medio(void) //Identifica al medio
 {
     //  VARIALES LOCALES
     int n1, n2, n3;
@@ -355,7 +358,7 @@ void Medio(void)
     system("PAUSE");
 }
 //****************************
-void Ascendentes(void)
+void Ascendentes(void) // Imprime los numeros de forma ascendente
 {
     //  VARIALES LOCALES
     int n1, n2, n3;
@@ -402,7 +405,7 @@ void Ascendentes(void)
     system("PAUSE");
 }
 //****************************
-void Zodiacal(void)
+void Zodiacal(void) // Ingresar fecha de nacimiento y dar su horoscopo
 {
     //  VARIALES LOCALES
     int dia, mes;
