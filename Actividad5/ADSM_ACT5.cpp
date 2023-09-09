@@ -1,3 +1,7 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 09/09/2023
+// Numeros descendentes, suma de pares e impares, identificar mayor y menor, tabla de multiplicar
+// ADSM_ACT5_932
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -97,12 +101,14 @@ void Pares(void)
         numero = rand() % 201; // Genera un numero entre 0 y 200
         if (numero % 2 == 0)
         {
+            // Entra si es par, aumenta al contador de par y se suma al acumulador
             n_par++;
             par = numero + par;
             printf("El numero %d es par\n", numero);
         }
         else
         {
+            // Entra si es par, aumenta al contador de par y se suma al acumulador
             n_impar++;
             impar = numero + impar;
             printf("El numero %d es impar\n", numero);
@@ -122,7 +128,7 @@ void MeMa(void)
     printf("   MAYOR Y MENOR\n");
     numero = rand() % 101 + 100; // Genera un numero entre 100 y 200
     menor = numero;
-    mayor = numero;
+    mayor = numero; // Utilizamos dos pivotes y comparamos con los 39 numeros restantes
     for (i = 0; i < N - 1; i++)
     {
         numero = rand() % 101 + 100;
@@ -151,6 +157,7 @@ void Multiplicar(void)
     system("CLS");
     for (i = 1; i <= 10; i++)
     {
+        // Imprime el numero x el contador, el contador incrementa cada iteracion hasta el 10
         printf("%d x %d = %d\n", numero, i, (numero * i));
     }
     system("PAUSE");
