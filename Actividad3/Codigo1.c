@@ -523,7 +523,7 @@ void Zodiacal(void)
             else
             {
                 system("CLS");
-                printf("LEO\ni te ofrecen la oportunidad de participar en algun proyecto hoy, deberas tener mucho cuidado, aunque se trate de alguien en quien confias. El terreno economico podra darte algunos sustos, asi que te recomendamos que seas prudente. Leo, puede que una persona cercana a ti intente aprovecharse de tu buena fe.\n");
+                printf("LEO\nSi te ofrecen la oportunidad de participar en algun proyecto hoy, deberas tener mucho cuidado, aunque se trate de alguien en quien confias. El terreno economico podra darte algunos sustos, asi que te recomendamos que seas prudente. Leo, puede que una persona cercana a ti intente aprovecharse de tu buena fe.\n");
             }
         }
         if (mes == 9)
