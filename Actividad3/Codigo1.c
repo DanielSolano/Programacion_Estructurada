@@ -547,6 +547,7 @@ void Zodiacal(void)
                 printf("ESCORPIO\nSentiras hoy cierta falta de equilibrio debido a la aparicion de factores extranos que no podras controlar. Ademas, corres el riesgo de perder tu relacion con alguien importante para ti, tal vez se trate del amor. Si sucede esto, necesitaras un periodo para olvidarlo, pero el tiempo cura las heridas. A lo mejor, aun podrias cambiar esto.\n");
             }
             else
+            
             {
                 system("CLS");
                 printf("LIBRA\nEs el tiempo de derribar muros; ¿quieres ir a algún lugar especial? Si es así, debes saber que este momento será el ideal para hacerlo. Sin embargo, si no te apetece viajar o no puedes hacerlo, tal vez ya sea hora de que cambies tus actitudes mentales. Dile adiós a ciertas ataduras del pasado para seguir un camino de mayor libertad e independencia personal.\n");
