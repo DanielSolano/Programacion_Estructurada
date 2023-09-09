@@ -536,7 +536,7 @@ void Zodiacal(void)
             else
             {
                 system("CLS");
-                printf("VIRGO\nSi todavía estás disfrutando de tus vacaciones y has decido desplazarte a algun lugar hoy, podrias tener problemas en ese lugar; puede que no salga segun tus planes, algo que te desanimara bastante. A veces, es mejor no hacerse demasiadas ilusiones. Animate, no todo será tan negativo, si tu no haces que lo sea.\n");
+                printf("VIRGO\nSi todavia estas disfrutando de tus vacaciones y has decido desplazarte a algun lugar hoy, podrias tener problemas en ese lugar puede que no salga segun tus planes, algo que te desanimara bastante. A veces, es mejor no hacerse demasiadas ilusiones. Animate, no todo sera tan negativo, si tu no haces que lo sea.\n");
             }
         }
         if (mes == 10)
