@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define N 10
+//*** PROTOTIPOS DE FUNCIONES  ******
+int msges();
+void menu();
+void for_Fibonacci(void);
+void while_Fibonacci(void);
+void dowhile_Fibonacci(void);
+void Factorial(void);
+void Digitos(void);
+//****  main principal  *********
+int main()
+{
+    menu();
+
+    return 0;
+}
+//  *** DESARROLLO DE LAS FUNCIONES  ******
+//*********************
+int msges()
+{
+    int op;
+    system("CLS");
+    printf("   M  E   N   U \n");
+    printf("1.- FIBONACCI FOR \n");
+    printf("1.- FIBONACCI WHILE \n");
+    printf("1.- FIBONACCI DO-WHILE \n");
+    printf("2.- FACTORIAL \n");
+    printf("3.- DIGITOS \n");
+    printf("0.- SALIR  \n");
+    printf("ESCOGE UNA OPCION: ");
+    scanf("%d", &op);
+    return op;
+}
+//****************
+void menu()
+{
+    int op;
+    do
+    {
+        op = msges();
+        switch (op)
+        {
+        case 1:
+            for_Fibonacci();
+            break;
+        case 2:
+            while_Fibonacci();
+            break;
+        case 3:
+            dowhile_Fibonacci();
+            break;
+        case 4:
+            Factorial();
+            break;
+        case 5:
+            Digitos();
+            break;
+        }
+
+    } while (op != 0);
+}
+
+//*********************
+void for_Fibonacci(void)
+{
+    //  VARIALES LOCALES
+    int ante, sig, resul, n, i;
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   FIBONACCI FOR\n");
+    ante = 0;
+    sig = 1;
+    printf("Cuantas veces se repetira la serie: \n");
+    scanf("%d", &n);
+    for (i = 0; i <= n; i++)
+    {
+        resul=ante+sig;
+        printf("%d",resul);
+    }
+    system("PAUSE");
+}
+
+//*********************
+void while_Fibonacci(void)
+{
+    //  VARIALES LOCALES
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   FIBONACCI\n");
+    system("PAUSE");
+}
+
+//*********************
+void dowhile_Fibonacci(void)
+{
+    //  VARIALES LOCALES
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   FIBONACCI\n");
+    system("PAUSE");
+}
+
+//*************************
+void Factorial(void)
+{
+
+    //  VARIALES LOCALES
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   FACTORIAL\n");
+    system("PAUSE");
+}
+//****************************
+void Digitos(void)
+{
+    //  VARIALES LOCALES
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   DIGITOS\n");
+    system("PAUSE");
+}

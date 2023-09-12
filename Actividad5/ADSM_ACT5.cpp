@@ -1,6 +1,6 @@
 // Solano Meza Angel Daniel Matr. 372453
 // 09/09/2023
-// Numeros descendentes, suma de pares e impares, identificar mayor y menor, tabla de multiplicar
+// Numeros descendentes, suma de pares e impares, dentificar mayor y menor, tabla de multiplicar
 // ADSM_ACT5_932
 #include <stdio.h>
 #include <stdlib.h>
