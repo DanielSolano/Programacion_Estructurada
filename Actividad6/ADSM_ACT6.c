@@ -80,18 +80,17 @@ void for_Fibonacci(void)
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
     printf("   FIBONACCI FOR\n");
-    ante = 0;
+    ante = -1;
     sig = 1;
-    resul = 1;
     printf("Cuantas veces se repetira la serie: \n");
     scanf("%d", &n);
     system("CLS");
     for (i = 0; i < n; i++)
     {
-        printf("%d\n", resul);
         resul = ante + sig;
         ante = sig;
         sig = resul;
+        printf("%d\n", resul);
     }
     system("PAUSE");
 }
@@ -107,16 +106,17 @@ void while_Fibonacci(void)
     printf("Cuantas veces se repetira la serie: \n");
     scanf("%d", &n);
     i = 0;
-    ante = 0;
+    ante = -1;
     sig = 1;
     resul = 1;
+    system("CLS");
     while (i < n)
     {
-        printf("%d\n", resul);
         resul = ante + sig;
         ante = sig;
         sig = resul;
         i++;
+        printf("%d\n", resul);
     }
     system("PAUSE");
 }
@@ -133,16 +133,16 @@ void dowhile_Fibonacci(void)
     scanf("%d", &n);
     system("CLS");
     i = 0;
-    ante = 0;
+    ante = -1;
     sig = 1;
     resul = 1;
     do
     {
-        printf("%d\n", resul);
         resul = ante + sig;
         ante = sig;
         sig = resul;
         i++;
+        printf("%d\n", resul);
 
     } while (i < n);
     system("PAUSE");
@@ -236,6 +236,5 @@ void Digitos(void)
     printf("   DIGITOS\n");
     printf("Cantidad de digitos de: \n");
     scanf("%d", &n);
-    
     system("PAUSE");
 }
