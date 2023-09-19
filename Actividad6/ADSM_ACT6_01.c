@@ -1,17 +1,22 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 19/09/2023
+// Uso de distintos ciclos para los mismos problemas.
+// ADSM_ACT6_01_932
 #include <stdio.h>
 #include <stdlib.h>
 //*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
-void for_Fibonacci(void);
-void while_Fibonacci(void);
-void dowhile_Fibonacci(void);
-void for_Factorial(void);
-void while_Factorial(void);
-void dowhile_Factorial(void);
-void for_Digitos(void);
-void while_Digitos(void);
-void dowhile_Digitos(void);
+void for_Fibonacci(void); //Funcion fibonacci con for
+void while_Fibonacci(void); //Funcion fibonacci con while
+void dowhile_Fibonacci(void); //Funcion fibonacci con dowhile
+void for_Factorial(void); //Funcion factorial con for
+void while_Factorial(void); //Funcion factorial con while
+void dowhile_Factorial(void); //Funcion factorial con dowhile
+void for_Digitos(void); //Funcion para contar digitos con for
+void while_Digitos(void); //Funcion para contar digitos con while
+void dowhile_Digitos(void); //Funcion para contar digitos con dowhile
+
 //****  main principal  *********
 int main()
 {
@@ -68,7 +73,13 @@ void menu()
             dowhile_Factorial();
             break;
         case 7:
-            Digitos();
+            for_Digitos();
+            break;
+        case 8:
+            while_Digitos();
+            break;
+        case 9:
+            dowhile_Digitos();
             break;
         }
 
@@ -88,11 +99,11 @@ void for_Fibonacci(void)
     printf("Cuantas veces se repetira la serie: \n");
     scanf("%d", &n);
     system("CLS");
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; i++)// Controla las veces que se realizara la serie
     {
         resul = ante + sig;
         ante = sig;
-        sig = resul;
+        sig = resul; //Se transforman las variables para poder continuar con el ciclo
         printf("%d\n", resul);
     }
     system("PAUSE");
@@ -113,11 +124,11 @@ void while_Fibonacci(void)
     sig = 1;
     resul = 1;
     system("CLS");
-    while (i < n)
+    while (i < n) // Controla las veces que se realizara la serie
     {
         resul = ante + sig;
         ante = sig;
-        sig = resul;
+        sig = resul; //Se transforman las variables para poder continuar con el ciclo
         i++;
         printf("%d\n", resul);
     }
@@ -143,11 +154,11 @@ void dowhile_Fibonacci(void)
     {
         resul = ante + sig;
         ante = sig;
-        sig = resul;
+        sig = resul; //Se transforman las variables para poder continuar con el ciclo
         i++;
         printf("%d\n", resul);
 
-    } while (i < n);
+    } while (i < n); // Controla las veces que se realizara la serie
     system("PAUSE");
 }
 
@@ -164,11 +175,11 @@ void for_Factorial(void)
     fact = 1;
     if (n == 0)
     {
-        printf("Factorial de 0 = 1");
+        printf("Factorial de 0 = 1"); //Caso base
     }
     for (i = 1; i <= n; i++)
     {
-        fact = i * fact;
+        fact = i * fact; //Se multiplica y se guarda en si mismo para obtener el factorial
     }
     printf("Factorial de %d = %d\n", n, fact);
     system("PAUSE");
@@ -189,11 +200,11 @@ void while_Factorial(void)
     i = 1;
     if (n == 0)
     {
-        printf("Factorial de 0 = 1");
+        printf("Factorial de 0 = 1"); //Caso base
     }
     while (i <= n)
     {
-        fact = i * fact;
+        fact = i * fact; //Se multiplica y se guarda en si mismo para obtener el factorial
         i++;
     }
     printf("Factorial de %d = %d\n", n, fact);
@@ -215,13 +226,13 @@ void dowhile_Factorial(void)
     i = 1;
     if (n == 0)
     {
-        printf("Factorial de 0 = 1");
+        printf("Factorial de 0 = 1"); //Caso base
     }
     else
     {
         do
         {
-            fact = i * fact;
+            fact = i * fact; //Se multiplica y se guarda en si mismo para obtener el factorial
             i++;
         } while (i <= n);
     }
@@ -230,14 +241,64 @@ void dowhile_Factorial(void)
 }
 
 //****************************
-void Digitos(void)
+void for_Digitos(void)
 {
     //  VARIALES LOCALES
-    int n, digitos;
+    int num, x, i;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
     printf("   DIGITOS\n");
-    printf("Cantidad de digitos de: \n");
-    scanf("%d", &n);
+    printf("Contar digitos del numero: \n");
+    scanf("%d", &num);
+    i = 0;
+    x = 1;
+    for (i = 0; num >= x; i++, x = x * 10) 
+    {
+        //Cada que entra al ciclo se agrega un digito a X
+        //El numero se compara con X
+        //Cada aumento de i significa que aumento un digito
+    }
+    printf("El numero %d tiene %d digitos \n", num, i);
+    system("PAUSE");
+}
+//****************************
+void while_Digitos(void)
+{
+    //  VARIALES LOCALES
+    int num, x, i;
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   DIGITOS\n");
+    printf("Contar digitos del numero: \n");
+    scanf("%d", &num);
+    i = 0;
+    x = 1;
+    while (num >= x) //El numero se compara con X
+    {
+        x = x * 10; //Cada que entra al ciclo se agrega un digito a X
+        i++; //Cada aumento de i significa que aumento un digito
+    }
+    printf("El numero %d tiene %d digitos \n", num, i);
+    system("PAUSE");
+}
+//****************************
+void dowhile_Digitos(void)
+{
+    //  VARIALES LOCALES
+    int num, x, i;
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   DIGITOS\n");
+    printf("Contar digitos del numero: \n");
+    scanf("%d", &num);
+    i = 0;
+    x = 1;
+    do
+    {
+        x = x * 10; //Cada que entra al ciclo se agrega un digito a X
+        i++; //Cada aumento de i significa que aumento un digito
+    } while (num >= x); //El numero se compara con X
+
+    printf("El numero %d tiene %d digitos \n", num, i);
     system("PAUSE");
 }
