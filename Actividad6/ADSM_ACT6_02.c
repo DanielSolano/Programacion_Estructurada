@@ -204,7 +204,7 @@ void Embarcacion(void)
     system("PAUSE");
 }
 //****************************
-void Recursadores(void)
+void Recursadores(void) 
 {
     //  VARIABLES LOCALES
     int cal, intentos, prom, band, i;
