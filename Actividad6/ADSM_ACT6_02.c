@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
+int Validar(char msg[], int inferior, int superior);
 void DerechoExamen(void);
 void Multiplicar(void);
 void Rango(void);
 void Embarcacion(void);
+void Recursadores(void);
 //****  main principal  *********
 int main()
 {
@@ -26,6 +29,7 @@ int msges()
     printf("2.- TABLAS DE MULTIPLICAR \n");
     printf("3.- NUMEROS DENTRO DE RANGO \n");
     printf("4.- EMBARCACION FINISTERRA \n");
+    printf("5.- RECURSADORES\n");
     printf("0.- SALIR  \n");
     printf("ESCOGE UNA OPCION: ");
     scanf("%d", &op);
@@ -52,11 +56,28 @@ void menu()
         case 4:
             Embarcacion();
             break;
+        case 5:
+            Recursadores();
+            break;
         }
 
     } while (op != 0);
 }
+//*********************
+int Validar(char msg[], int inferior, int superior)
+{
+    int num;
+    char cadena[4];
+    do
+    {
+        printf("%s", msg);
+        fflush(stdin);
+        gets(cadena);
+        num = atoi(cadena);
 
+    } while ((num < inferior) || (num > superior));
+    return num;
+}
 //*********************
 void DerechoExamen(void)
 {
@@ -68,15 +89,15 @@ void DerechoExamen(void)
     i = 1;
     j = 1;
     printf("   EXAMEN DE NIVELACION\n");
-    for (i = 1; i <= 40; i++)
+    for (i = 1; i <= 4; i++)
     {
         prom = 0;
         system("CLS");
         printf("ALUMNO %d\n", i);
         for (j = 1; j <= 5; j++, prom += cal)
         {
-            printf("Calificacion unidad %d: \n", j);
-            scanf("%d", &cal);
+            printf("PARCIAL %d\n", j);
+            cal = Validar("Ingresa tu calificacion: \n", 0, 100);
         }
         prom /= 5;
         printf("%d", prom);
@@ -118,48 +139,20 @@ void Rango(void)
     //  AQUI DESARROLLO PROGRAMA
     printf("   NUMEROS DENTRO DE RANGO\n");
     system("CLS");
-    printf("Rango inferior: \n");
-    scanf("%d", &inferior);
-    printf("Rango superior: \n");
-    scanf("%d", &superior);
-    if (inferior >= superior)
-    {
-        do
-        {
-            system("CLS");
-            printf("Ingresa un rango valido\n");
-            system("PAUSE");
-            printf("Rango inferior: \n");
-            scanf("%d", &inferior);
-            printf("Rango superior: \n");
-            scanf("%d", &superior);
-        } while (inferior >= superior);
-    }
+    inferior = Validar("Rango inferior: \n", 0, 2147483647);
+    superior = Validar("Rango superior: \n", inferior, 2147483647);
 
     limite = superior - inferior;
     system("CLS");
-    printf("Cuantos numeros ingresaras: \n");
-    scanf("%d", &n);
-    if (n > limite)
-    {
-        do
-        {
-            system("CLS");
-            printf("Ingresa una cantidad valida\n");
-            system("PAUSE");
-            printf("Cuantos numeros ingresaras: \n");
-            scanf("%d", &n);
-        } while (n > limite);
-    }
-
+    limite = Validar("Cuantos numeros ingresara?: \n", 0, limite);
     i = 0;
-    numero = 0;
     suma = 0;
     for (i = 1; i <= n; i++, suma += numero)
     {
-        printf("Numero %d: \n", i);
-        scanf("%d", &numero);
+        printf("NUMERO %d: \n", i);
+        numero = Validar("Ingresa el numero: \n", inferior, superior);
     }
+
     system("CLS");
     printf("La suma de los numeros es: %d\n", suma);
     printf("La media aritmetica de los numeros es: %.2f\n", ((suma + .0) / n));
@@ -175,11 +168,11 @@ void Embarcacion(void)
     printf("   EMBARCACION FINISTERRA\n");
     band = 1;
     turistas = 0;
-    ac=0;
+    ac = 0;
     while (band)
     {
-        printf("Ingresa tu peso turista %d: \n", ++turistas);
-        scanf("%d", &peso);
+        printf("TURISTA %d: \n", ++turistas);
+        peso = Validar("Ingresa tu peso: \n", 0, 805);
         ac += peso;
         if (peso >= 805)
         {
@@ -190,7 +183,7 @@ void Embarcacion(void)
             band = 0;
         }
     }
-    
+
     printf("El promedio de peso de los pasajeros es: %.2f\n", (ac + .0) / (turistas + .0));
 
     if (turistas == 10)
@@ -202,4 +195,13 @@ void Embarcacion(void)
         printf("Se llego al maximo de peso permitido en la embarcacion\n");
     }
     system("PAUSE");
+}
+//****************************
+void Recursadores(void)
+{
+    //  VARIABLES LOCALES
+    int turistas, peso, band, ac;
+    system("CLS");
+    //  AQUI DESARROLLO PROGRAMA
+    printf("   EMBARCACION FINISTERRA\n");
 }

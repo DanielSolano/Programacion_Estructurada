@@ -9,7 +9,9 @@ void dowhile_Fibonacci(void);
 void for_Factorial(void);
 void while_Factorial(void);
 void dowhile_Factorial(void);
-void Digitos(void);
+void for_Digitos(void);
+void while_Digitos(void);
+void dowhile_Digitos(void);
 //****  main principal  *********
 int main()
 {
@@ -30,7 +32,9 @@ int msges()
     printf("4.- FACTORIAL FOR\n");
     printf("5.- FACTORIAL WHILE\n");
     printf("6.- FACTORIAL DO-WHILE\n");
-    printf("6.- DIGITOS \n");
+    printf("7.- DIGITOS FOR\n");
+    printf("8.- DIGITOS WHILE\n");
+    printf("9.- DIGITOS DO-WHILE\n");
     printf("0.- SALIR  \n");
     printf("ESCOGE UNA OPCION: ");
     scanf("%d", &op);
