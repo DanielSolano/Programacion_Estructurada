@@ -106,7 +106,7 @@ int Validar(char msg[], int inferior, int superior) // Parametros para funcionar
 void Salida1(void)
 {
     //  VARIALES LOCALES
-    int i;
+    int i, j;
     char cadena[100];
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
@@ -125,7 +125,10 @@ void Salida1(void)
             }
         }
     }
-    printf("%s\n", cadena); // Imprime cadena
+    for (j = 0; j <= i; i++) // Imprime cadena
+    {
+        printf("%c\n", cadena[j]);
+    } 
     system("PAUSE");
 }
 
@@ -393,7 +396,7 @@ void Salida9(void)
 
     for (j = 0; j <= i; j++)
     {
-        //Si el caracter no es vocal la imprime
+        // Si el caracter no es vocal la imprime
         if ((cadena[j] != 'A') && (cadena[j] != 'E') && (cadena[j] != 'I') && (cadena[j] != 'O') && (cadena[j] != 'U'))
         {
             printf("%c", cadena[j]);
@@ -427,7 +430,7 @@ void Salida10(void)
 
     for (j = 0; j <= i; j++)
     {
-        //Si el caracter es vocal lo imprime
+        // Si el caracter es vocal lo imprime
         if ((cadena[j] == 'A') || (cadena[j] == 'E') || (cadena[j] == 'I') || (cadena[j] == 'O') || (cadena[j] == 'U'))
         {
             printf("%c", cadena[j]);
