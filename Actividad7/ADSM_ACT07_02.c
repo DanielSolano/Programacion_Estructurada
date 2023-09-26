@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 25/09/2023
+// Uso de funciones para modificar cadenas 
+// ADSM_ACT7_02_932
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 25/09/2023
+// Modificar cadenas de caracteres y mostrarlas
+// ADSM_ACT7_01_932
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
