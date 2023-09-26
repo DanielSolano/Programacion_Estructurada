@@ -7,6 +7,12 @@ void menu();
 void Mayusculas(char cadena[]);
 void Minusculas(char cadena[]);
 void Capital(char cadena[]);
+int Caracteres(char cadena[]);
+void Inversa(char cadena[]);
+void Espacios(char cadena[]);
+void Alfabetica(char cadena[]);
+void Todas(char cadena[]);
+void Palindromo(char cadena[]);
 //****  main principal  *********
 int main()
 {
@@ -24,6 +30,12 @@ int msges()
     printf("1.- MAYUSCULAS \n");
     printf("2.- MINUSCULAS \n");
     printf("3.- CAPITAL \n");
+    printf("4.- LARGO CADENA \n");
+    printf("5.- CADENA INVERSA \n");
+    printf("6.- SIN ESPACIOS \n");
+    printf("7.- SOLO CARACTERES A - Z \n");
+    printf("8.- COMBINACION DE TODOS\n");
+    printf("9.- PALINDROMO\n");
     printf("0.- SALIR  \n");
     printf("ESCOGE UNA OPCION: ");
     scanf("%d", &op);
@@ -32,7 +44,7 @@ int msges()
 //****************
 void menu()
 {
-    int op;
+    int op, largo;
     char cadena[100];
     do
     {
@@ -63,6 +75,55 @@ void menu()
             gets(cadena);
             Capital(cadena);
             break;
+        case 4:
+            system("CLS");
+            printf("   LARGO CADENA\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            largo = Caracteres(cadena);
+            printf("La cadena tiene %d caracteres.\n", largo);
+            break;
+        case 5:
+            system("CLS");
+            printf("   CADENA INVERSA\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            Inversa(cadena);
+            break;
+        case 6:
+            system("CLS");
+            printf("   SIN ESPACIOS\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            Espacios(cadena);
+            break;
+        case 7:
+            system("CLS");
+            printf("   SOLO CARACTERES A - Z\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            Alfabetica(cadena);
+            break;
+        case 8:
+            system("CLS");
+            printf("   COMBINACION\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            Todas(cadena);
+            break;
+        case 9:
+            system("CLS");
+            printf("   PALINDROMO\n");
+            printf("Ingresa una sentencia:\n");
+            fflush(stdin);
+            gets(cadena);
+            Palindromo(cadena);
+            break;
         }
 
     } while (op != 0);
@@ -85,7 +146,7 @@ void Mayusculas(char cadena[])
             }
         }
     }
-    for (j = 0; j <= i; j++)
+    for (j = 0; j <= i; j++) // Imprime la cadena
     {
         printf("%c", cadena[j]);
     }
@@ -98,7 +159,7 @@ void Minusculas(char cadena[])
 {
 
     //  VARIALES LOCALES
-    int i, j, k;
+    int i, j;
     //  AQUI DESARROLLO PROGRAMA
     i = 0;
     for (i = 0; cadena[i] != '\0'; i++) // Convierte a minusculas
@@ -111,7 +172,7 @@ void Minusculas(char cadena[])
             }
         }
     }
-    for (j = 0; j <= i; j++)
+    for (j = 0; j <= i; j++) // Imprime la cadena
     {
         printf("%c", cadena[j]);
     }
@@ -121,8 +182,8 @@ void Minusculas(char cadena[])
 //****************************
 void Capital(char cadena[])
 {
-    //  VARIALES LOCALES
-    int i, j, k;
+    //  VARIABLES LOCALES
+    int i, j;
     //  AQUI DESARROLLO PROGRAMA
     for (i = 0; cadena[i] != '\0'; i++) // Cuenta los caracteres totales
     {
@@ -138,7 +199,7 @@ void Capital(char cadena[])
                     }
                 }
             }
-            else
+            else // Si empieza con un espacio convierte la segunda letra en mayuscula
             {
                 if (cadena[i + 1] >= 'a')
                 {
@@ -151,9 +212,133 @@ void Capital(char cadena[])
         }
     }
 
-    for (j = 0; j <= i; j++)
+    for (j = 0; j <= i; j++) // Imprime la cadena
     {
         printf("%c", cadena[j]);
+    }
+    printf("\n");
+    system("PAUSE");
+}
+//****************************
+int Caracteres(char cadena[])
+{
+    //  VARIABLES LOCALES
+    int i;
+    //  AQUI DESARROLLO PROGRAMA
+    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    {
+    }
+    return i;
+    system("PAUSE");
+}
+//****************************
+void Inversa(char cadena[])
+{
+    //  VARIABLES LOCALES
+    int i, j;
+    //  AQUI DESARROLLO PROGRAMA
+    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    {
+    }
+
+    for (j = i; j >= 0; j--) // Imprime la cadena inversa
+    {
+        printf("%c", cadena[j]);
+    }
+    printf("\n");
+    system("PAUSE");
+}
+//****************************
+void Espacios(char cadena[])
+{
+    //  VARIABLES LOCALES
+    int i, j, k, h, q;
+    char copia[100];
+    //  AQUI DESARROLLO PROGRAMA
+    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    {
+    }
+
+    for (q = 0; q <= i; q++) // Copia la cadena orginal
+    {
+        copia[q] = cadena[q];
+    }
+
+    for (j = 0; j <= i; j++)
+    {
+        if (copia[j] == ' ') // Si hay un espacio vacio, todo el contenido se recorre un espacio a la izquierda
+        {
+            for (k = j; k < i; k++)
+            {
+                copia[k] = copia[k + 1];
+            }
+        }
+    }
+
+    for (h = 0; h <= i; h++) // Imprime la cadena
+    {
+        printf("%c", copia[h]);
+    }
+    printf("\n");
+    system("PAUSE");
+}
+//****************************
+void Alfabetica(char cadena[])
+{
+    //  VARIABLES LOCALES
+    int i, j;
+    char copia[100];
+    //  AQUI DESARROLLO PROGRAMA
+    for (i = 0, j = 0; cadena[i] != '\0'; i++, j++)
+    {
+        // Verifica si es caracter o espacio
+        if ((cadena[i] == ' ') || (cadena[i] >= 'a' && cadena[i] <= 'z') || (cadena[i] >= 'A' && cadena[i] <= 'Z'))
+        {
+            // Verfica inicio y terminacion en espacio
+            if (cadena[i] != ' ' || (i > 0 && cadena[i + 1] != '\0' && cadena[i - 1] != ' '))
+            {
+                copia[j] = cadena[i];
+                printf("%c", copia[j]);
+            }
+        }
+    }
+    printf("\n");
+    system("PAUSE");
+}
+//****************************
+void Todas(char cadena[])
+{
+    printf("    MAYUSCULAS\n");
+    Mayusculas(cadena);
+    printf("    MINUSCULAS\n");
+    Minusculas(cadena);
+    printf("    CAPITAL\n");
+    Capital(cadena);
+    printf("    SIN ESPACIOS\n");
+    Espacios(cadena);
+    printf("    AL REVES\n");
+    Inversa(cadena);
+    system("PAUSE");
+}
+//****************************
+void Palindromo(char cadena[])
+{
+    //  VARIABLES LOCALES
+    int i, j, h, k;
+    char copia[100];
+    //  AQUI DESARROLLO PROGRAMA
+    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    {
+    }
+
+    for (j = i, h = 0; j >= 0; j--, h++)
+    {
+        copia[h] = cadena[j];
+    }
+
+    for (k = 0; k <= i; k++) // Imprime la cadena
+    {
+        printf("%c", copia[h]);
     }
     printf("\n");
     system("PAUSE");

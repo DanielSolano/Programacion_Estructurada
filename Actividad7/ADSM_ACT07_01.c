@@ -110,11 +110,10 @@ void Salida1(void)
     char cadena[100];
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   SALIDA 1");
+    printf("   SALIDA 1\n");
     printf("Ingresa una frase: \n");
     fflush(stdin);
     gets(cadena);
-    system("CLS");
     for (i = 0; cadena[i] != '\0'; i++) // Convierte a mayusculas
     {
         if (cadena[i] >= 'a')
@@ -125,10 +124,11 @@ void Salida1(void)
             }
         }
     }
-    for (j = 0; j <= i; i++) // Imprime cadena
+    for (j = 0; j <= i; j++) // Imprime cadena
     {
-        printf("%c\n", cadena[j]);
+        printf("%c", cadena[j]);
     } 
+    printf("\n");
     system("PAUSE");
 }
 
@@ -145,7 +145,6 @@ void Salida2(void)
     printf("Ingresa una frase: \n");
     fflush(stdin);
     gets(cadena);
-
     for (i = 0; cadena[i] != '\0'; i++) // Convierte a mayusculas
     {
         if (cadena[i] >= 'a')
@@ -156,7 +155,6 @@ void Salida2(void)
             }
         }
     }
-    system("CLS");
     for (j = i; j >= 0; j--)
     {
         printf("%c", cadena[j]); // Imprime la cadena al reves
@@ -187,7 +185,6 @@ void Salida3(void)
             }
         }
     }
-    system("CLS");
     for (j = 0; j <= i; j++)
     {
         printf("%c\n", cadena[j]); // Imprime la cadena letra por letra hacia abajo
@@ -206,7 +203,6 @@ void Salida4(void)
     printf("Ingresa una frase: \n");
     fflush(stdin);
     gets(cadena);
-
     for (i = 0; cadena[i] != '\0'; i++) // Convierte a mayusculas
     {
         if (cadena[i] >= 'a')
@@ -217,7 +213,6 @@ void Salida4(void)
             }
         }
     }
-    system("CLS");
     for (j = i; j >= 0; j--)
     {
         printf("%c\n", cadena[j]); // Imprime la cadena letra por letra al reves
@@ -360,8 +355,8 @@ void Salida8(void)
     for (h = i; h >= 0; h--) // Controla las veces que se imprimira la cadena
     {
         j = 0;
-        cadena[k] = '\0';        // Modifica el carecter vacio
-        for (j = i; j >= 0; j--) // Imprime la cadena
+        cadena[k] = '\0';  // Modifica el carecter vacio
+        for (j = i; j >= 0; j--) // Imprime la cadena al reves
         {
             printf("%c", cadena[j]);
         }
