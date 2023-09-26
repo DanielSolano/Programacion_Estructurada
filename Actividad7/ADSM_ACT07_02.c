@@ -13,6 +13,7 @@ void Espacios(char cadena[]);
 void Alfabetica(char cadena[]);
 void Todas(char cadena[]);
 void Palindromo(char cadena[]);
+int Validar(char cadena[]);
 //****  main principal  *********
 int main()
 {
@@ -83,6 +84,7 @@ void menu()
             gets(cadena);
             largo = Caracteres(cadena);
             printf("La cadena tiene %d caracteres.\n", largo);
+            system("PAUSE");
             break;
         case 5:
             system("CLS");
@@ -210,8 +212,18 @@ void Capital(char cadena[])
                 }
             }
         }
+        if (cadena[i] == ' ')
+        {
+            i++;
+            if (cadena[i] >= 'a')
+            {
+                if (cadena[i] <= 'z')
+                {
+                    cadena[i] = cadena[i] - 32;
+                }
+            }
+        }
     }
-
     for (j = 0; j <= i; j++) // Imprime la cadena
     {
         printf("%c", cadena[j]);
@@ -219,6 +231,7 @@ void Capital(char cadena[])
     printf("\n");
     system("PAUSE");
 }
+
 //****************************
 int Caracteres(char cadena[])
 {
@@ -229,7 +242,6 @@ int Caracteres(char cadena[])
     {
     }
     return i;
-    system("PAUSE");
 }
 //****************************
 void Inversa(char cadena[])
@@ -324,22 +336,63 @@ void Todas(char cadena[])
 void Palindromo(char cadena[])
 {
     //  VARIABLES LOCALES
-    int i, j, h, k;
-    char copia[100];
+    int largo, j, valor, i, palindromo;
     //  AQUI DESARROLLO PROGRAMA
-    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    valor = Validar(cadena);
+    if (valor == 0)
     {
-    }
+        printf("Cadena valida\n");
+        largo = 0;
+        while (cadena[largo] != '\0')
+        {
+            largo++;
+        }
 
-    for (j = i, h = 0; j >= 0; j--, h++)
-    {
-        copia[h] = cadena[j];
+        i = 0;
+        j = largo - 1;
+        palindromo = 1;
+        while (i < j)
+        {
+            if (cadena[i] != cadena[j])
+            {
+                palindromo = 0;
+            }
+            i++;
+            j--;
+        }
+        if (palindromo == 1)
+        {
+            printf("La cadena es palindromo\n");
+        }
+        else
+        {
+            printf("La cadena no es palindromo\n");
+        }
+        system("PAUSE");
     }
-
-    for (k = 0; k <= i; k++) // Imprime la cadena
+    else
     {
-        printf("%c", copia[h]);
+        printf("Cadena invalida.\n");
+        system("PAUSE");
     }
-    printf("\n");
-    system("PAUSE");
+}
+//****************************
+int Validar(char cadena[])
+{
+    for (int i = 0; cadena[i] != '\0'; i++)
+    {
+        if (cadena[i] >= '0' && cadena[i] <= '9')
+        {
+            return 1; // Son numeros
+        }
+        if (cadena[i] >= 'a' && cadena[i] <= 'z')
+        {
+            return 2; // Es minuscula
+        }
+        if (cadena[i] == ' ' && cadena[i + 1] == ' ')
+        {
+            return 3; // Hay doble espacio
+        }
+    }
+    return 0;
 }
