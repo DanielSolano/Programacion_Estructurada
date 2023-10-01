@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 30/09/2023
+// Utilizar vectores para crear arreglos e imprimirlos.
+// ADSM_ACT8_932
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,11 +12,11 @@
 int msges();
 void menu();
 void LlenarVector(int vect[], int m, int ri, int rf, int op);
-int Validar(int inferior, int superior);
+int Validar(char msg[], int inferior, int superior);
 void Vector3(int vect3[], int vect2[], int vect[1]);
 void ImprimirVector(char msg[], int vect[], int m);
-void Matriz(void);
-void ImprimirMatriz(void);
+void LlenarMatriz(int matriz[][4], int vect1[], int vect2[], int m, int n);
+void ImprimirMatriz(int matriz[][4], int m, int n);
 
 //****  main principal  *********
 int main()
@@ -41,7 +46,7 @@ int msges()
 //****************
 void menu()
 {
-    int op, vector1[10], vector2[10], vector3[20];
+    int op, vector1[10], vector2[10], vector3[20], matriz[4][4];
     do
     {
         srand(time(NULL));
@@ -75,10 +80,10 @@ void menu()
             ImprimirVector("VECTOR 3", vector3, 20);
             break;
         case 5:
-            Matriz();
+            LlenarMatriz(matriz, vector1, vector2, 4, 4);
             break;
         case 6:
-            ImprimirMatriz();
+            ImprimirMatriz(matriz, 4, 4);
             break;
         }
 
@@ -131,8 +136,8 @@ void Vector3(int vect3[], int vect2[], int vect1[])
     system("CLS");
     for (i = 0; i < 10; i++)
     {
-        vect3[i] = vect2[i];
-        vect3[i + 10] = vect1[i];
+        vect3[i] = vect2[i]; //Los primeros 10 espacios se llenan con el vector 2
+        vect3[i + 10] = vect1[i]; //Del 10 al 20 con el vector 1
     }
     //  AQUI DESARROLLO PROGRAMA
 }
@@ -143,28 +148,51 @@ void ImprimirVector(char msg[], int vect[], int m)
     int i;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("%s\n",msg);
-    for (i = 0; i < m ; i++)
+    printf("%s\n", msg);
+    for (i = 0; i < m; i++) 
     {
-        printf("[%d] --> %d\n",i+1,vect[i]);
+        printf("[%d] --> %d\n", i + 1, vect[i]); //Imprime el valor del del arreglo en el indice
     }
     system("PAUSE");
 }
 //****************************
-void Matriz(void)
+void LlenarMatriz(int matriz[][4], int vect1[], int vect2[], int m, int n)
 {
     //  VARIALES LOCALES
+    int i, j, k;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   DIGITOS\n");
+    for (i = 0, k=0; i < m; i++)
+    {
+        for (j = 0; j < n; j++, k++)
+        {
+            if (k < 10) //Llena la matriz con los 10 datos del vector 1
+            {
+                matriz[i][j] = vect1[k];
+            }
+            else //Cuando se termina el vector 1 continua con el vector 2
+            {
+                matriz[i][j] = vect2[k-10];
+            }
+        }
+    }
+    printf("Matriz rellenada\n");
     system("PAUSE");
 }
 //****************************
-void ImprimirMatriz(void)
-{`
+void ImprimirMatriz(int matriz[][4], int m, int n)
+{
     //  VARIALES LOCALES
+    int i, j;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    printf("   DIGITOS\n");
+    printf("   IMPRIMIR MATRIZ\n");
+    for (i = 0; i< m; i++)
+    {
+        for (j = 0; j < n ; j++)
+        {
+            printf("Espacio [%d][%d] --> [%d]\n",i+1,j+1,matriz[i][j]); //Imprime los valores del arreglo bidimensional
+        }
+    }
     system("PAUSE");
 }
