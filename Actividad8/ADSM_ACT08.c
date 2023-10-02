@@ -108,22 +108,29 @@ int Validar(char msg[], int inferior, int superior) // Parametros para funcionar
 void LlenarVector(int vect[], int m, int ri, int rf, int op)
 {
     //  VARIABLES LOCALES
-    int i;
+    int i, j, num;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    if (op == 1)
+    if (op == 1) // Opcion rellenado automatico
     {
-        for (i = 0; i < m; i++)
+        for (i = 0; i < m; i++) // Le asgina un valor a cada indice del vector
         {
             vect[i] = (rand() % (ri - rf)) + ri;
+            for (j = 0; j < i; j++) // Barre el vector hasta i comprobando que no se repita el numero
+            {
+                if (vect[i] == vect[j]) // Si se encuentra un numero repetido lo vuelve a generar
+                {
+                    vect[i] = (rand() % (ri - rf)) + ri;
+                }
+            }
         }
     }
-    else
+    else // Opcion rellenado manual
     {
         for (i = 0; i < m; i++)
         {
             printf("    Espacio [%d]\n", i + 1);
-            vect[i] = Validar("Numero entre 30 y 70\n", 30, 70);
+            vect[i] = Validar("Numero entre 30 y 70\n", 30, 70); // Valida la entrada manual
         }
     }
 }
@@ -136,8 +143,8 @@ void Vector3(int vect3[], int vect2[], int vect1[])
     system("CLS");
     for (i = 0; i < 10; i++)
     {
-        vect3[i] = vect2[i]; //Los primeros 10 espacios se llenan con el vector 2
-        vect3[i + 10] = vect1[i]; //Del 10 al 20 con el vector 1
+        vect3[i] = vect2[i];      // Los primeros 10 espacios se llenan con el vector 2
+        vect3[i + 10] = vect1[i]; // Del 10 al 20 con el vector 1
     }
     //  AQUI DESARROLLO PROGRAMA
 }
@@ -149,9 +156,9 @@ void ImprimirVector(char msg[], int vect[], int m)
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
     printf("%s\n", msg);
-    for (i = 0; i < m; i++) 
+    for (i = 0; i < m; i++)
     {
-        printf("[%d] --> %d\n", i + 1, vect[i]); //Imprime el valor del del arreglo en el indice
+        printf("[%d] --> %d\n", i + 1, vect[i]); // Imprime el valor del del arreglo en el indice
     }
     system("PAUSE");
 }
@@ -162,17 +169,17 @@ void LlenarMatriz(int matriz[][4], int vect1[], int vect2[], int m, int n)
     int i, j, k;
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
-    for (i = 0, k=0; i < m; i++)
+    for (i = 0, k = 0; i < m; i++)
     {
         for (j = 0; j < n; j++, k++)
         {
-            if (k < 10) //Llena la matriz con los 10 datos del vector 1
+            if (k < 10) // Llena la matriz con los 10 datos del vector 1
             {
                 matriz[i][j] = vect1[k];
             }
-            else //Cuando se termina el vector 1 continua con el vector 2
+            else // Cuando se termina el vector 1 continua con el vector 2
             {
-                matriz[i][j] = vect2[k-10];
+                matriz[i][j] = vect2[k - 10];
             }
         }
     }
@@ -187,11 +194,11 @@ void ImprimirMatriz(int matriz[][4], int m, int n)
     system("CLS");
     //  AQUI DESARROLLO PROGRAMA
     printf("   IMPRIMIR MATRIZ\n");
-    for (i = 0; i< m; i++)
+    for (i = 0; i < m; i++)
     {
-        for (j = 0; j < n ; j++)
+        for (j = 0; j < n; j++)
         {
-            printf("Espacio [%d][%d] --> [%d]\n",i+1,j+1,matriz[i][j]); //Imprime los valores del arreglo bidimensional
+            printf("Espacio [%d][%d] --> [%d]\n", i + 1, j + 1, matriz[i][j]); // Imprime los valores del arreglo bidimensional
         }
     }
     system("PAUSE");
