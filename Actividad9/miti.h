@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 int Validar(int inferior, int superior);
+void VectorMatriz(int vector[], int m, int ri, int rf);
 void LlenarVector(int vector[], int m, int ri, int rf, int op);
 void LlenarMatrizM(int matriz[][4], int m, int n, int ri, int rf);
 void LlenarMatrizR(int matriz[][4], int m, int n, int ri, int rf);
@@ -13,7 +14,7 @@ void Ordenar(int vector[], int n);
 int Validar(int inferior, int superior) // Parametros para funcionar
 {
     int num;
-    char cadena[100];
+    char cadena[10];
     do
     {
         fflush(stdin);
@@ -23,10 +24,25 @@ int Validar(int inferior, int superior) // Parametros para funcionar
     return num;
 }
 //*********************
-void LlenarVector(int vector[], int m, int ri, int rf, int op)
+void VectorMatriz(int vector[], int m, int ri, int rf)
 {
     int i, num, rango;
+    rango = rf - ri + 1;
+    for (i = 0; i < m; i++) // Le asgina un valor a cada indice del vector
+    {
+
+        do
+        {
+            num = rand() % rango + ri;
+        } while (BusquedaSec(vector, i, num) != -1);
+        vector[i] = num;
+    }
+}
+//*********************
+void LlenarVector(int vector[], int m, int ri, int rf, int op)
+{
     system("CLS");
+    int i, num, rango;
     rango = rf - ri + 1;
     if (op == 1) // Opcion rellenado automatico
     {
@@ -48,13 +64,15 @@ void LlenarVector(int vector[], int m, int ri, int rf, int op)
             vector[i] = Validar(30, 70); // Valida la entrada manual
         }
     }
+    printf("VECTOR RELLENADO\n");
+    system("PAUSE");
 }
 //****************************
 void LlenarMatrizR(int matriz[][4], int m, int n, int ri, int rf)
 {
-    //  VARIALES LOCALES
+    system("CLS");
     int i, j, k, vect[m * n];
-    LlenarVector(vect, m, n, ri, rf);
+    VectorMatriz(vect, m * n, ri, rf);
     for (i = 0, k = 0; i < m; i++)
     {
         for (j = 0; j < n; j++)
@@ -62,12 +80,13 @@ void LlenarMatrizR(int matriz[][4], int m, int n, int ri, int rf)
             matriz[i][j] = vect[k++];
         }
     }
-    printf("Matriz rellenada\n");
+    printf("MATRIZ RELLENADA\n");
     system("PAUSE");
 }
 //****************************
 void LlenarMatrizM(int matriz[][4], int m, int n, int ri, int rf)
 {
+    system("CLS");
     int i, j;
     for (i = 0; i < m; i++)
     {
@@ -76,13 +95,14 @@ void LlenarMatrizM(int matriz[][4], int m, int n, int ri, int rf)
             matriz[i][j] = Validar(ri, rf);
         }
     }
-    printf("Matriz rellenada\n");
+    printf("MATRIZ RELLENADA\n");
     system("PAUSE");
 }
 //****************************
 int BusquedaSec(int vector[], int n, int num)
 {
-    int i, j;
+    system("CLS");
+    int i;
     for (i = 0; i < n; i++)
     {
         if (vector[i] == num)
@@ -95,16 +115,19 @@ int BusquedaSec(int vector[], int n, int num)
 //****************************
 void ImprimirVector(int vector[], int m, char msg[])
 {
+    system("CLS");
     int i;
-    printf("%s\n", msg);
+    printf("    %s\n", msg);
     for (i = 0; i < m; i++)
     {
         printf("[%d] --> %d\n", i + 1, vector[i]);
     }
+    system("PAUSE");
 }
 //****************************
 void Ordenar(int vector[], int n)
 {
+    system("CLS");
     int i, j, temp;
     for (i = 0; i < n; i++)
     {
@@ -118,12 +141,14 @@ void Ordenar(int vector[], int n)
             }
         }
     }
+    ImprimirVector(vector, n, "VECTOR ORDENADO");
 }
 //****************************
 void ImprimirMatriz(int matriz[][4], int m, int n, char msg[])
 {
+    system("CLS");
     int i, j;
-    printf("%s\n", msg);
+    printf("    %s\n", msg);
     for (i = 0; i < m; i++)
     {
         for (j = 0; j < n; j++)
@@ -131,4 +156,5 @@ void ImprimirMatriz(int matriz[][4], int m, int n, char msg[])
             printf("[%d][%d] --> %d\n", i + 1, j + 1, matriz[i][j]);
         }
     }
+    system("PAUSE");
 }
