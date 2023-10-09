@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 05/10/2023
+// Creacion de nuestra libreria e implementacion de funciones propias
+// ADSM_ACT9_932
+
 #include "miti.h"
 
 //*** PROTOTIPOS DE FUNCIONES  ******
