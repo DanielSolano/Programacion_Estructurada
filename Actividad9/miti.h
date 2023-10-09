@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 05/10/2023
+// Creacion de nuestra libreria
+// ADSM_ACT9_LIB_932
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
