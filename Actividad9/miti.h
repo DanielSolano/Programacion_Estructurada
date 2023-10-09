@@ -2,10 +2,11 @@
 // 05/10/2023
 // Creacion de nuestra libreria
 // ADSM_ACT9_LIB_932
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
 int Validar(int inferior, int superior);
 void VectorMatriz(int vector[], int m, int ri, int rf);
 void LlenarVector(int vector[], int m, int ri, int rf, int op);

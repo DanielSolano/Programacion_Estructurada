@@ -36,6 +36,7 @@ int msges()
 //****************
 void menu()
 {
+    srand(time(NULL));
     int op, num, i;
     int vector[15], matriz[4][4];
     do
