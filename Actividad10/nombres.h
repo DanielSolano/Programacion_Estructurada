@@ -1,13 +1,9 @@
-char NombresHombre[30][30] = {"Juan", "Carlos", "Luis", "José", "Miguel", "Pedro", "Antonio", "Manuel", "Javier", "Pablo",
-                               "David", "Francisco", "Alejandro", "Daniel", "Andres", "Fernando", "Rafael", "Ricardo", "Roberto", "Sergio",
-                               "Martin", "Hector", "Eduardo", "Gabriel", "Mario", "Jorge", "Angel", "Lorenzo", "Diego"};
+char NombresHombre[15][15] = {"JUAN", "CARLOS", "LUIS", "JOSE", "MIGUEL", "PEDRO", "ANTONIO", "MANUEL", "JAVIER", "PABLO", "DAVID", "FRANCISCO", "ALEJANDRO", "DANIEL", "ANDRES"};
 
-char NombresMujer[30][30] = {"Maria", "Ana", "Laura", "Carmen", "Isabel", "Sofia", "Luisa", "Elena", "Patricia", "Teresa",
-                              "Rosa", "Paula", "Marta", "Cristina", "Lucia", "Raquel", "Natalia", "Beatriz", "Lourdes", "Clara",
-                              "Linda", "Gloria", "Adriana", "Valeria", "Alicia", "Victoria", "Diana", "Silvia", "Sara"};
+char SegundoHombre[15][15] = {" ALBERTO", " FERNANDO", " MARIO", " ALEJANDRO", " GABRIEL", " SERGIO", " CARLOS", " HECTOR", " LUIS", " ENRIQUE", " JULIO", " RODRIGO", " EDUARDO", " OSCAR", " GUSTAVO"};
 
-char Apellidos[30][30] = {"Garcia", "Rodriguez", "Martinez", "Lopez", "Gonzalez", "Perez", "Sanchez", "Fernandez", "Torres", "Ramirez",
-                          "Ruiz", "Gonzalez", "Torres", "Morales", "Ortega", "Jimenez", "Soto", "Herrera", "Delgado", "Castro",
-                          "Rios", "Medina", "Vargas", "Mendoza", "Reyes", "Blanco", "Navarro", "Guzman", "Romero", "Morales",
-                          "Castro", "Rios", "Medina", "Vargas", "Mendoza", "Reyes", "Blanco", "Navarro", "Guzman", "Romero",
-                          "Ortega", "Jimenez", "Soto", "Herrera", "Delgado", "Castro", "Rios", "Medina"};
+char NombresMujer[15][15] = {"MARIA", "ANA", "LAURA", "CARMEN", "ISABEL", "SOFIA", "LUISA", "ELENA", "PATRICIA", "TERESA", "ROSA", "PAULA", "MARTA", "CRISTINA", "DANNA"};
+
+char SegundoMujer[15][15] = {" LUCIA", " RAQUEL", " NATALIA", " BEATRIZ", " LOURDES", " CLARA", " LINDA", " GLORIA", " ADRIANA", " VALERIA", " ALICIA", " VICTORIA", " DIANA", " SILVIA", " SARA"};
+
+char Apellidos[89][30] = {"GARCIA", "RODRIGUEZ", "MARTINEZ", "LOPEZ", "GONZALEZ", "PEREZ", "SANCHEZ", "FERNANDEZ", "TORRES", "RAMIREZ", "RUIZ", "GONZALEZ", "TORRES", "MORALES", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "MORALES", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "SILVA", "CASTRO", "RIOS", "MONTOYA", "PENA", "VIDAL", "AGUILAR", "CORDERO", "MORA", "SOSA", "ROSALES", "LUGO", "SERRANO", "CACERES", "ROBLES", "SALAZAR", "LEON", "GALLEGOS", "CORDOVA", "DEL VALLE", "NAVARRO", "PAREDES", "ZAMORA", "VALDEZ", "DURAN", "CISNEROS", "GUTIERREZ", "SALINAS", "AVILA", "RIVAS", "PIZARRO", "GUERRA", "ESPINOZA", "CALDERON", "PANTOJA", "MIRANDA", "MORALES", "ROJAS", "SEGURA", "VILLANUEVA", "ROLDAN", "BENITEZ", "LUNA", "VALENCIA", "CERVANTES", "ESCOBAR", "ZUNIGA", "BARRIOS"};

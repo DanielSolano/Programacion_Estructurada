@@ -6,16 +6,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "nombres.h"
 
 int Validar(int inferior, int superior);
-void VectorMatriz(int vector[], int m, int ri, int rf);
 void LlenarVector(int vector[], int m, int ri, int rf, int op);
-void LlenarMatrizM(int matriz[][4], int m, int n, int ri, int rf);
-void LlenarMatrizR(int matriz[][4], int m, int n, int ri, int rf);
 int BusquedaSec(int vector[], int n, int num);
 void ImprimirVector(int vector[], int m, char msg[]);
-void ImprimirMatriz(int matriz[][4], int m, int n, char msg[]);
 void Ordenar(int vector[], int n);
+int NumAleatorio(int ri, int rf);
+void ValiCadena(char cadena[], char msg[]);
+void Mayusculas(char cadena[]);
+void DobleEspacio(char cadena[]);
+int BusquedaOrdenada(int vect[], int n, int num);
+
 //*********************
 int Validar(int inferior, int superior) // Parametros para funcionar
 {
@@ -47,7 +50,6 @@ void VectorMatriz(int vector[], int m, int ri, int rf)
 //*********************
 void LlenarVector(int vector[], int m, int ri, int rf, int op)
 {
-    system("CLS");
     int i, num, rango;
     rango = rf - ri + 1;
     if (op == 1) // Opcion rellenado automatico
@@ -70,40 +72,8 @@ void LlenarVector(int vector[], int m, int ri, int rf, int op)
             vector[i] = Validar(30, 70); // Valida la entrada manual
         }
     }
-    printf("VECTOR RELLENADO\n");
-    system("PAUSE");
 }
-//****************************
-void LlenarMatrizR(int matriz[][4], int m, int n, int ri, int rf)
-{
-    system("CLS");
-    int i, j, k, vect[m * n];
-    VectorMatriz(vect, m * n, ri, rf);
-    for (i = 0, k = 0; i < m; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            matriz[i][j] = vect[k++];
-        }
-    }
-    printf("MATRIZ RELLENADA\n");
-    system("PAUSE");
-}
-//****************************
-void LlenarMatrizM(int matriz[][4], int m, int n, int ri, int rf)
-{
-    system("CLS");
-    int i, j;
-    for (i = 0; i < m; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            matriz[i][j] = Validar(ri, rf);
-        }
-    }
-    printf("MATRIZ RELLENADA\n");
-    system("PAUSE");
-}
+
 //****************************
 int BusquedaSec(int vector[], int n, int num)
 {
@@ -146,18 +116,99 @@ void Ordenar(int vector[], int n)
         }
     }
 }
+
 //****************************
-void ImprimirMatriz(int matriz[][4], int m, int n, char msg[])
+int NumAleatorio(int ri, int rf)
 {
-    system("CLS");
-    int i, j;
-    printf("    %s\n", msg);
-    for (i = 0; i < m; i++)
+    int rango = (rf - ri + 1);
+
+    return rand() % rango + ri;
+}
+//****************************
+void ValiCadena(char cadena[], char msg[])
+{
+    int error;
+    error = 0;
+    do
     {
-        for (j = 0; j < n; j++)
+        if (error == 1)
         {
-            printf("[%d][%d] --> %d\n", i + 1, j + 1, matriz[i][j]);
+            printf("%s\n", msg);
+            fflush(stdin);
+            gets(cadena);
+            error = 0;
+        }
+        for (int i = 0; cadena[i] != '\0'; i++)
+        {
+            if (cadena[i] >= '0' && cadena[i] <= '9') // Son numeros
+            {
+                error = 1;
+            }
+        }
+        if (error == 1)
+        {
+            printf("NO NUMEROS\n");
+            system("PAUSE");
+            system("CLS");
+        }
+
+    } while (error == 1);
+    Mayusculas(cadena);
+    DobleEspacio(cadena);
+}
+//****************************
+void Mayusculas(char cadena[])
+{
+    int i;
+    for (i = 0; cadena[i] != '\0'; i++) // Convierte a mayusculas
+    {
+        if (cadena[i] >= 'a')
+        {
+            if (cadena[i] <= 'z')
+            {
+                cadena[i] = cadena[i] - 32;
+            }
         }
     }
-    system("PAUSE");
+}
+//****************************
+void DobleEspacio(char cadena[])
+{
+    int i, j, k;
+    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
+    {
+    }
+    for (j = 0; cadena[j] != '\0'; j++)
+    {
+        if (cadena[j] == ' ') // Espacio vacio, todo el contenido se recorre un espacio a la izquierda
+        {
+            for (k = j; k < i; k++)
+            {
+                cadena[k] = cadena[k + 1];
+            }
+        }
+    }
+}
+//****************************
+int BusquedaOrdenada(int vect[], int n, int num)
+{
+    int i;
+    i = 0;
+    while (i < n)
+    {
+
+        if (num >= vect[i])
+        {
+            if (num == vect[i])
+            {
+                return i;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+        i++;
+    }
+    return -1;
 }
