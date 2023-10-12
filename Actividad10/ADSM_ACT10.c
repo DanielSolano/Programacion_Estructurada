@@ -78,7 +78,7 @@ void menu()
             {
                 system("CLS");
                 printf("MATRIZ DUPLICADA, INGRESE UNA NUEVA\n");
-                temp.Matricula = Validar(300, 399999);
+                temp.Matricula = Validar(300000, 399999);
                 system("PAUSE");
             }
             VectReg[i++] = temp;
@@ -86,7 +86,7 @@ void menu()
         case 3: // ELIMINAR REGISTRO
             system("CLS");
             printf("NUMERO DE REGISTRO A ELIMINAR\n");
-            apagar = Validar(0, 499);
+            apagar = Validar(0, i-1);
             if (VectReg[apagar].Status == 0)
             {
                 printf("REGISTRO YA APAGADO\n");
@@ -152,10 +152,10 @@ Talum RegistroAuto()
     Talum alum;
     int i, apellido, sexo, nombres;
 
-    i = NumAleatorio(1, 14);
+    i = NumAleatorio(0, 14);
     nombres = NumAleatorio(1, 2); // Numero de nombres
-    sexo = NumAleatorio(1, 2);    // Genera sexo
-    if (sexo == 1)                // Es hombre
+    sexo = NumAleatorio(1, 2);  // Genera sexo
+    if (sexo == 1)   // Es hombre
     {
         if (nombres == 1)
         {
@@ -183,9 +183,9 @@ Talum RegistroAuto()
     alum.Status = 1;
     alum.Matricula = NumAleatorio(300000, 399999);
 
-    apellido = NumAleatorio(1, 89);
+    apellido = NumAleatorio(0, 88);
     strcpy(alum.ApPat, Apellidos[apellido]);
-    apellido = NumAleatorio(1, 89); // Genera otro numero aleatorio para el segundo apellido
+    apellido = NumAleatorio(0, 88); // Genera otro numero aleatorio para el segundo apellido
     strcpy(alum.ApMat, Apellidos[apellido]);
 
     alum.Edad = NumAleatorio(18, 28);
@@ -246,7 +246,7 @@ Talum RegistroMan()
 
     system("CLS");
     printf("EDAD\n");
-    alum.Edad = Validar(18, 28);
+    alum.Edad = Validar(18, 50);
     system("PAUSE");
 
     system("CLS");
@@ -302,12 +302,12 @@ int BusquedaOrdenadaTalum(Talum vect[], int n, int num)
 void ImprimirTalum(Talum vect[], int n)
 {
     int i;
-    printf("MATRICULA     NOMBRES                     APELLIDO PATERNO                APELLIDO MATERNO                    EDAD   SEXO\n");
+    printf("MATRICULA     NOMBRES                     APELLIDO PATERNO                APELLIDO MATERNO                    EDAD       SEXO\n");
     for (i = 0; i < n; i++)
     {
-        if (vect[i].Status == 1)
+        if (vect[i].Status == 1) // IMPRIME LOS REGISTROS ACTIVOS
         {
-            printf("%-9d   %-30s   %-30s   %-30s   %-4d   \n", vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad);
+            printf("%-9d   %-30s   %-30s   %-30s   %-4d      %-6s \n", vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, (vect[i].Sexo == 1) ? "HOMBRE" : "MUJER");
         }
     }
 }

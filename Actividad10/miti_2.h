@@ -180,7 +180,7 @@ void DobleEspacio(char cadena[])
     }
     for (j = 0; cadena[j] != '\0'; j++)
     {
-        if (cadena[j] == ' ') // Espacio vacio, todo el contenido se recorre un espacio a la izquierda
+        if ((cadena[j] == ' ') && (cadena[j+1] == ' ')) // Doble espacio vacio, todo el contenido se recorre un espacio a la izquierda
         {
             for (k = j; k < i; k++)
             {
