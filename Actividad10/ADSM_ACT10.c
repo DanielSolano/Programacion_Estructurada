@@ -57,88 +57,140 @@ void menu()
         switch (op)
         {
         case 1: // REGISTROS AUTOMATICOS
-            ordenado = 0;
             system("CLS");
-            for (j = 0; j < 10; j++)
+            for (j = 0; j < 100; j++)
             {
                 temp = RegistroAuto();
                 while (BusquedaTalum(VectReg, i, temp.Matricula) != -1)
                 {
                     temp.Matricula = NumAleatorio(300000, 399999);
                 }
-                VectReg[i++] = temp;
+                if (i <= 499)
+                {
+                    VectReg[i++] = temp;
+                    ordenado = 0;
+                }
             }
-            printf("REGISTROS LLENADOS AUTOMATICAMENTE\n");
-            system("PAUSE");
-            break;
-        case 2: // REGISTROS MANUALES
-            ordenado = 0;
-            temp = RegistroMan();
-            while (BusquedaTalum(VectReg, i, temp.Matricula) != -1)
+            if (i <= 499)
             {
-                system("CLS");
-                printf("MATRIZ DUPLICADA, INGRESE UNA NUEVA\n");
-                temp.Matricula = Validar(300000, 399999);
-                system("PAUSE");
-            }
-            VectReg[i++] = temp;
-            break;
-        case 3: // ELIMINAR REGISTRO
-            system("CLS");
-            printf("NUMERO DE REGISTRO A ELIMINAR\n");
-            apagar = Validar(0, i-1);
-            if (VectReg[apagar].Status == 0)
-            {
-                printf("REGISTRO YA APAGADO\n");
+                printf("REGISTROS LLENADOS AUTOMATICAMENTE\n");
             }
             else
             {
-                VectReg[apagar].Status = 0; // Cambia estatus a 0
-                printf("REGISTRO %d APAGADO\n", apagar);
+                printf("500 REGISTROS OCUPADOS\n");
+            }
+            system("PAUSE");
+            break;
+        case 2: // REGISTROS MANUALES
+            system("CLS");
+            if (i <= 499)
+            {
+                temp = RegistroMan();
+                while (BusquedaTalum(VectReg, i, temp.Matricula) != -1)
+                {
+                    printf("MATRICULA DUPLICADA, INGRESE UNA NUEVA\n");
+                    temp.Matricula = Validar(300000, 399999);
+                }
+                VectReg[i++] = temp;
+                ordenado = 0;
+            }
+            else
+            {
+                printf("500 REGISTROS OCUPADOS\n");
+            }
+            system("PAUSE");
+            break;
+        case 3: // ELIMINAR REGISTRO
+            system("CLS");
+            if (i == 0)
+            {
+                printf("INCAPAZ DE ELIMINAR REGISTROS VACIOS\n");
+            }
+            else
+            {
+
+                printf("MATRICULA DE REGISTRO A ELIMINAR\n");
+                apagar = Validar(300000, 399999);
+                encontrado = BusquedaTalum(VectReg, i, apagar);
+                if (encontrado == -1)
+                {
+                    printf("MATRICULA NO EXISTENTE\n");
+                }
+                else
+                {
+                    VectReg[encontrado].Status = 0; // Cambia estatus a 0
+                    printf("REGISTRO CON MATRICULA %d APAGADO\n", apagar);
+                }
             }
             system("PAUSE");
             break;
         case 4: // BUSCAR MATRICULA
             system("CLS");
-            printf("MATRICULA A BUSCAR\n");
-            buscar = Validar(300000, 399999);
-
-            if (ordenado == 0) // Si no esta ordenado busqueda secuencial normal
+            if (i == 0)
             {
-                encontrado = BusquedaTalum(VectReg, i, buscar);
-            }
-            else // Si esta ordenado usa busqueda mejorada
-            {
-                encontrado = BusquedaOrdenadaTalum(VectReg, i, buscar);
-            }
-
-            if (encontrado == -1)
-            {
-                printf("MATRICULA NO ENCONTRADA\n");
+                printf("INCAPAZ DE BUSCAR EN REGISTROS VACIOS\n");
             }
             else
             {
-                printf("MATRICULA EN REGISTRO: %d\n", encontrado);
-            }
+                printf("MATRICULA A BUSCAR\n");
+                buscar = Validar(300000, 399999);
+                if (ordenado == 0) // Si no esta ordenado busqueda secuencial normal
+                {
+                    encontrado = BusquedaTalum(VectReg, i, buscar);
+                }
+                else // Si esta ordenado usa busqueda mejorada
+                {
+                    encontrado = BusquedaOrdenadaTalum(VectReg, i, buscar);
+                }
 
+                if (encontrado == -1)
+                {
+                    printf("MATRICULA NO ENCONTRADA\n");
+                }
+                else
+                {
+                    printf("MATRICULA EN REGISTRO: %d\n", encontrado);
+                }
+            }
             system("PAUSE");
             break;
         case 5: // ORDENAR REGISTROS
             system("CLS");
-            if (ordenado == 0)
+            if (i <= 1)
             {
-                ordenado = OrdenarTalum(VectReg, i);
-                printf("REGISTRO ORDENADO\n");
+                if (i == 0)
+                {
+                    printf("INCAPAZ DE ORDENAR UN REGISTRO VACIO\n");
+                }
+                else
+                {
+                    printf("UN SOLO REGISTRO ORDENADO\n");
+                }
             }
             else
             {
-                printf("REGISTRO YA ORDENADO\n");
+                if (ordenado == 0)
+                {
+                    ordenado = OrdenarTalum(VectReg, i);
+                    printf("REGISTROS ORDENADOS\n");
+                }
+                else
+                {
+                    printf("REGISTROS YA ORDENADOS\n");
+                }
             }
             system("PAUSE");
             break;
         case 6: // IMPRIMIR REGISTROS
             system("CLS");
-            ImprimirTalum(VectReg, i);
+            if (i == 0)
+            {
+                printf("REGISTROS VACIOS\n");
+            }
+            else
+            {
+                ImprimirTalum(VectReg, i);
+            }
             system("PAUSE");
             break;
         }
@@ -154,8 +206,8 @@ Talum RegistroAuto()
 
     i = NumAleatorio(0, 14);
     nombres = NumAleatorio(1, 2); // Numero de nombres
-    sexo = NumAleatorio(1, 2);  // Genera sexo
-    if (sexo == 1)   // Es hombre
+    sexo = NumAleatorio(1, 2);    // Genera sexo
+    if (sexo == 1)                // Es hombre
     {
         if (nombres == 1)
         {
@@ -180,7 +232,7 @@ Talum RegistroAuto()
         }
     }
 
-    alum.Status = 1;
+    alum.Status = NumAleatorio(0, 1);
     alum.Matricula = NumAleatorio(300000, 399999);
 
     apellido = NumAleatorio(0, 88);
@@ -213,12 +265,13 @@ Talum RegistroMan()
     Talum alum;
     char nombre[30], ap1[30], ap2[30];
 
-    alum.Status = 1;
+    system("CLS");
+    printf("ESTATUS\n");
+    alum.Status = Validar(0, 1);
 
     system("CLS");
     printf("MATRICULA\n");
     alum.Matricula = Validar(300000, 399999);
-    system("PAUSE");
 
     system("CLS");
     printf("NOMBRE\n");
@@ -226,7 +279,6 @@ Talum RegistroMan()
     gets(nombre);
     ValiCadena(nombre, "NOMBRE");
     strcpy(alum.Nombre, nombre);
-    system("PAUSE");
 
     system("CLS");
     printf("APELLIDO PATERNO\n");
@@ -234,7 +286,6 @@ Talum RegistroMan()
     gets(ap1);
     ValiCadena(ap1, "APELLIDO PATERNO");
     strcpy(alum.ApPat, ap1);
-    system("PAUSE");
 
     system("CLS");
     printf("APELLIDO MATERNO\n");
@@ -242,17 +293,14 @@ Talum RegistroMan()
     gets(ap2);
     ValiCadena(ap2, "APELLIDO MATERNO");
     strcpy(alum.ApMat, ap2);
-    system("PAUSE");
 
     system("CLS");
     printf("EDAD\n");
     alum.Edad = Validar(18, 50);
-    system("PAUSE");
 
     system("CLS");
     printf("SEXO\n");
     alum.Sexo = Validar(1, 2);
-    system("PAUSE");
 
     return alum;
 }

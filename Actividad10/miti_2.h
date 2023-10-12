@@ -127,6 +127,7 @@ int NumAleatorio(int ri, int rf)
 //****************************
 void ValiCadena(char cadena[], char msg[])
 {
+    int i;
     int error;
     error = 0;
     do
@@ -138,23 +139,34 @@ void ValiCadena(char cadena[], char msg[])
             gets(cadena);
             error = 0;
         }
-        for (int i = 0; cadena[i] != '\0'; i++)
+        for (i = 0; cadena[i] != '\0'; i++)
         {
             if (cadena[i] >= '0' && cadena[i] <= '9') // Son numeros
             {
                 error = 1;
             }
+            if ((cadena[i] == ' ') && (cadena[i + 1] == ' ')) // Doble espacio vacio
+            {
+                error = 1;
+            }
+            if(cadena[0] == ' ')
+            {
+                error = 1;
+            }
+        }
+        if (cadena[i - 1] == ' ')
+        {
+            error = 1;
         }
         if (error == 1)
         {
-            printf("NO NUMEROS\n");
+            printf("NO NUMEROS, DOBLES ESPACIOS, INICIO Y FINAL DEBEN SER CARACTERES\n");
             system("PAUSE");
             system("CLS");
         }
 
     } while (error == 1);
     Mayusculas(cadena);
-    DobleEspacio(cadena);
 }
 //****************************
 void Mayusculas(char cadena[])
@@ -167,24 +179,6 @@ void Mayusculas(char cadena[])
             if (cadena[i] <= 'z')
             {
                 cadena[i] = cadena[i] - 32;
-            }
-        }
-    }
-}
-//****************************
-void DobleEspacio(char cadena[])
-{
-    int i, j, k;
-    for (i = 0; cadena[i] != '\0'; i++) // Cuenta caracteres
-    {
-    }
-    for (j = 0; cadena[j] != '\0'; j++)
-    {
-        if ((cadena[j] == ' ') && (cadena[j+1] == ' ')) // Doble espacio vacio, todo el contenido se recorre un espacio a la izquierda
-        {
-            for (k = j; k < i; k++)
-            {
-                cadena[k] = cadena[k + 1];
             }
         }
     }
