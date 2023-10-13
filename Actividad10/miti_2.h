@@ -16,7 +16,6 @@ void Ordenar(int vector[], int n);
 int NumAleatorio(int ri, int rf);
 void ValiCadena(char cadena[], char msg[]);
 void Mayusculas(char cadena[]);
-void DobleEspacio(char cadena[]);
 int BusquedaOrdenada(int vect[], int n, int num);
 
 //*********************
@@ -130,6 +129,7 @@ void ValiCadena(char cadena[], char msg[])
     int i;
     int error;
     error = 0;
+    Mayusculas(cadena);
     do
     {
         if (error == 1)
@@ -137,6 +137,7 @@ void ValiCadena(char cadena[], char msg[])
             printf("%s\n", msg);
             fflush(stdin);
             gets(cadena);
+            Mayusculas(cadena);
             error = 0;
         }
         for (i = 0; cadena[i] != '\0'; i++)
@@ -149,9 +150,16 @@ void ValiCadena(char cadena[], char msg[])
             {
                 error = 1;
             }
-            if(cadena[0] == ' ')
+            if (cadena[0] == ' ') // Empieza en espacio
             {
                 error = 1;
+            }
+            if (cadena[i] != ' ') // Si no es un espacio y no contiene letras es caracter especial
+            {
+                if (cadena[i] < 'A' || cadena[i] > 'Z')
+                {
+                    error = 1;
+                }
             }
         }
         if (cadena[i - 1] == ' ')
@@ -166,7 +174,6 @@ void ValiCadena(char cadena[], char msg[])
         }
 
     } while (error == 1);
-    Mayusculas(cadena);
 }
 //****************************
 void Mayusculas(char cadena[])
