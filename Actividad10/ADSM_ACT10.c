@@ -1,3 +1,8 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 15/10/2023
+// Uso de registros para almacenar informacion de alumnos
+// ADSM_ACT10_932
+
 #include "miti_2.h"
 
 typedef struct _alumnos
@@ -57,26 +62,26 @@ void menu()
         op = msges();
         switch (op)
         {
-        case 1: // REGISTROS AUTOMATICOS
+        case 1: 
             system("CLS");
-            for (j = 0; j < 10; j++) // Cada iteracion llena un indice de los registros
+            for (j = 0; j < 10; j++)  
             {
-                temp = RegistroAuto();                                  // Da los datos a un alumno temporal
-                while (BusquedaTalum(VectReg, i, temp.Matricula) != -1) // Comprueba que la matricula no este repetida
+                temp = RegistroAuto();                                   
+                while (BusquedaTalum(VectReg, i, temp.Matricula) != -1) 
                 {
-                    temp.Matricula = NumAleatorio(300000, 399999); // Si la matricula original se encontro en el registro, genera otra hasta que no se encuentre
+                    temp.Matricula = NumAleatorio(300000, 399999); 
                 }
-                if (i <= 500) // Si los registros se llenaron con 500 datos ya no se le asignan mas valores
+                if (i <= 500) 
                 {
-                    VectReg[i++] = temp; // El alumno temporal ya validado se le asigna a los registros
-                    ordenado = 0;        // Bandera que indica el vector esta desordenado
+                    VectReg[i++] = temp; 
+                    ordenado = 0;       
                 }
             }
-            if (i <= 500) // No esta lleno el registro, asignados correctamente
+            if (i <= 500) 
             {
                 printf("REGISTROS LLENADOS AUTOMATICAMENTE\n");
             }
-            else // Registro lleno
+            else 
             {
                 printf("500 REGISTROS OCUPADOS\n");
             }
@@ -86,13 +91,13 @@ void menu()
             system("CLS");
             if (i <= 500)
             {
-                temp = RegistroMan();                                   // Da los datos a un alumno temporal
-                while (BusquedaTalum(VectReg, i, temp.Matricula) != -1) // Comprueba que la matricula no este repetida
+                temp = RegistroMan();                                   
+                while (BusquedaTalum(VectReg, i, temp.Matricula) != -1) 
                 {
                     printf("MATRICULA DUPLICADA, INGRESE UNA NUEVA\n");
-                    temp.Matricula = Validar(300000, 399999); // Si la matricula original se encontro en el registro, genera otra hasta que no se encuentre
+                    temp.Matricula = Validar(300000, 399999); 
                 }
-                VectReg[i++] = temp; // El alumno temporal ya validado se le asigna a los registros
+                VectReg[i++] = temp; 
                 ordenado = 0;
             }
             else
@@ -103,7 +108,7 @@ void menu()
             break;
         case 3: // ELIMINAR REGISTRO
             system("CLS");
-            if (i == 0) // No hay registros llenos para eliminar
+            if (i == 0) 
             {
                 printf("INCAPAZ DE ELIMINAR REGISTROS VACIOS\n");
             }
@@ -111,26 +116,26 @@ void menu()
             {
                 printf("MATRICULA DE REGISTRO A ELIMINAR\n");
                 apagar = Validar(300000, 399999);
-                if (ordenado == 0) // Si no esta ordenado usa busqueda normal
+                if (ordenado == 0) 
                 {
                     encontrado = BusquedaTalum(VectReg, i, apagar);
                 }
-                else // Si esta ordenado binaria
+                else 
                 {
                     encontrado = BusquedaBinaria(VectReg, 0, i, apagar);
                 }
 
-                if (encontrado == -1) // Si no existe no se puede eliminar
+                if (encontrado == -1) 
                 {
                     printf("MATRICULA NO EXISTENTE\n");
                 }
                 else // Encontrada
                 {
-                    if (VectReg[encontrado].Status == 0) // Si ya esta eliminado no se vuelve a borrar
+                    if (VectReg[encontrado].Status == 0) 
                     {
                         printf("REGISTRO YA ELIMINADO\n");
                     }
-                    else // Se encontro y no se ha borrado, se elimina
+                    else 
                     {
                         VectReg[encontrado].Status = 0;
                         printf("REGISTRO CON MATRICULA %d APAGADO\n", apagar);
@@ -139,9 +144,9 @@ void menu()
             }
             system("PAUSE");
             break;
-        case 4: // BUSCAR MATRICULA
+        case 4: 
             system("CLS");
-            if (i == 0) // No hay registros llenos
+            if (i == 0) 
             {
                 printf("INCAPAZ DE BUSCAR EN REGISTROS VACIOS\n");
             }
@@ -149,22 +154,22 @@ void menu()
             {
                 printf("MATRICULA A BUSCAR\n");
                 buscar = Validar(300000, 399999);
-                if (ordenado == 0) // Si no esta ordenado busqueda secuencial normal
+                if (ordenado == 0) 
                 {
                     encontrado = BusquedaTalum(VectReg, i, buscar);
                 }
-                else // Si esta ordenado usa busqueda binaria
+                else 
                 {
                     encontrado = BusquedaBinaria(VectReg, 0, i, buscar);
                 }
 
-                if (encontrado == -1) // No se encontro la matricula
+                if (encontrado == -1) 
                 {
                     printf("MATRICULA NO ENCONTRADA\n");
                 }
-                else // Se encontro
+                else 
                 {
-                    if (VectReg[encontrado].Status == 0) // Se encontro pero tiene estatus 0
+                    if (VectReg[encontrado].Status == 0) 
                     {
                         printf("MATRICULA DE ALUMNO DESACTIVADO EN: %d\n", encontrado);
                     }
@@ -180,11 +185,11 @@ void menu()
             system("CLS");
             if (i <= 1)
             {
-                if (i == 0) // No hay registros llenos
+                if (i == 0) 
                 {
                     printf("INCAPAZ DE ORDENAR UN REGISTRO VACIO\n");
                 }
-                else // Solo hay un registro, no se ordena
+                else 
                 {
                     printf("UN SOLO REGISTRO ORDENADO\n");
                 }
@@ -227,30 +232,30 @@ Talum RegistroAuto()
     int i, apellido, sexo, nombres;
 
     i = NumAleatorio(0, 14);
-    nombres = NumAleatorio(1, 2); // Numero de nombres
-    sexo = NumAleatorio(1, 2);    // Genera sexo
-    if (sexo == 1)                // Es hombre
+    nombres = NumAleatorio(1, 2);
+    sexo = NumAleatorio(1, 2);    
+    if (sexo == 1)                
     {
         if (nombres == 1)
         {
-            strcpy(alum.Nombre, NombresHombre[i]); // Primer nombre
+            strcpy(alum.Nombre, NombresHombre[i]); 
         }
         else
         {
-            strcpy(alum.Nombre, NombresHombre[i]); // Primer nombre
-            strcat(alum.Nombre, SegundoHombre[i]); // Anade segundo nombre
+            strcpy(alum.Nombre, NombresHombre[i]); 
+            strcat(alum.Nombre, SegundoHombre[i]); 
         }
     }
-    else // Es mujer
+    else 
     {
         if (nombres == 1)
         {
-            strcpy(alum.Nombre, NombresMujer[i]); // Primer nombre
+            strcpy(alum.Nombre, NombresMujer[i]); 
         }
         else
         {
-            strcpy(alum.Nombre, NombresMujer[i]); // Primer nombre
-            strcat(alum.Nombre, SegundoMujer[i]); // Anade segundo nombre
+            strcpy(alum.Nombre, NombresMujer[i]); 
+            strcat(alum.Nombre, SegundoMujer[i]); 
         }
     }
 
@@ -259,7 +264,7 @@ Talum RegistroAuto()
 
     apellido = NumAleatorio(0, 88);
     strcpy(alum.ApPat, Apellidos[apellido]);
-    apellido = NumAleatorio(0, 88); // Genera otro numero aleatorio para el segundo apellido
+    apellido = NumAleatorio(0, 88); 
     strcpy(alum.ApMat, Apellidos[apellido]);
 
     alum.Edad = NumAleatorio(18, 28);
