@@ -46,7 +46,7 @@ void LeerTXT(void)
 {
     char caracter;
     FILE *archivo;
-    archivo = fopen("cancion.txt", "r");
+    archivo = fopen("C:\\Miti\\Universidad\\3er. Semestre\\Programacion Estructurada\\Repositorio\\Taller\\Parte1\\cancion.txt", "r");
     if (archivo)
     {
         do
