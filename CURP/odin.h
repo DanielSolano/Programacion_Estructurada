@@ -133,6 +133,9 @@ void ValiCadena(char cadena[], char msg[])
     {
         if (error == 1)
         {
+            printf("NO NUMEROS, DOBLES ESPACIOS, INICIO Y FINAL DEBEN SER CARACTERES\n");
+            system("PAUSE");
+            system("CLS");
             printf("%s\n", msg);
             fflush(stdin);
             gets(cadena);
@@ -164,12 +167,6 @@ void ValiCadena(char cadena[], char msg[])
         if (cadena[i - 1] == ' ')
         {
             error = 1;
-        }
-        if (error == 1)
-        {
-            printf("NO NUMEROS, DOBLES ESPACIOS, INICIO Y FINAL DEBEN SER CARACTERES\n");
-            system("PAUSE");
-            system("CLS");
         }
 
     } while (error == 1);

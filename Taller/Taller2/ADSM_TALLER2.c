@@ -1,4 +1,4 @@
-#include <odin.h>
+#include "odin.h"
 //*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
@@ -80,5 +80,5 @@ void CrearTXT(char nombres[], char paterno[], char materno[], int edad)
 {
     FILE *archivo;
     archivo = fopen("creado.txt", "a");
-    fprintf(archivo, "%-9d   %-30s   %-30s   %-30s   %-4d", nombres, paterno, materno, edad);
+    fprintf(archivo, "\n%-30s   %-30s   %-30s   %-4d", nombres, paterno, materno, edad);
 }
