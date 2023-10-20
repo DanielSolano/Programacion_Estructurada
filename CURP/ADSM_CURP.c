@@ -4,7 +4,14 @@
 int msges();
 void menu();
 void Curp(char curp[]);
-void ValidarSexo(char sexo[]);
+void ValidarSexo(char sexo[], char msg[]);
+void ValiApellidos(char cadena[], char msg[]);
+void Estados(char curp[]);
+void FechaNac(char curp[]);
+void Nombres(char curp[]);
+void Sexo(char curp[]);
+int JoseMaria(char primernombre[]);
+int Inconvenientes(char curp[]);
 //****  main principal  *********
 int main()
 {
@@ -28,6 +35,7 @@ int msges()
 //****************
 void menu()
 {
+    srand(time(NULL));
     char curp[18];
     int op;
     do
@@ -38,6 +46,8 @@ void menu()
         case 1:
             system("CLS");
             Curp(curp);
+            system("CLS");
+            printf("    TU CURP\n");
             printf("%s", curp);
             printf("\n");
             system("PAUSE");
@@ -47,52 +57,156 @@ void menu()
     } while (op != 0);
 }
 
-//*********************
+//********************* CHECAR PREPOSICIONES
 void Curp(char curp[])
 {
-    char nombres[30], paterno[20], materno[20], cdia[3], cmes[3], canio[3], sexo[2];
-    int i, anio, mes, dia;
-    int lleno;
+    char cultimo[2];
+    int ultimo;
     char caracter;
-    fflush(stdin);
-    ValiCadena(paterno, "APELLIDO PATERNO");
-    lleno = 1;
-    i = 0;
+    Nombres(curp);
+    FechaNac(curp);
+    Sexo(curp);
+    Estados(curp);
 
-    while (lleno)
+    ultimo = NumAleatorio(1, 5);
+    sprintf(cultimo, "%d", ultimo);
+    caracter = cultimo[0];
+    curp[17] = caracter;
+}
+
+void ValidarSexo(char cadena[], char msg[])
+{
+    int error;
+    error = 0;
+    printf("%s\n", msg);
+    fflush(stdin);
+    gets(cadena);
+    Mayusculas(cadena);
+    do
     {
-        if (i == 0)
+        if (error == 1)
         {
-            caracter = paterno[i];
-            curp[0] = caracter;
+            system("CLS");
+            printf("SOLO CARACTER 'H' O 'M', HOMBRE MUJER\n");
+            system("PAUSE");
+            fflush(stdin);
+            gets(cadena);
+            Mayusculas(cadena);
+            error = 0;
         }
-        else
+        if ((cadena[0] != 'M') && (cadena[0] != 'H'))
         {
-            if ((paterno[i] == 'A') || (paterno[i] == 'E') || (paterno[i] == 'I') || (paterno[i] == 'O') || (paterno[i] == 'U'))
+            error = 1;
+        }
+
+    } while (error == 1);
+}
+
+void ValiApellidos(char cadena[], char msg[])
+{
+    int i;
+    int error;
+    error = 0;
+    printf("%s\n", msg);
+    fflush(stdin);
+    gets(cadena);
+    Mayusculas(cadena);
+    do
+    {
+        if (error == 1)
+        {
+            printf("NO NUMEROS, DOBLES ESPACIOS, INICIO Y FINAL DEBEN SER CARACTERES\n");
+            system("PAUSE");
+            system("CLS");
+            printf("%s\n", msg);
+            fflush(stdin);
+            gets(cadena);
+            Mayusculas(cadena);
+            error = 0;
+        }
+        if (cadena[0] != 13)
+        {
+            for (i = 0; cadena[i] != '\0'; i++)
             {
-                caracter = paterno[i];
-                curp[1] = caracter;
-                lleno = 0;
+                if (cadena[i] >= '0' && cadena[i] <= '9') // Son numeros
+                {
+                    error = 1;
+                }
+                if ((cadena[i] == ' ') && (cadena[i + 1] == ' ')) // Doble espacio vacio
+                {
+                    error = 1;
+                }
+                if (cadena[i] != ' ' && cadena[i] != -92 && cadena[i] != 46 && cadena[i] != 45 && cadena[i] != 47 && cadena[i] != 39 && cadena[i] != 154 && cadena[i] != 13) // Si no es un espacio y no contiene letras es caracter especial, excepto enie
+                {
+                    if (cadena[i] < 'A' || cadena[i] > 'Z')
+                    {
+                        error = 1;
+                    }
+                }
+                if (cadena[i] == -92) // Si es enie la hace X
+                {
+                    cadena[i] = 'X';
+                }
+                if (cadena[i] == 47) // Si es /
+                {
+                    cadena[i] = 'X';
+                }
+                if (cadena[i] == 46) // Si es -
+                {
+                    cadena[i] = 'X';
+                }
+                if (cadena[i] == 39) // Si es '
+                {
+                    cadena[i] = 'X';
+                }
+                if (cadena[i] == 154) // Si es diarisis
+                {
+                    cadena[i] = 'X';
+                }
+            }
+            if (cadena[i - 1] == ' ')
+            {
+                error = 1;
+            }
+            if (cadena[0] == ' ') // Empieza en espacio
+            {
+                error = 1;
             }
         }
-        i++;
+    } while (error == 1);
+}
+
+void Estados(char curp[])
+{
+    int estado, i;
+    char caracter;
+    char nombres_estados[33][30] = {"AGUASCALIENTES", "BAJA CALIFORNIA", "BAJA CALIFORNIA SUR", "CAMPECHE", "CHIAPAS", "CHIHUAHUA", "COAHUILA", "COLIMA", "CIUDAD DE MEXICO", "DURANGO", "GUANAJUATO", "GUERRERO", "HIDALGO", "JALISCO", "MEXICO", "MICHOACAN", "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA", "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI", "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA", "VERACRUZ", "YUCATAN", "ZACATECAS"};
+    char estados[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS"};
+    system("CLS");
+    printf("    ESTADO DE NACIMIENTO\n");
+    for (i = 0; i < 32; i++)
+    {
+        printf("%d.- %s\n", i + 1, nombres_estados[i]);
     }
+    estado = Validar(1, 32);
+    caracter = estados[estado - 1][0];
+    curp[11] = caracter;
+    caracter = estados[estado - 1][1];
+    curp[12] = caracter;
+}
 
-    fflush(stdin);
-    ValiCadena(materno, "APELLIDO MATERNO");
-    caracter = materno[0];
-    curp[2] = caracter;
-
-    fflush(stdin);
-    ValiCadena(nombres, "NOMBRES");
-    caracter = nombres[0];
-    curp[3] = caracter;
-
-    printf("ANO DE NACIMIENTO \n(aaaa)\n");
+void FechaNac(char curp[])
+{
+    int anio, mes, dia;
+    char cdia[3], cmes[3], canio[3];
+    system("CLS");
+    printf("   ANO DE NACIMIENTO  (aaaa)\n");
     anio = Validar(1920, 2023);
-    printf("MES DE NACIMIENTO\n");
+    system("CLS");
+    printf("    MES DE NACIMIENTO  (mm)\n");
     mes = Validar(1, 12);
-    printf("DIA DE NACIMIENTO\n");
+    system("CLS");
+    printf("    DIA DE NACIMIENTO (dd)\n");
     switch (mes)
     {
     case 1:
@@ -163,7 +277,7 @@ void Curp(char curp[])
     }
 
     sprintf(cdia, "%d", dia);
-    if (mes < 10)
+    if (dia < 10)
     {
         curp[8] = '0';
         curp[9] = cdia[0];
@@ -174,10 +288,62 @@ void Curp(char curp[])
         curp[9] = cdia[1];
     }
 
-    printf("SEXO\n'M' o 'H'\n");
-    ValidarSexo(sexo);
-    curp[10] = sexo[0];
+    if (anio <= 23)
+    {
+        curp[16] = 'A';
+    }
+    else
+    {
+        curp[16] = '0';
+    }
+}
 
+void Sexo(char curp[])
+{
+    char sexo[2];
+    system("CLS");
+    ValidarSexo(sexo, "    SEXO 'H'|'M'");
+    curp[10] = sexo[0];
+}
+
+void Nombres(char curp[])
+{
+    char nombre1[50], nombre2[50], paterno[50], materno[50];
+    char caracter, vocal, consonante;
+    int i, joseMaria, lleno;
+
+    // *********************** APELLIDO PATERNO *******************************
+    do
+    {
+        system("CLS");
+        ValiApellidos(paterno, "   APELLIDO PATERNO");
+    } while (paterno[0] == '\0');
+
+    caracter = paterno[0];
+    curp[0] = caracter;
+
+    vocal = 0;
+    lleno = 1;
+    for (i = 1; lleno; i++)
+    {
+        if ((paterno[i] == 'A') || (paterno[i] == 'E') || (paterno[i] == 'I') || (paterno[i] == 'O') || (paterno[i] == 'U'))
+        {
+            caracter = paterno[i];
+            curp[1] = caracter;
+            vocal = 1;
+            lleno = 0;
+        }
+        if (i == strlen(paterno))
+        {
+            lleno = 0;
+        }
+    }
+    if (vocal == 0) // No tiene vocal intermedia
+    {
+        curp[1] = 'X';
+    }
+
+    consonante = 0;
     lleno = 1;
     for (i = 1; lleno; i++)
     {
@@ -185,56 +351,161 @@ void Curp(char curp[])
         {
             caracter = paterno[i];
             curp[13] = caracter;
+            consonante = 1;
             lleno = 0;
+        }
+        if (i == strlen(paterno))
+        {
+            lleno = 0;
+        }
+    }
+    if (consonante == 0) // No tiene consonante intermedia
+    {
+        curp[13] = 'X';
+    }
+    // *********************** APELLIDO MATERNO *******************************
+
+    system("CLS");
+    ValiApellidos(materno, "   APELLIDO MATERNO");
+    printf("%d", strlen(materno));
+    system("pause");
+    if (strlen(materno) == 0) // Si no tiene apellido materno
+    {
+        curp[2] = 'X';
+        curp[14] = 'X';
+    }
+    else // Tiene apellido materno
+    {
+        caracter = materno[0];
+        curp[2] = caracter;
+        consonante = 0;
+        lleno = 1;
+        for (i = 1; lleno; i++)
+        {
+            if ((materno[i] != 'A') && (materno[i] != 'E') && (materno[i] != 'I') && (materno[i] != 'O') && (materno[i] != 'U'))
+            {
+                caracter = materno[i];
+                curp[14] = caracter;
+                consonante = 1;
+                lleno = 0;
+            }
+            if (i == strlen(materno))
+            {
+                lleno = 0;
+            }
+        }
+        if (consonante == 0)
+        {
+            curp[14] = 'X';
         }
     }
 
-    lleno = 1;
-    for (i = 1; lleno; i++)
-    {
-        if ((materno[i] != 'A') && (materno[i] != 'E') && (materno[i] != 'I') && (materno[i] != 'O') && (materno[i] != 'U'))
-        {
-            caracter = materno[i];
-            curp[14] = caracter;
-            lleno = 0;
-        }
-    }
-
-    lleno = 1;
-    for (i = 1; lleno; i++)
-    {
-        if ((nombres[i] != 'A') && (nombres[i] != 'E') && (nombres[i] != 'I') && (nombres[i] != 'O') && (nombres[i] != 'U'))
-        {
-            caracter = nombres[i];
-            curp[15] = caracter;
-            lleno = 0;
-        }
-    }
-}
-//*********************
-void ValidarSexo(char cadena[])
-{
-    int error;
-    error = 0;
-    fflush(stdin);
-    gets(cadena);
-    Mayusculas(cadena);
+    // *********************** NOMBRES *******************************
     do
     {
-        if (error == 1)
-        {
-            system("CLS");
-            printf("SOLO CARACTER 'H' O 'M', HOMBRE MUJER\n");
-            system("PAUSE");
-            fflush(stdin);
-            gets(cadena);
-            Mayusculas(cadena);
-            error = 0;
-        }
-        if ((cadena[0] != 'M') && (cadena[0] != 'H'))
-        {
-            error = 1;
-        }
+        system("CLS");
+        ValiApellidos(nombre1, "   PRIMER NOMBRE");
+    } while (nombre1[0] == '\0');
 
-    } while (error == 1);
+    system("CLS");
+    ValiApellidos(nombre2, "   SEGUNDO NOMBRE");
+
+    consonante = 0;
+    if (strlen(nombre2) == 0) // Si no es compuesto
+    {
+        caracter = nombre1[0];
+        curp[3] = caracter;
+        lleno = 1;
+        for (i = 1; lleno; i++)
+        {
+            if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+            {
+                caracter = nombre1[i];
+                curp[15] = caracter;
+                consonante = 1;
+                lleno = 0;
+            }
+            if (i == strlen(nombre1))
+            {
+                lleno = 0;
+            }
+        }
+    }
+    else // Si es compuesto
+    {
+        joseMaria = JoseMaria(nombre1);
+        if (joseMaria) // Si es jose o maria tomamos su segundo nombre
+        {
+            caracter = nombre2[0];
+            curp[3] = caracter;
+            lleno = 1;
+            for (i = 1; lleno; i++)
+            {
+                if ((nombre2[i] != 'A') && (nombre2[i] != 'E') && (nombre2[i] != 'I') && (nombre2[i] != 'O') && (nombre2[i] != 'U'))
+                {
+                    caracter = nombre1[i];
+                    curp[15] = caracter;
+                    consonante = 1;
+                    lleno = 0;
+                }
+                if (i == strlen(nombre2))
+                {
+                    lleno = 0;
+                }
+            }
+        }
+        else // No es Jose o Maria usamos su primer nombre
+        {
+            caracter = nombre1[0];
+            curp[3] = caracter;
+            lleno = 1;
+            for (i = 1; lleno; i++)
+            {
+                if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+                {
+                    caracter = nombre1[i];
+                    curp[15] = caracter;
+                    consonante = 1;
+                    lleno = 0;
+                }
+                if (i == strlen(nombre1))
+                {
+                    lleno = 0;
+                }
+            }
+        }
+    }
+    if (consonante == 0)
+    {
+        curp[15] = 'X';
+    }
+}
+
+int JoseMaria(char primernombre[])
+{
+    char JoseMaria[8][5] = {"JOSE", "JX", "J", "MARIA", "MAX", "MA", "MX", "M"};
+    int i;
+    for (i = 0; i < 8; i++)
+    {
+        if (strcmp(primernombre, JoseMaria[i]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int Inconvenientes(char curp[])
+{
+    char inconvenientes[81][5] = {"BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO", "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALO", "FETO", "GETA", "GUEI", "GUEY", "JETA", "JOTO", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE", "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KOLA", "KULO", "LILO", "LOCA", "LOCO", "LOKA", "LOKO", "MAME", "MAMO", "MEAR", "MEAS", "MEON", "MIAR", "MION", "MOCO", "MOKO", "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO", "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENO", "TETA", "VACA", "VAGA", "VAGO", "VAKA", "VUEI", "VUEY", "WUEI", "WUEY"};
+    char comparar[5];
+    int i;
+    strncat(comparar, curp, 4);
+    for (i = 0; i < 81; i++)
+    {
+        if (comparar == inconvenientes[i])
+        {
+            curp[1] = 'X';
+        }
+    }
 }

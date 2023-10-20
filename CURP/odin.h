@@ -152,10 +152,6 @@ void ValiCadena(char cadena[], char msg[])
             {
                 error = 1;
             }
-            if (cadena[0] == ' ') // Empieza en espacio
-            {
-                error = 1;
-            }
             if (cadena[i] != ' ') // Si no es un espacio y no contiene letras es caracter especial
             {
                 if (cadena[i] < 'A' || cadena[i] > 'Z')
@@ -164,7 +160,15 @@ void ValiCadena(char cadena[], char msg[])
                 }
             }
         }
-        if (cadena[i - 1] == ' ')
+        if (cadena[0] == '\0') // Empieza en espacio
+        {
+            error = 1;
+        }
+        if (cadena[0] == ' ') // Empieza en espacio
+        {
+            error = 1;
+        }
+        if (cadena[i - 1] == ' ') // Termina en espacio
         {
             error = 1;
         }

@@ -397,10 +397,8 @@ void Salida9(void)
     for (j = 0; j <= i; j++)
     {
         // Si el caracter no es vocal la imprime
-        if ((cadena[j] != 'A') && (cadena[j] != 'E') && (cadena[j] != 'I') && (cadena[j] != 'O') && (cadena[j] != 'U'))
-        {
-            printf("%c", cadena[j]);
-        }
+        
+        
     }
     printf("\n");
     system("PAUSE");
