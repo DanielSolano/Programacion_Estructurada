@@ -9,18 +9,18 @@ void ValiApellidos(char cadena[], char msg[]);
 void Estados(char curp[]);
 void FechaNac(char curp[]);
 void Nombres(char curp[]);
+void Preposiciones(char nombres[]);
 void Sexo(char curp[]);
 int JoseMaria(char primernombre[]);
-int Inconvenientes(char curp[]);
-//****  main principal  *********
+void Inconvenientes(char curp[]);
+
 int main()
 {
     menu();
 
     return 0;
 }
-//  *** DESARROLLO DE LAS FUNCIONES  ******
-//*********************
+
 int msges()
 {
     int op;
@@ -32,7 +32,7 @@ int msges()
     scanf("%d", &op);
     return op;
 }
-//****************
+
 void menu()
 {
     srand(time(NULL));
@@ -57,7 +57,6 @@ void menu()
     } while (op != 0);
 }
 
-//********************* CHECAR PREPOSICIONES
 void Curp(char curp[])
 {
     char cultimo[2];
@@ -67,6 +66,7 @@ void Curp(char curp[])
     FechaNac(curp);
     Sexo(curp);
     Estados(curp);
+    Inconvenientes(curp);
 
     ultimo = NumAleatorio(1, 5);
     sprintf(cultimo, "%d", ultimo);
@@ -159,9 +159,9 @@ void ValiApellidos(char cadena[], char msg[])
                 {
                     cadena[i] = 'X';
                 }
-                if (cadena[i] == 154) // Si es diarisis
+                if (cadena[i] == 154) // Si es dierisis
                 {
-                    cadena[i] = 'X';
+                    cadena[i] = 'U';
                 }
             }
             if (cadena[i - 1] == ' ')
@@ -180,15 +180,16 @@ void Estados(char curp[])
 {
     int estado, i;
     char caracter;
-    char nombres_estados[33][30] = {"AGUASCALIENTES", "BAJA CALIFORNIA", "BAJA CALIFORNIA SUR", "CAMPECHE", "CHIAPAS", "CHIHUAHUA", "COAHUILA", "COLIMA", "CIUDAD DE MEXICO", "DURANGO", "GUANAJUATO", "GUERRERO", "HIDALGO", "JALISCO", "MEXICO", "MICHOACAN", "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA", "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI", "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA", "VERACRUZ", "YUCATAN", "ZACATECAS"};
-    char estados[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS"};
+    char nombres_estados[33][30] = {"AGUASCALIENTES", "BAJA CALIFORNIA", "BAJA CALIFORNIA SUR", "CAMPECHE", "CHIAPAS", "CHIHUAHUA", "COAHUILA", "COLIMA", "CIUDAD DE MEXICO", "DURANGO", "GUANAJUATO", "GUERRERO", "HIDALGO", "JALISCO", "MEXICO", "MICHOACAN", "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA", "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI", "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA", "VERACRUZ", "YUCATAN", "ZACATECAS", "NACIDO EN EL EXTRANJERO"};
+    char estados[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "NE"};
     system("CLS");
     printf("    ESTADO DE NACIMIENTO\n");
-    for (i = 0; i < 32; i++)
+    for (i = 0; i < 33; i++)
     {
         printf("%d.- %s\n", i + 1, nombres_estados[i]);
     }
-    estado = Validar(1, 32);
+    printf("SELECCIONA UNA OPCION: \n");
+    estado = Validar(1, 33);
     caracter = estados[estado - 1][0];
     curp[11] = caracter;
     caracter = estados[estado - 1][1];
@@ -319,6 +320,10 @@ void Nombres(char curp[])
         ValiApellidos(paterno, "   APELLIDO PATERNO");
     } while (paterno[0] == '\0');
 
+    Preposiciones(paterno);
+    Preposiciones(paterno);
+    Preposiciones(paterno);
+
     caracter = paterno[0];
     curp[0] = caracter;
 
@@ -367,8 +372,7 @@ void Nombres(char curp[])
 
     system("CLS");
     ValiApellidos(materno, "   APELLIDO MATERNO");
-    printf("%d", strlen(materno));
-    system("pause");
+
     if (strlen(materno) == 0) // Si no tiene apellido materno
     {
         curp[2] = 'X';
@@ -376,6 +380,10 @@ void Nombres(char curp[])
     }
     else // Tiene apellido materno
     {
+
+        Preposiciones(materno);
+        Preposiciones(materno);
+        Preposiciones(materno);
         caracter = materno[0];
         curp[2] = caracter;
         consonante = 0;
@@ -407,6 +415,10 @@ void Nombres(char curp[])
         ValiApellidos(nombre1, "   PRIMER NOMBRE");
     } while (nombre1[0] == '\0');
 
+    Preposiciones(nombre1);
+    Preposiciones(nombre1);
+    Preposiciones(nombre1);
+
     system("CLS");
     ValiApellidos(nombre2, "   SEGUNDO NOMBRE");
 
@@ -433,9 +445,14 @@ void Nombres(char curp[])
     }
     else // Si es compuesto
     {
+
         joseMaria = JoseMaria(nombre1);
         if (joseMaria) // Si es jose o maria tomamos su segundo nombre
         {
+
+            Preposiciones(nombre2);
+            Preposiciones(nombre2);
+            Preposiciones(nombre2);
             caracter = nombre2[0];
             curp[3] = caracter;
             lleno = 1;
@@ -443,7 +460,7 @@ void Nombres(char curp[])
             {
                 if ((nombre2[i] != 'A') && (nombre2[i] != 'E') && (nombre2[i] != 'I') && (nombre2[i] != 'O') && (nombre2[i] != 'U'))
                 {
-                    caracter = nombre1[i];
+                    caracter = nombre2[i];
                     curp[15] = caracter;
                     consonante = 1;
                     lleno = 0;
@@ -487,7 +504,7 @@ int JoseMaria(char primernombre[])
     int i;
     for (i = 0; i < 8; i++)
     {
-        if (strcmp(primernombre, JoseMaria[i]))
+        if (strcmp(primernombre, JoseMaria[i]) == 0)
         {
             return 1;
         }
@@ -495,17 +512,63 @@ int JoseMaria(char primernombre[])
     return 0;
 }
 
-int Inconvenientes(char curp[])
+void Inconvenientes(char curp[])
 {
     char inconvenientes[81][5] = {"BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO", "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALO", "FETO", "GETA", "GUEI", "GUEY", "JETA", "JOTO", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE", "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KOLA", "KULO", "LILO", "LOCA", "LOCO", "LOKA", "LOKO", "MAME", "MAMO", "MEAR", "MEAS", "MEON", "MIAR", "MION", "MOCO", "MOKO", "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO", "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENO", "TETA", "VACA", "VAGA", "VAGO", "VAKA", "VUEI", "VUEY", "WUEI", "WUEY"};
-    char comparar[5];
+    char comparar[4];
     int i;
     strncat(comparar, curp, 4);
     for (i = 0; i < 81; i++)
     {
-        if (comparar == inconvenientes[i])
+        if (strcmp(comparar, inconvenientes[i]) == 0)
         {
             curp[1] = 'X';
+        }
+    }
+}
+
+void Preposiciones(char nombres[])
+{
+    int i, j;
+
+    char TresCar[10][5] = {"DAS ", "DEL ", "DER ", "DIE ", "LOS ", "LAS ", "LES ", "MAC ", "VAN ", "VON "};
+    char DosCar[8][4] = {"DA ", "DE ", "DI ", "DD ", "EL ", "LA ", "LE ", "MC "};
+    char UnCar[1][3] = {"Y "};
+
+    i = 0;
+    if (strncmp(nombres, UnCar[i], 2) == 0)
+    {
+        i = 2;
+        for (j = 0; j < strlen(nombres) - 2; j++)
+        {
+            nombres[j] = nombres[i++];
+        }
+        nombres[j] = '\0';
+    }
+
+    for (i = 0; i < 10; i++)
+    {
+        if (strncmp(nombres, TresCar[i], 4) == 0)
+        {
+            i = 4;
+            for (j = 0; j < strlen(nombres) - 4; j++)
+            {
+                nombres[j] = nombres[i++];
+            }
+            nombres[j] = '\0';
+        }
+    }
+
+    for (i = 0; i < 8; i++)
+    {
+        if (strncmp(nombres, DosCar[i], 3) == 0)
+        {
+            i = 3;
+            for (j = 0; j < strlen(nombres) - 3; j++)
+            {
+                nombres[j] = nombres[i++];
+            }
+            nombres[j] = '\0';
         }
     }
 }
