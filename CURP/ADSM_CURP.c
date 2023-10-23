@@ -5,7 +5,7 @@ int msges();
 void menu();
 void Curp(char curp[]);
 void ValidarSexo(char sexo[], char msg[]);
-void ValiApellidos(char cadena[], char msg[]);
+void ValiApellidos(unsigned char cadena[], char msg[]);
 void Estados(char curp[]);
 void FechaNac(char curp[]);
 void Nombres(char curp[]);
@@ -102,7 +102,7 @@ void ValidarSexo(char cadena[], char msg[])
     } while (error == 1);
 }
 
-void ValiApellidos(char cadena[], char msg[])
+void ValiApellidos(unsigned char cadena[], char msg[])
 {
     int i;
     int error;
@@ -111,6 +111,10 @@ void ValiApellidos(char cadena[], char msg[])
     fflush(stdin);
     gets(cadena);
     Mayusculas(cadena);
+    if (cadena == "MAX")
+    {
+        cadena = "MAXX";
+    }
     do
     {
         if (error == 1)
@@ -122,6 +126,10 @@ void ValiApellidos(char cadena[], char msg[])
             fflush(stdin);
             gets(cadena);
             Mayusculas(cadena);
+            if (cadena == "MAX")
+            {
+                cadena = "MAXX";
+            }
             error = 0;
         }
         if (cadena[0] != 13)
@@ -136,32 +144,192 @@ void ValiApellidos(char cadena[], char msg[])
                 {
                     error = 1;
                 }
-                if (cadena[i] != ' ' && cadena[i] != -92 && cadena[i] != 46 && cadena[i] != 45 && cadena[i] != 47 && cadena[i] != 39 && cadena[i] != 154 && cadena[i] != 13) // Si no es un espacio y no contiene letras es caracter especial, excepto enie
+                if ((cadena[i] != ' ') && (cadena[i] < 'A') || (cadena[i] > 'Z')) // Excepeciones de caracteres especiales
                 {
-                    if (cadena[i] < 'A' || cadena[i] > 'Z')
+                    if (cadena[i] == 164) // Ñ la hace X
                     {
-                        error = 1;
+                        cadena[i] = 'X';
                     }
-                }
-                if (cadena[i] == -92) // Si es enie la hace X
-                {
-                    cadena[i] = 'X';
-                }
-                if (cadena[i] == 47) // Si es /
-                {
-                    cadena[i] = 'X';
-                }
-                if (cadena[i] == 46) // Si es -
-                {
-                    cadena[i] = 'X';
-                }
-                if (cadena[i] == 39) // Si es '
-                {
-                    cadena[i] = 'X';
-                }
-                if (cadena[i] == 154) // Si es dierisis
-                {
-                    cadena[i] = 'U';
+                    else
+                    {
+                        if (cadena[i] == 239) // Si es ´
+                        {
+                            cadena[i] = 64;
+                        }
+                        else
+                        {
+
+                            if (cadena[i] == 47) // Si es /
+                            {
+                                cadena[i] = 64;
+                            }
+                            else
+                            {
+                                if (cadena[i] == 46) // Si es .
+                                {
+                                    cadena[i] = 'X';
+                                }
+                                else
+                                {
+                                    if (cadena[i] == 39) // Si es '
+                                    {
+                                        cadena[i] = 64;
+                                    }
+                                    else
+                                    {
+                                        if (cadena[i] == 154) // U dierisis
+                                        {
+                                            cadena[i] = 'U';
+                                        }
+                                        else
+                                        {
+                                            if (cadena[i] == 153) // O dierisis
+                                            {
+                                                cadena[i] = 'U';
+                                            }
+                                            else
+                                            {
+                                                if (cadena[i] == 216) // I dierisis
+                                                {
+                                                    cadena[i] = 'U';
+                                                }
+                                                else
+                                                {
+                                                    if (cadena[i] == 211) // E dierisis
+                                                    {
+                                                        cadena[i] = 'U';
+                                                    }
+                                                    else
+                                                    {
+                                                        if (cadena[i] == 142) // A dierisis
+                                                        {
+                                                            cadena[i] = 'A';
+                                                        }
+                                                        else
+                                                        {
+                                                            if (cadena[i] == 129) // U dierisis
+                                                            {
+                                                                cadena[i] = 'U';
+                                                            }
+                                                            else
+                                                            {
+                                                                if (cadena[i] == 148) // O dierisis
+                                                                {
+                                                                    cadena[i] = 'U';
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (cadena[i] == 139) // I dierisis
+                                                                    {
+                                                                        cadena[i] = 'U';
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (cadena[i] == 137) // E dierisis
+                                                                        {
+                                                                            cadena[i] = 'U';
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (cadena[i] == 132) // A dierisis
+                                                                            {
+                                                                                cadena[i] = 'A';
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (cadena[i] == 181) // A acentuada
+                                                                                {
+                                                                                    cadena[i] = 'A';
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (cadena[i] == 144) // E acentuada
+                                                                                    {
+                                                                                        cadena[i] = 'E';
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (cadena[i] == 214) // I acentuada
+                                                                                        {
+                                                                                            cadena[i] = 'I';
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            if (cadena[i] == 224) // O acentuada
+                                                                                            {
+                                                                                                cadena[i] = 'O';
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                if (cadena[i] == 233) // U acentuada
+                                                                                                {
+                                                                                                    cadena[i] = 'U';
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    if (cadena[i] == 160) // A acentuada
+                                                                                                    {
+                                                                                                        cadena[i] = 'A';
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        if (cadena[i] == 130) // E acentuada
+                                                                                                        {
+                                                                                                            cadena[i] = 'E';
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            if (cadena[i] == 161) // I acentuada
+                                                                                                            {
+                                                                                                                cadena[i] = 'I';
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                if (cadena[i] == 162) // O acentuada
+                                                                                                                {
+                                                                                                                    cadena[i] = 'O';
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    if (cadena[i] == 163) // U acentuada
+                                                                                                                    {
+                                                                                                                        cadena[i] = 'U';
+                                                                                                                    }
+                                                                                                                    else
+                                                                                                                    {
+                                                                                                                        if (cadena[i] == 45)
+                                                                                                                        {
+                                                                                                                            cadena[i] = 64;
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            error = 1;
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             if (cadena[i - 1] == ' ')
@@ -218,7 +386,10 @@ void FechaNac(char curp[])
         {
             dia = Validar(1, 29);
         }
-        dia = Validar(1, 28);
+        else
+        {
+            dia = Validar(1, 28);
+        }
         break;
     case 3:
         dia = Validar(1, 31);
@@ -309,64 +480,83 @@ void Sexo(char curp[])
 
 void Nombres(char curp[])
 {
-    char nombre1[50], nombre2[50], paterno[50], materno[50];
-    char caracter, vocal, consonante;
+    char nombre1[50], nombre2[50], nombre3[50], nombre4[50], paterno[50], materno[50];
+    char caracter;
     int i, joseMaria, lleno;
 
     // *********************** APELLIDO PATERNO *******************************
-    do
-    {
-        system("CLS");
-        ValiApellidos(paterno, "   APELLIDO PATERNO");
-    } while (paterno[0] == '\0');
 
-    Preposiciones(paterno);
-    Preposiciones(paterno);
-    Preposiciones(paterno);
+    system("CLS");
+    ValiApellidos(paterno, "   APELLIDO PATERNO");
 
-    caracter = paterno[0];
-    curp[0] = caracter;
-
-    vocal = 0;
-    lleno = 1;
-    for (i = 1; lleno; i++)
+    if (strlen(paterno) == 0)
     {
-        if ((paterno[i] == 'A') || (paterno[i] == 'E') || (paterno[i] == 'I') || (paterno[i] == 'O') || (paterno[i] == 'U'))
-        {
-            caracter = paterno[i];
-            curp[1] = caracter;
-            vocal = 1;
-            lleno = 0;
-        }
-        if (i == strlen(paterno))
-        {
-            lleno = 0;
-        }
-    }
-    if (vocal == 0) // No tiene vocal intermedia
-    {
+        curp[0] = 'X';
         curp[1] = 'X';
-    }
-
-    consonante = 0;
-    lleno = 1;
-    for (i = 1; lleno; i++)
-    {
-        if ((paterno[i] != 'A') && (paterno[i] != 'E') && (paterno[i] != 'I') && (paterno[i] != 'O') && (paterno[i] != 'U'))
-        {
-            caracter = paterno[i];
-            curp[13] = caracter;
-            consonante = 1;
-            lleno = 0;
-        }
-        if (i == strlen(paterno))
-        {
-            lleno = 0;
-        }
-    }
-    if (consonante == 0) // No tiene consonante intermedia
-    {
         curp[13] = 'X';
+    }
+    else
+    {
+
+        Preposiciones(paterno);
+        Preposiciones(paterno);
+        Preposiciones(paterno);
+
+        caracter = paterno[0];
+        curp[0] = caracter;
+        if (paterno[0] == 64)
+        {
+            curp[0] = 'X';
+        }
+
+        lleno = 1;
+        for (i = 1; lleno; i++)
+        {
+            if ((paterno[i] == 'A') || (paterno[i] == 'E') || (paterno[i] == 'I') || (paterno[i] == 'O') || (paterno[i] == 'U'))
+            {
+                if (paterno[i - 1] == 64)
+                {
+                    curp[1] = 'X';
+                }
+                else
+                {
+                    caracter = paterno[i];
+                    curp[1] = caracter;
+                }
+                lleno = 0;
+            }
+            if (i == strlen(paterno))
+            {
+                lleno = 0;
+                curp[1] = 'X';
+            }
+        }
+
+        lleno = 1;
+        for (i = 1; lleno; i++)
+        {
+            if (paterno[i] != 64)
+            {
+                if ((paterno[i] != 'A') && (paterno[i] != 'E') && (paterno[i] != 'I') && (paterno[i] != 'O') && (paterno[i] != 'U'))
+                {
+                    if (paterno[i - 1] == 64)
+                    {
+                        curp[13] = 'X';
+                    }
+                    else
+                    {
+                        caracter = paterno[i];
+                        curp[13] = caracter;
+                    }
+                    lleno = 0;
+                }
+            }
+            if (i == strlen(paterno))
+            {
+                lleno = 0;
+                curp[13] = 'X';
+            }
+        }
     }
     // *********************** APELLIDO MATERNO *******************************
 
@@ -386,25 +576,34 @@ void Nombres(char curp[])
         Preposiciones(materno);
         caracter = materno[0];
         curp[2] = caracter;
-        consonante = 0;
+        if (materno[0] == 64)
+        {
+            curp[2] = 'X';
+        }
         lleno = 1;
         for (i = 1; lleno; i++)
         {
-            if ((materno[i] != 'A') && (materno[i] != 'E') && (materno[i] != 'I') && (materno[i] != 'O') && (materno[i] != 'U'))
+            if (materno[i] != 64)
             {
-                caracter = materno[i];
-                curp[14] = caracter;
-                consonante = 1;
-                lleno = 0;
+                if ((materno[i] != 'A') && (materno[i] != 'E') && (materno[i] != 'I') && (materno[i] != 'O') && (materno[i] != 'U'))
+                {
+                    if (materno[i - 1] == 64)
+                    {
+                        curp[14] = 'X';
+                    }
+                    else
+                    {
+                        caracter = materno[i];
+                        curp[14] = caracter;
+                    }
+                    lleno = 0;
+                }
             }
             if (i == strlen(materno))
             {
                 lleno = 0;
+                curp[14] = 'X';
             }
-        }
-        if (consonante == 0)
-        {
-            curp[14] = 'X';
         }
     }
 
@@ -422,52 +621,246 @@ void Nombres(char curp[])
     system("CLS");
     ValiApellidos(nombre2, "   SEGUNDO NOMBRE");
 
-    consonante = 0;
+    Preposiciones(nombre2);
+    Preposiciones(nombre2);
+    Preposiciones(nombre2);
+
+    system("CLS");
+    ValiApellidos(nombre3, "   TERCER NOMBRE");
+
+    Preposiciones(nombre3);
+    Preposiciones(nombre3);
+    Preposiciones(nombre3);
+
+    system("CLS");
+    ValiApellidos(nombre4, "   CUARTO NOMBRE");
+    Preposiciones(nombre4);
+    Preposiciones(nombre4);
+    Preposiciones(nombre4);
+
     if (strlen(nombre2) == 0) // Si no es compuesto
     {
+
         caracter = nombre1[0];
         curp[3] = caracter;
+        if (nombre1[0] == 64)
+        {
+            curp[3] = 'X';
+        }
         lleno = 1;
         for (i = 1; lleno; i++)
         {
-            if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+            if (nombre1[i] != 64)
             {
-                caracter = nombre1[i];
-                curp[15] = caracter;
-                consonante = 1;
-                lleno = 0;
+                if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+                {
+                    if (nombre1[i - 1] == 64)
+                    {
+                        curp[15] = 'X';
+                    }
+                    else
+                    {
+                        caracter = nombre1[i];
+                        curp[15] = caracter;
+                    }
+                    lleno = 0;
+                }
             }
             if (i == strlen(nombre1))
             {
                 lleno = 0;
+                curp[15] = 'X';
             }
         }
     }
     else // Si es compuesto
     {
-
         joseMaria = JoseMaria(nombre1);
         if (joseMaria) // Si es jose o maria tomamos su segundo nombre
         {
-
-            Preposiciones(nombre2);
-            Preposiciones(nombre2);
-            Preposiciones(nombre2);
-            caracter = nombre2[0];
-            curp[3] = caracter;
-            lleno = 1;
-            for (i = 1; lleno; i++)
+            system("pause");
+            if (strlen(nombre3) != 0)
             {
-                if ((nombre2[i] != 'A') && (nombre2[i] != 'E') && (nombre2[i] != 'I') && (nombre2[i] != 'O') && (nombre2[i] != 'U'))
+                joseMaria = JoseMaria(nombre2);
+                if (joseMaria)
                 {
-                    caracter = nombre2[i];
-                    curp[15] = caracter;
-                    consonante = 1;
-                    lleno = 0;
+                    system("pause");
+                    if (strlen(nombre4) != 0)
+                    {
+                        joseMaria = JoseMaria(nombre3);
+                        if (joseMaria)
+                        {
+                            printf("%s", nombre4);
+                            system("pause");
+                            caracter = nombre4[0];
+                            curp[3] = caracter;
+                            if (nombre4[0] == 64)
+                            {
+                                curp[3] = 'X';
+                            }
+                            lleno = 1;
+                            for (i = 1; lleno; i++)
+                            {
+                                if (nombre4[i] != 64)
+                                {
+                                    if ((nombre4[i] != 'A') && (nombre4[i] != 'E') && (nombre4[i] != 'I') && (nombre4[i] != 'O') && (nombre4[i] != 'U'))
+                                    {
+                                        if (nombre4[i - 1] == 64)
+                                        {
+                                            curp[15] = 'X';
+                                        }
+                                        else
+                                        {
+                                            caracter = nombre4[i];
+                                            curp[15] = caracter;
+                                        }
+                                        lleno = 0;
+                                    }
+                                }
+                                if (i == strlen(nombre4))
+                                {
+                                    lleno = 0;
+                                    curp[15] = 'X';
+                                }
+                            }
+                        }
+                        else
+                        {
+                            caracter = nombre3[0];
+                            curp[3] = caracter;
+                            if (nombre3[0] == 64)
+                            {
+                                curp[3] = 'X';
+                            }
+                            lleno = 1;
+                            for (i = 1; lleno; i++)
+                            {
+                                if (nombre3[i] != 64)
+                                {
+                                    if ((nombre3[i] != 'A') && (nombre3[i] != 'E') && (nombre3[i] != 'I') && (nombre3[i] != 'O') && (nombre3[i] != 'U'))
+                                    {
+                                        if (nombre3[i - 1] == 64)
+                                        {
+                                            curp[15] = 'X';
+                                        }
+                                        else
+                                        {
+                                            caracter = nombre3[i];
+                                            curp[15] = caracter;
+                                        }
+                                        lleno = 0;
+                                    }
+                                }
+                                if (i == strlen(nombre3))
+                                {
+                                    lleno = 0;
+                                    curp[15] = 'X';
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        caracter = nombre3[0];
+                        curp[3] = caracter;
+                        if (nombre3[0] == 64)
+                        {
+                            curp[3] = 'X';
+                        }
+                        lleno = 1;
+                        for (i = 1; lleno; i++)
+                        {
+                            if (nombre3[i] != 64)
+                            {
+                                if ((nombre3[i] != 'A') && (nombre3[i] != 'E') && (nombre3[i] != 'I') && (nombre3[i] != 'O') && (nombre3[i] != 'U'))
+                                {
+                                    if (nombre3[i - 1] == 64)
+                                    {
+                                        curp[15] = 'X';
+                                    }
+                                    else
+                                    {
+                                        caracter = nombre3[i];
+                                        curp[15] = caracter;
+                                    }
+                                    lleno = 0;
+                                }
+                            }
+                            if (i == strlen(nombre3))
+                            {
+                                lleno = 0;
+                                curp[15] = 'X';
+                            }
+                        }
+                    }
                 }
-                if (i == strlen(nombre2))
+                else
                 {
-                    lleno = 0;
+                    caracter = nombre2[0];
+                    curp[3] = caracter;
+                    if (nombre2[0] == 64)
+                    {
+                        curp[3] = 'X';
+                    }
+                    lleno = 1;
+                    for (i = 1; lleno; i++)
+                    {
+                        if (nombre2[i] != 64)
+                        {
+                            if ((nombre2[i] != 'A') && (nombre2[i] != 'E') && (nombre2[i] != 'I') && (nombre2[i] != 'O') && (nombre2[i] != 'U'))
+                            {
+                                if (nombre2[i - 1] == 64)
+                                {
+                                    curp[15] = 'X';
+                                }
+                                else
+                                {
+                                    caracter = nombre2[i];
+                                    curp[15] = caracter;
+                                }
+                                lleno = 0;
+                            }
+                        }
+                        if (i == strlen(nombre2))
+                        {
+                            lleno = 0;
+                            curp[15] = 'X';
+                        }
+                    }
+                }
+            }
+            else
+            {
+                caracter = nombre2[0];
+                curp[3] = caracter;
+                if (nombre2[0] == 64)
+                {
+                    curp[3] = 'X';
+                }
+                lleno = 1;
+                for (i = 1; lleno; i++)
+                {
+                    if (nombre2[i] != 64)
+                    {
+                        if ((nombre2[i] != 'A') && (nombre2[i] != 'E') && (nombre2[i] != 'I') && (nombre2[i] != 'O') && (nombre2[i] != 'U'))
+                        {
+                            if (nombre2[i - 1] == 64)
+                            {
+                                curp[15] = 'X';
+                            }
+                            else
+                            {
+                                caracter = nombre2[i];
+                                curp[15] = caracter;
+                            }
+                            lleno = 0;
+                        }
+                    }
+                    if (i == strlen(nombre2))
+                    {
+                        lleno = 0;
+                        curp[15] = 'X';
+                    }
                 }
             }
         }
@@ -475,32 +868,42 @@ void Nombres(char curp[])
         {
             caracter = nombre1[0];
             curp[3] = caracter;
+            if (nombre1[0] == 64)
+            {
+                curp[3] = 'X';
+            }
             lleno = 1;
             for (i = 1; lleno; i++)
             {
-                if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+                if (nombre1[i] != 64)
                 {
-                    caracter = nombre1[i];
-                    curp[15] = caracter;
-                    consonante = 1;
-                    lleno = 0;
+                    if ((nombre1[i] != 'A') && (nombre1[i] != 'E') && (nombre1[i] != 'I') && (nombre1[i] != 'O') && (nombre1[i] != 'U'))
+                    {
+                        if (nombre1[i - 1] == 64)
+                        {
+                            curp[15] = 'X';
+                        }
+                        else
+                        {
+                            caracter = nombre1[i];
+                            curp[15] = caracter;
+                        }
+                        lleno = 0;
+                    }
                 }
                 if (i == strlen(nombre1))
                 {
                     lleno = 0;
+                    curp[15] = 'X';
                 }
             }
         }
-    }
-    if (consonante == 0)
-    {
-        curp[15] = 'X';
     }
 }
 
 int JoseMaria(char primernombre[])
 {
-    char JoseMaria[8][5] = {"JOSE", "JX", "J", "MARIA", "MAX", "MA", "MX", "M"};
+    char JoseMaria[8][6] = {"JOSE", "JX", "J", "MARIA", "MAX", "MA", "MX", "M"};
     int i;
     for (i = 0; i < 8; i++)
     {
