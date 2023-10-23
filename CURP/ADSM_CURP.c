@@ -1,6 +1,10 @@
+// Solano Meza Angel Daniel Matr. 372453
+// 22/10/2023
+// Creacion de un programa para generar una curp
+// ADSM_CURP_932
+
 #include "odin.h"
 
-//*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
 void Curp(char curp[]);
@@ -67,7 +71,6 @@ void Curp(char curp[])
     Sexo(curp);
     Estados(curp);
     Inconvenientes(curp);
-
     ultimo = NumAleatorio(1, 5);
     sprintf(cultimo, "%d", ultimo);
     caracter = cultimo[0];
@@ -624,10 +627,9 @@ void Nombres(char curp[])
     Preposiciones(nombre2);
     Preposiciones(nombre2);
     Preposiciones(nombre2);
-
+    
     system("CLS");
     ValiApellidos(nombre3, "   TERCER NOMBRE");
-
     Preposiciones(nombre3);
     Preposiciones(nombre3);
     Preposiciones(nombre3);
@@ -678,20 +680,17 @@ void Nombres(char curp[])
         joseMaria = JoseMaria(nombre1);
         if (joseMaria) // Si es jose o maria tomamos su segundo nombre
         {
-            system("pause");
             if (strlen(nombre3) != 0)
             {
                 joseMaria = JoseMaria(nombre2);
                 if (joseMaria)
                 {
-                    system("pause");
                     if (strlen(nombre4) != 0)
                     {
                         joseMaria = JoseMaria(nombre3);
                         if (joseMaria)
                         {
-                            printf("%s", nombre4);
-                            system("pause");
+
                             caracter = nombre4[0];
                             curp[3] = caracter;
                             if (nombre4[0] == 64)
