@@ -14,6 +14,10 @@ int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num);
 TReg RegistroAuto();
 TReg RegistroMan();
 void ImprimirTReg(TReg vect[], int n);
+void CrearTXT(char Nombre[], TReg Vect[], int n);
+void Intercambio(TReg Nombres[], int i, int j);
+int Particion(TReg Nombres[], int inferior, int superior);
+void Quicksort(TReg Nombres[], int inferior, int superior);
 
 int main()
 {
@@ -31,8 +35,9 @@ int msges()
     printf("2.- REGISTROS MANUALES \n");
     printf("3.- ELIMINAR REGISTRO \n");
     printf("4.- BUSCAR MATRICULA  \n");
-    printf("5.- ORDENAR MATRICULA  \n");
-    printf("6.- IMPRIMIR \n");
+    printf("5.- ORDENAR REGISTROS  \n");
+    printf("6.- IMPRIMIR REGISTROS \n");
+    printf("7.- CREAR ARCHIVO DE TEXTO \n");
     printf("0.- SALIR  \n");
     printf("ESCOGE UNA OPCION: ");
     scanf("%d", &op);
@@ -43,7 +48,8 @@ void menu()
 {
     srand(time(NULL));
     TReg VectReg[2000], temp;
-    int op, j, i, apagar, buscar, encontrado, ordenado;
+    int op, j, i, apagar, buscar, encontrado, ordenado, confirmar;
+    char NombreArchivo[50];
     i = 0;
     ordenado = 0;
     do
@@ -113,7 +119,6 @@ void menu()
                 {
                     encontrado = BusquedaBinaria(VectReg, 0, i, apagar);
                 }
-
                 if (encontrado == -1)
                 {
                     printf("MATRICULA NO EXISTENTE\n");
@@ -126,14 +131,39 @@ void menu()
                     }
                     else
                     {
-                        VectReg[encontrado].Status = 0;
-                        printf("REGISTRO CON MATRICULA %d APAGADO\n", apagar);
+                        printf("DATOS DEL REGISTRO A ELIMINAR:\n\n");
+                        printf("MATRICULA: %d\n", VectReg[encontrado].Matricula);
+                        printf("NOMBRE 1: %s\n", VectReg[encontrado].Persona.Nombre1);
+                        printf("NOMBRE 2: %s\n", VectReg[encontrado].Persona.Nombre2);
+                        printf("NOMBRE 3: %s\n", VectReg[encontrado].Persona.Nombre3);
+                        printf("APELLIDO PATERNO: %s\n", VectReg[encontrado].Persona.ApPat);
+                        printf("APELLIDO MATERNO: %s\n", VectReg[encontrado].Persona.ApMat);
+                        printf("FECHA DE NACIMIENTO:  %02d-%02d-%4d\n", VectReg[encontrado].Nacimiento.dia, VectReg[encontrado].Nacimiento.mes, VectReg[encontrado].Nacimiento.anio);
+                        printf("EDAD: %d\n", VectReg[encontrado].Nacimiento.edad);
+                        printf("SEXO: %s\n", VectReg[encontrado].Sexo);
+                        printf("LUGAR DE NACIMIENTO: %s\n", VectReg[encontrado].Estado);
+                        printf("CURP: %s\n", VectReg[encontrado].Curp);
+                        printf("DESEA ELIMINAR EL REGISTRO: 1.SI 0.NO\n");
+                        confirmar = Validar(0, 1);
+                        if (confirmar == 1)
+                        {
+                            VectReg[encontrado].Status = 0;
+                            system("CLS");
+                            printf("REGISTRO ELIMINADO\n");
+                            system("PAUSE");
+                        }
+                        else
+                        {
+                            system("CLS");
+                            printf("REGISTRO NO ELIMINADO\n");
+                            system("PAUSE");
+                        }
                     }
                 }
             }
             system("PAUSE");
             break;
-        case 4:
+        case 4: // Buscar
             system("CLS");
             if (i == 0)
             {
@@ -160,11 +190,23 @@ void menu()
                 {
                     if (VectReg[encontrado].Status == 0)
                     {
-                        printf("MATRICULA DE ALUMNO DESACTIVADO EN: %d\n", encontrado);
+                        printf("MATRICULA DE ALUMNO DESACTIVADO\n");
                     }
                     else
                     {
+                        printf("DATOS DEL REGISTRO ENCONTRADO:\n\n");
                         printf("MATRICULA EN REGISTRO: %d\n", encontrado);
+                        printf("MATRICULA: %d\n", VectReg[encontrado].Matricula);
+                        printf("NOMBRE 1: %s\n", VectReg[encontrado].Persona.Nombre1);
+                        printf("NOMBRE 2: %s\n", VectReg[encontrado].Persona.Nombre2);
+                        printf("NOMBRE 3: %s\n", VectReg[encontrado].Persona.Nombre3);
+                        printf("APELLIDO PATERNO: %s\n", VectReg[encontrado].Persona.ApPat);
+                        printf("APELLIDO MATERNO: %s\n", VectReg[encontrado].Persona.ApMat);
+                        printf("FECHA DE NACIMIENTO:  %02d-%02d-%4d\n", VectReg[encontrado].Nacimiento.dia, VectReg[encontrado].Nacimiento.mes, VectReg[encontrado].Nacimiento.anio);
+                        printf("EDAD: %d\n", VectReg[encontrado].Nacimiento.edad);
+                        printf("SEXO: %s\n", VectReg[encontrado].Sexo);
+                        printf("LUGAR DE NACIMIENTO: %s\n", VectReg[encontrado].Estado);
+                        printf("CURP: %s\n", VectReg[encontrado].Curp);
                     }
                 }
             }
@@ -187,8 +229,17 @@ void menu()
             {
                 if (ordenado == 0)
                 {
-                    ordenado = OrdenarTReg(VectReg, i);
-                    printf("REGISTROS ORDENADOS\n");
+                    if (i < 500)
+                    {
+                        ordenado = OrdenarTReg(VectReg, i);
+                        printf("REGISTROS ORDENADOS\n");
+                    }
+                    else
+                    {
+                        Quicksort(VectReg, 0, i - 1);
+                        ordenado = 1;
+                        printf("REGISTROS ORDENADOS POR QUICKSORT\n");
+                    }
                 }
                 else
                 {
@@ -207,6 +258,12 @@ void menu()
             {
                 ImprimirTReg(VectReg, i);
             }
+            system("PAUSE");
+            break;
+        case 7: // Archivo de texto
+            ValiCadena(NombreArchivo, "NOMBRE DEL ARCHIVO TXT");
+            CrearTXT(NombreArchivo, VectReg, i);
+            printf("\n");
             system("PAUSE");
             break;
         }
@@ -265,7 +322,6 @@ TReg RegistroAuto()
     {
         alum.Nacimiento.edad = 2023 - alum.Nacimiento.anio;
     }
-
     return alum;
 }
 
@@ -286,6 +342,7 @@ TReg RegistroMan()
     sprintf(cultimo, "%d", ultimo);
     caracter = cultimo[0];
     alum.Curp[17] = caracter;
+    alum.Curp[18] = '\0';
     if (alum.Nacimiento.anio == 2023)
     {
         if (alum.Nacimiento.mes > 10)
@@ -360,15 +417,23 @@ int BusquedaOrdenadaTReg(TReg vect[], int n, int num)
 
 void ImprimirTReg(TReg vect[], int n)
 {
-    int i, activos;
+    int i, j;
 
-    printf("MATRICULA                     NOMBRES               APPAT      APMAT         FECHA NAC   EDAD   SEXO         ORIGEN                 CURP\n\n");
-    for (i = 0, i < n; i < n; i++)
+    printf("MATRICULA                     NOMBRES                  APPAT           APMAT         FECHA NAC     EDAD      SEXO           ORIGEN                    CURP\n");
+    printf("______________________________________________________________________________________________________________________________________________________________________\n");
+    for (i = 0, i < n; i < n; i++, j++)
     {
         if (vect[i].Status != 0)
         {
-            printf("%-9d   %-10s   %-10s   %-10s  %-10s   %-10s    %02d-%02d-%4d   %-4d   %-7s   %-20s   %-18s\n", vect[i].Matricula, vect[i].Persona.Nombre1, vect[i].Persona.Nombre2, vect[i].Persona.Nombre3, vect[i].Persona.ApPat, vect[i].Persona.ApMat, vect[i].Nacimiento.dia, vect[i].Nacimiento.mes, vect[i].Nacimiento.anio, vect[i].Nacimiento.edad, vect[i].Sexo, vect[i].Estado, vect[i].Curp);
-            activos++;
+            printf("%-9d |  %-10s |  %-10s |  %-10s | %-10s  |  %-10s  |  %02d-%02d-%4d  |  %-4d  |  %-5s  |  %-20s  |  %-18s  |\n", vect[i].Matricula, vect[i].Persona.Nombre1, vect[i].Persona.Nombre2, vect[i].Persona.Nombre3, vect[i].Persona.ApPat, vect[i].Persona.ApMat, vect[i].Nacimiento.dia, vect[i].Nacimiento.mes, vect[i].Nacimiento.anio, vect[i].Nacimiento.edad, vect[i].Sexo, vect[i].Estado, vect[i].Curp);
+        }
+        if (j == 39)
+        {
+            system("pause");
+            system("cls");
+            printf("MATRICULA                     NOMBRES                  APPAT           APMAT         FECHA NAC     EDAD      SEXO           ORIGEN                    CURP\n");
+            printf("______________________________________________________________________________________________________________________________________________________________________\n");
+            j = 0;
         }
     }
 }
@@ -393,4 +458,62 @@ int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
         }
     }
     return -1;
+}
+
+void CrearTXT(char Nombre[], TReg vect[], int n)
+{
+    int i;
+    FILE *archivo;
+
+    strcat(Nombre, ".txt");
+    archivo = fopen(Nombre, "w");
+    fprintf(archivo, "MATRICULA                     NOMBRES                  APPAT           APMAT         FECHA NAC     EDAD      SEXO           ORIGEN                    CURP\n\n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].Status != 0)
+        {
+            fprintf(archivo, "%-9d |  %-10s |  %-10s |  %-10s | %-10s  |  %-10s  |  %02d-%02d-%4d  |  %-4d  |  %-5s  |  %-20s  |  %-18s  |\n", vect[i].Matricula, vect[i].Persona.Nombre1, vect[i].Persona.Nombre2, vect[i].Persona.Nombre3, vect[i].Persona.ApPat, vect[i].Persona.ApMat, vect[i].Nacimiento.dia, vect[i].Nacimiento.mes, vect[i].Nacimiento.anio, vect[i].Nacimiento.edad, vect[i].Sexo, vect[i].Estado, vect[i].Curp);
+        }
+    }
+
+    printf("ARCHIVO CREADO EXITOSAMENTE");
+    fclose(archivo);
+}
+
+void Intercambio(TReg Nombres[], int i, int j)
+{
+    TReg temp;
+
+    temp = Nombres[i];
+    Nombres[i] = Nombres[j];
+    Nombres[j] = temp;
+}
+
+int Particion(TReg Nombres[], int inferior, int superior)
+{
+    TReg Alumno;
+    Alumno.Matricula = Nombres[superior].Matricula;
+    int i = inferior - 1;
+
+    for (int j = inferior; j <= superior - 1; j++)
+    {
+        if (Nombres[j].Matricula <= Alumno.Matricula)
+        {
+            i++;
+            Intercambio(Nombres, i, j);
+        }
+    }
+    Intercambio(Nombres, i + 1, superior);
+    return i + 1;
+}
+
+void Quicksort(TReg Nombres[], int inferior, int superior)
+{
+    if (inferior < superior)
+    {
+        int pi = Particion(Nombres, inferior, superior);
+
+        Quicksort(Nombres, inferior, pi - 1);
+        Quicksort(Nombres, pi + 1, superior);
+    }
 }

@@ -24,7 +24,7 @@ typedef struct _reg
     TNombres Nacimiento;
     char Estado[20];
     char Sexo[2];
-    char Curp[18];
+    char Curp[19];
 } TReg;
 
 //****************** PROTOTIPOS ***********************************
@@ -789,7 +789,7 @@ TReg Nombres(TReg Nombres)
                     }
                     else
                     {
-                        caracter = ApMat;
+                        caracter = ApMat[i];
                         Nombres.Curp[14] = caracter;
                     }
                     lleno = 0;
@@ -1015,7 +1015,6 @@ TReg Nombres(TReg Nombres)
             }
         }
     }
-
     return Nombres;
 }
 

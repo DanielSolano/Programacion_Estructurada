@@ -127,6 +127,9 @@ void ValiCadena(char cadena[], char msg[])
     int i;
     int error;
     error = 0;
+    printf("%s\n", msg);
+    fflush(stdin);
+    gets(cadena);
     Mayusculas(cadena);
     do
     {
