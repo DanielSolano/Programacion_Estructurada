@@ -273,7 +273,7 @@ void menu()
                 }
                 else
                 {
-                    printf("NUMERO DE REGISTROS: \n", registros);
+                    printf("NUMERO DE REGISTROS: %d\n", registros);
                 }
                 system("PAUSE");
                 break;
@@ -450,8 +450,8 @@ int ContarReg(char nombre[])
     char fileName[50];
     char cmd[50];
 
-    system("gcc contadorReg.c -o contadorReg");
-    sprintf(cmd, "contadorReg.exe %s", nombre);
+    system("gcc Contador.c -o Contador");
+    sprintf(cmd, "Contador.exe %s", nombre);
     cont = system(cmd);
 
     return cont;

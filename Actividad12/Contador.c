@@ -4,11 +4,6 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 1)
-    {
-        return -1;
-    }
-
     FILE *fa;
     char nombre[30];
     char linea[90];
