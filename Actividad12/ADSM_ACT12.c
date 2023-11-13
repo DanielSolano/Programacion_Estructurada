@@ -195,7 +195,6 @@ void menu()
                         printf("APELLIDO MATERNO: %s\n", VectReg[encontrado].ApMat);
                         printf("EDAD: %d\n", VectReg[encontrado].Edad);
                         printf("SEXO: %s\n", VectReg[encontrado].Sexo);
-                        printf("DESEA ELIMINAR EL REGISTRO: 1.SI 0.NO\n");
                     }
                 }
                 system("PAUSE");
