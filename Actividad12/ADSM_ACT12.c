@@ -12,6 +12,8 @@ void ImprimirApagados(TReg vect[], int n);
 void ImprimirTReg(TReg vect[], int n);
 void NombreArch(char archivo[]);
 void CrearBorrados(TReg vect[], int n);
+void ActualizarTXT(char Nombre[], TReg vect[], int n);
+int ContarReg(char nomArchivo[]);
 TReg RegistroAuto();
 //****  main principal  *********
 int main()
@@ -45,7 +47,7 @@ void menu()
 {
     srand(time(NULL));
     TReg VectReg[1500], temp;
-    int op, j, i, apagar, buscar, encontrado, ordenado, cargado, confirmar, creado;
+    int op, j, i, apagar, buscar, encontrado, ordenado, cargado, confirmar, creado, registros;
     char NombreArchivo[50];
     i = 0;
     ordenado = 0;
@@ -156,7 +158,8 @@ void menu()
             system("CLS");
             if (i == 0)
             {
-                printf("INCAPAZ DE BUSCAR EN REGISTROS VACIOS\n");
+                printf("REGISTROS VACIOS\n");
+                system("PAUSE");
             }
             else
             {
@@ -258,8 +261,21 @@ void menu()
                     creado = 1;
                     printf("ARCHIVO CREADO EXITOSAMENTE");
                     printf("\n");
-                    system("PAUSE");
                 }
+                system("PAUSE");
+                break;
+            case 8:
+                registros = ContarReg(NombreArchivo);
+                system("CLS");
+                if (registros == -1)
+                {
+                    printf("ERROR\n");
+                }
+                else
+                {
+                    printf("NUMERO DE REGISTROS: \n", registros);
+                }
+                system("PAUSE");
                 break;
             case 9:
                 system("CLS");
@@ -393,7 +409,7 @@ void CrearBorrados(TReg vect[], int n)
     int i;
     FILE *archivo;
 
-    archivo = fopen("basura.txt", "w");
+    archivo = fopen("eliminados.txt", "w");
     fprintf(archivo, "------------------------------------------------------------------------------------------\n");
     fprintf(archivo, "  NO  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
     fprintf(archivo, "------------------------------------------------------------------------------------------\n");
@@ -426,4 +442,17 @@ void ActualizarTXT(char Nombre[], TReg vect[], int n)
     }
 
     fclose(archivo);
+}
+
+int ContarReg(char nombre[])
+{
+    int cont;
+    char fileName[50];
+    char cmd[50];
+
+    system("gcc contadorReg.c -o contadorReg");
+    sprintf(cmd, "contadorReg.exe %s", nombre);
+    cont = system(cmd);
+
+    return cont;
 }
