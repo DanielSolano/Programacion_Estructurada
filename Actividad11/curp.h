@@ -243,7 +243,7 @@ TReg AutoCurp(TReg Nombres)
     caracter = Nombres.Estado[0];
     Nombres.Curp[11] = caracter;
     caracter = Nombres.Estado[1];
-    Nombres.Curp[12] = Nombres.Estado[1];
+    Nombres.Curp[12] = caracter;
 
     // *********************** ANTISONANTES *******************************
     strncat(comparar, Nombres.Curp, 4);

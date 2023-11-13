@@ -1,0 +1,103 @@
+MATRICULA                     NOMBRES                  APPAT           APMAT         FECHA NAC     EDAD      SEXO           ORIGEN                    CURP
+
+301649    |  LUIS       |  MARIO      |             | CASTRO      |  RAMIREZ     |  21-08-1974  |  49    |  H      |  CHIHUAHUA             |  CARL740821HCHSMS05  |
+302105    |  MANUEL     |  CARLOS     |             | HERRERA     |  VILLANUEVA  |  24-03-2008  |  15    |  H      |  CHIHUAHUA             |  HEVM080324HCHRLNA4  |
+302121    |  MIGUEL     |  ALEJANDRO  |             | GUZMAN      |  RUIZ        |  16-07-2007  |  16    |  H      |  TLAXCALA              |  GURM070716HTLZZGA3  |
+302292    |  CARLOS     |  FERNANDO   |             | ROJAS       |  HERRERA     |  21-04-1966  |  57    |  H      |  AGUASCALIENTES        |  ROHC660421HAGJRR05  |
+304321    |  JAVIER     |  HECTOR     |             | MEDINA      |  ZAMORA      |  25-01-1969  |  54    |  H      |  COAHUILA              |  MEZJ690125HCODMV01  |
+305074    |  CARLOS     |  FERNANDO   |             | CORDERO     |  DELGADO     |  05-12-1950  |  73    |  H      |  ZACATECAS             |  CODC501205HZARLR03  |
+305835    |  PABLO      |  LUIS       |             | VARGAS      |  REYES       |  31-12-2022  |  1     |  H      |  GUERRERO              |  VARP221231HGURYBA2  |
+305911    |  JUAN       |  ALBERTO    |             | MEDINA      |  PENA        |  11-04-1955  |  68    |  H      |  COAHUILA              |  MEPJ550411HCODNN03  |
+306263    |  CRISTINA   |  SILVIA     |             | ROMERO      |  JIMENEZ     |  01-07-2006  |  17    |  M      |  OAXACA                |  ROJC060701MOAMMRA3  |
+306380    |  JAVIER     |  HECTOR     |             | PIZARRO     |  CORDERO     |  23-07-1954  |  69    |  H      |  CAMPECHE              |  PICJ540723HCAZRV01  |
+306744    |  LUISA      |  LINDA      |             | REYES       |  RAMIREZ     |  18-03-1984  |  39    |  M      |  SONORA                |  RERL840318MSOYMS01  |
+307659    |  PEDRO      |  GABRIEL    |             | GUTIERREZ   |  FERNANDEZ   |  25-02-1970  |  53    |  H      |  PUEBLA                |  GUFP700225HPUTRD01  |
+307787    |  LUIS       |  MARIO      |             | MEDINA      |  ROMERO      |  14-06-1977  |  46    |  H      |  MICHOACAN             |  MERL770614HMIDMS02  |
+307845    |  LAURA      |  NATALIA    |             | SALAZAR     |  PENA        |  22-03-1989  |  34    |  M      |  SINALOA               |  SAPL890322MSILNR05  |
+308075    |  DAVID      |  ENRIQUE    |             | RUIZ        |  VALLE       |  15-10-1959  |  64    |  H      |  GUANAJUATO            |  RUVD591015HGUZLV01  |
+308448    |  FRANCISCO  |  JULIO      |             | MENDOZA     |  ROMERO      |  26-11-1989  |  34    |  H      |  COLIMA                |  MERF891126HCONMR04  |
+308752    |  MIGUEL     |  ALEJANDRO  |             | GUZMAN      |  ORTEGA      |  31-08-2021  |  2     |  H      |  CHIHUAHUA             |  GUOM210831HCHZRGA1  |
+308920    |  TERESA     |  VALERIA    |             | CASTRO      |  ROBLES      |  12-05-2002  |  21    |  M      |  NAYARIT               |  CART020512MNASBRA1  |
+309079    |  DAVID      |  ENRIQUE    |             | ROBLES      |  REYES       |  19-05-2000  |  23    |  H      |  MEXICO                |  RORD000519HMEBYVA5  |
+309442    |  DAVID      |  ENRIQUE    |             | MORA        |  MENDOZA     |  12-04-2015  |  8     |  H      |  MORELOS               |  MOMD150412HMORNVA3  |
+309997    |  DAVID      |  ENRIQUE    |             | DELGADO     |  GUTIERREZ   |  11-01-1975  |  48    |  H      |  AGUASCALIENTES        |  DEGD750111HAGLTV03  |
+310130    |  PEDRO      |  GABRIEL    |             | HARO        |  LOPEZ       |  08-03-2007  |  16    |  H      |  SONORA                |  HALP070308HSORPDA5  |
+310202    |  CARMEN     |  BEATRIZ    |             | SANDEZ      |  ROSALES     |  06-04-1952  |  71    |  M      |  TAMAULIPAS            |  SARC520406MTANSR04  |
+310703    |  LUISA      |  LINDA      |             | FERNANDEZ   |  GUZMAN      |  25-09-1971  |  52    |  M      |  EXTRANJERO            |  FEGL710925MEXRZS03  |
+310760    |  LUISA      |  LINDA      |             | MORALES     |  MENDOZA     |  24-02-1991  |  32    |  M      |  YUCATAN               |  MOML910224MYURNS04  |
+310885    |  TERESA     |  VALERIA    |             | NAVARRO     |  DELGADO     |  04-06-1996  |  27    |  M      |  CAMPECHE              |  NADT960604MCAVLR05  |
+311034    |  LAURA      |  NATALIA    |             | TORRES      |  MIRANDA     |  10-03-2021  |  2     |  M      |  GUERRERO              |  TOML210310MGURRRA1  |
+311200    |  LUISA      |  LINDA      |             | CORDOVA     |  NAVARRO     |  04-08-1995  |  28    |  M      |  GUERRERO              |  CONL950804MGURVS04  |
+311959    |  ELENA      |  GLORIA     |             | CASTRO      |  ROJAS       |  04-12-1953  |  70    |  M      |  COLIMA                |  CARE531204MCOSJL03  |
+311983    |  MIGUEL     |  ALEJANDRO  |             | MENDOZA     |  BLANCO      |  09-06-2023  |  23    |  H      |  PUEBLA                |  MEBM230609HPUNLGA4  |
+312187    |  JUAN       |  ALBERTO    |             | SOTO        |  PENA        |  12-08-2005  |  18    |  H      |  MICHOACAN             |  SOPJ050812HMITNNA1  |
+312621    |  FRANCISCO  |  JULIO      |             | RIVAS       |  REYES       |  17-09-1973  |  50    |  H      |  SAN LUIS POTOSI       |  RIRF730917HSAVYR04  |
+312734    |  ANTONIO    |  SERGIO     |             | GONZALEZ    |  CISNEROS    |  15-07-2004  |  19    |  H      |  BAJA CALIFORNIA SUR   |  GOCA040715HBANSNA3  |
+313241    |  PATRICIA   |  ADRIANA    |             | TORRES      |  JIMENEZ     |  23-01-1960  |  63    |  M      |  MORELOS               |  TOJP600123MMORMT05  |
+313379    |  MARTA      |  DIANA      |             | GUTIERREZ   |  RUIZ        |  31-10-1995  |  28    |  M      |  AGUASCALIENTES        |  GURM951031MAGTZR04  |
+313579    |  FRANCISCO  |  JULIO      |             | SANCHEZ     |  MENDOZA     |  16-01-1993  |  30    |  H      |  JALISCO               |  SAMF930116HJANNR02  |
+313687    |  ALEJANDRO  |  RODRIGO    |             | VALDEZ      |  ROBLES      |  18-04-1994  |  29    |  H      |  SAN LUIS POTOSI       |  VARA940418HSALBL01  |
+314491    |  MIGUEL     |  ALEJANDRO  |             | LUGO        |  VIDAL       |  14-03-2011  |  12    |  H      |  NAYARIT               |  LUVM110314HNAGDGA5  |
+314586    |  JAVIER     |  HECTOR     |             | CACERES     |  RIOS        |  28-11-2000  |  23    |  H      |  CAMPECHE              |  CARJ001128HCACSVA1  |
+314835    |  LUIS       |  MARIO      |             | VALLE       |  MEZA        |  29-11-1999  |  24    |  H      |  CIUDAD DE MEXICO      |  VAML991129HCILZS03  |
+314895    |  LAURA      |  NATALIA    |             | SERRANO     |  RIOS        |  18-08-2001  |  22    |  M      |  SINALOA               |  SERL010818MSIRSRA1  |
+315518    |  MARTA      |  DIANA      |             | REYES       |  RIOS        |  22-03-2015  |  8     |  M      |  OAXACA                |  RERM150322MOAYSRA2  |
+315608    |  ANTONIO    |  SERGIO     |             | PAREDES     |  PANTOJA     |  12-10-2004  |  19    |  H      |  VERACRUZ              |  PAPA041012HVERNNA1  |
+315783    |  CARMEN     |  BEATRIZ    |             | MENDOZA     |  SOLANO      |  16-09-1976  |  47    |  M      |  SONORA                |  MESC760916MSONLR02  |
+315905    |  ISABEL     |  LOURDES    |             | CASTRO      |  LUGO        |  17-06-2019  |  4     |  M      |  GUANAJUATO            |  CALI190617MGUSGSA1  |
+316519    |  MIGUEL     |  ALEJANDRO  |             | RUIZ        |  GALLEGOS    |  23-02-1978  |  45    |  H      |  CAMPECHE              |  RUGM780223HCAZLG03  |
+316562    |  LUISA      |  LINDA      |             | MORALES     |  BLANCO      |  17-04-1971  |  52    |  M      |  COLIMA                |  MOBL710417MCORLS01  |
+316654    |  ALEJANDRO  |  RODRIGO    |             | CASTRO      |  CASTRO      |  17-09-1983  |  40    |  H      |  SINALOA               |  CACA830917HSISSL02  |
+317116    |  MIGUEL     |  ALEJANDRO  |             | VARGAS      |  AGUILAR     |  24-06-1971  |  52    |  H      |  GUANAJUATO            |  VAAM710624HGURGG02  |
+317449    |  PAULA      |  VICTORIA   |             | GUERRA      |  DELGADO     |  31-05-1952  |  71    |  M      |  MEXICO                |  GUDP520531MMERLL02  |
+317597    |  ANDRES     |  OSCAR      |             | SALAZAR     |  CORDOVA     |  26-06-1987  |  36    |  H      |  CAMPECHE              |  SACA870626HCALRN04  |
+318025    |  PEDRO      |  GABRIEL    |             | SANDEZ      |  MEDINA      |  14-11-2009  |  14    |  H      |  NUEVO LEON            |  SAMP091114HNUNDDA5  |
+318606    |  PEDRO      |  GABRIEL    |             | HARO        |  TORRES      |  24-04-1982  |  41    |  H      |  NUEVO LEON            |  HATP820424HNURRD02  |
+318731    |  CRISTINA   |  SILVIA     |             | PANTOJA     |  RIOS        |  21-03-1999  |  24    |  M      |  MORELOS               |  PARC990321MMONSR02  |
+319187    |  TERESA     |  VALERIA    |             | BLANCO      |  PAREDES     |  27-12-2006  |  17    |  M      |  JALISCO               |  BAPT061227MJALRRA4  |
+319313    |  JAVIER     |  HECTOR     |             | LEON        |  VALLE       |  21-12-1959  |  64    |  H      |  COLIMA                |  LEVJ591221HCONLV05  |
+319327    |  ELENA      |  GLORIA     |             | SERRANO     |  AGUILAR     |  13-04-2017  |  6     |  M      |  NUEVO LEON            |  SEAE170413MNURGLA1  |
+320209    |  MANUEL     |  CARLOS     |             | ORTEGA      |  VALDEZ      |  27-11-2009  |  14    |  H      |  SAN LUIS POTOSI       |  OEVM091127HSARLNA2  |
+320542    |  DANIEL     |  EDUARDO    |             | RIOS        |  HERRERA     |  20-12-1973  |  50    |  H      |  NAYARIT               |  RIHD731220HNASRN01  |
+320630    |  JUAN       |  ALBERTO    |             | HERRERA     |  MENDOZA     |  26-03-2005  |  18    |  H      |  OAXACA                |  HEMJ050326HOARNNA5  |
+320792    |  SOFIA      |  CLARA      |             | CASTRO      |  AGUILAR     |  11-12-1971  |  52    |  M      |  DURANGO               |  CAAS711211MDUSGF04  |
+321051    |  MIGUEL     |  ALEJANDRO  |             | PEREZ       |  CISNEROS    |  21-01-2022  |  1     |  H      |  MORELOS               |  PECM220121HMORSGA2  |
+321085    |  ANDRES     |  OSCAR      |             | ORTEGA      |  SEGURA      |  13-03-1955  |  68    |  H      |  GUERRERO              |  OESA550313HGURGN01  |
+321497    |  MIGUEL     |  ALEJANDRO  |             | GALLEGOS    |  RIVAS       |  18-03-2001  |  22    |  H      |  TLAXCALA              |  GARM010318HTLLVGA5  |
+321844    |  JAVIER     |  HECTOR     |             | HARO        |  MONTOYA     |  10-03-2002  |  21    |  H      |  COLIMA                |  HAMJ020310HCORNVA3  |
+321910    |  PAULA      |  VICTORIA   |             | HERRERA     |  SOTO        |  06-04-1962  |  61    |  M      |  TLAXCALA              |  HESP620406MTLRTL01  |
+322092    |  TERESA     |  VALERIA    |             | SERRANO     |  RUIZ        |  08-06-1982  |  41    |  M      |  MORELOS               |  SERT820608MMORZR02  |
+322241    |  LAURA      |  NATALIA    |             | CACERES     |  SOTO        |  28-11-1978  |  45    |  M      |  CAMPECHE              |  CASL781128MCACTR02  |
+322326    |  ANA        |  RAQUEL     |             | JIMENEZ     |  MEZA        |  30-07-2016  |  7     |  M      |  QUINTANA ROO          |  JIMA160730MQUMZNA3  |
+322451    |  MARIA      |  LUCIA      |             | PAREDES     |  VILLANUEVA  |  23-02-1985  |  38    |  M      |  BAJA CALIFORNIA       |  PAVL850223MBARLC02  |
+324626    |  PABLO      |  LUIS       |             | HERRERA     |  MORALES     |  01-10-1968  |  55    |  H      |  CHIHUAHUA             |  HEMP681001HCHRRB02  |
+325495    |  CARLOS     |  FERNANDO   |             | SALAZAR     |  GUTIERREZ   |  18-11-1980  |  43    |  H      |  TAMAULIPAS            |  SAGC801118HTALTR01  |
+325982    |  FRANCISCO  |  JULIO      |             | RAMIREZ     |  MEDINA      |  25-05-1987  |  36    |  H      |  NUEVO LEON            |  RAMF870525HNUMDR05  |
+326111    |  ISABEL     |  LOURDES    |             | SANDEZ      |  DURAN       |  31-03-1955  |  68    |  M      |  MORELOS               |  SADI550331MMONRS01  |
+326189    |  LAURA      |  NATALIA    |             | MONTOYA     |  SILVA       |  28-10-1971  |  52    |  M      |  JALISCO               |  MOSL711028MJANLR04  |
+326568    |  ANA        |  RAQUEL     |             | REYES       |  NAVARRO     |  03-10-1995  |  28    |  M      |  MORELOS               |  RENA951003MMOYVN04  |
+326658    |  ROSA       |  ALICIA     |             | LUGO        |  ROLDAN      |  24-06-2013  |  10    |  M      |  CIUDAD DE MEXICO      |  LURR130624MCIGLSA4  |
+327155    |  FRANCISCO  |  JULIO      |             | MENDOZA     |  LOPEZ       |  04-01-1958  |  65    |  H      |  AGUASCALIENTES        |  MELF580104HAGNPR04  |
+327406    |  ROSA       |  ALICIA     |             | HARO        |  SALINAS     |  16-09-1998  |  25    |  M      |  ZACATECAS             |  HASR980916MZARLS01  |
+327476    |  ROSA       |  ALICIA     |             | JIMENEZ     |  REYES       |  02-01-1965  |  58    |  M      |  AGUASCALIENTES        |  JIRR650102MAGMYS03  |
+327709    |  LUIS       |  MARIO      |             | GUZMAN      |  ORTEGA      |  14-02-2013  |  10    |  H      |  TAMAULIPAS            |  GUOL130214HTAZRSA4  |
+327718    |  MARTA      |  DIANA      |             | GUTIERREZ   |  ROLDAN      |  12-10-1957  |  66    |  M      |  BAJA CALIFORNIA       |  GURM571012MBATLR01  |
+327879    |  PABLO      |  LUIS       |             | DELGADO     |  ROLDAN      |  28-10-1968  |  55    |  H      |  SAN LUIS POTOSI       |  DERP681028HSALLB03  |
+328033    |  PATRICIA   |  ADRIANA    |             | ORTEGA      |  CISNEROS    |  01-05-1960  |  63    |  M      |  PUEBLA                |  OECP600501MPURST03  |
+328044    |  CARLOS     |  FERNANDO   |             | VALDEZ      |  MEZA        |  01-05-1977  |  46    |  H      |  SONORA                |  VAMC770501HSOLZR04  |
+328315    |  SOFIA      |  CLARA      |             | CASTRO      |  DELGADO     |  02-04-2021  |  2     |  M      |  NUEVO LEON            |  CADS210402MNUSLFA5  |
+328425    |  CARMEN     |  BEATRIZ    |             | ORTEGA      |  ROSALES     |  14-09-1977  |  46    |  M      |  QUINTANA ROO          |  OERC770914MQURSR02  |
+328503    |  TERESA     |  VALERIA    |             | VARGAS      |  GUTIERREZ   |  23-05-2001  |  22    |  M      |  GUANAJUATO            |  VAGT010523MGURTRA4  |
+328513    |  MARTA      |  DIANA      |             | VALDEZ      |  PIZARRO     |  15-12-1991  |  32    |  M      |  SAN LUIS POTOSI       |  VAPM911215MSALZR02  |
+329604    |  LUISA      |  LINDA      |             | ESPINOZA    |  SALAZAR     |  01-06-1958  |  65    |  M      |  DURANGO               |  EISL580601MDUSLS01  |
+329739    |  LAURA      |  NATALIA    |             | LEON        |  SANDEZ      |  05-02-2018  |  5     |  M      |  ZACATECAS             |  LESL180205MZANNRA4  |
+329976    |  FRANCISCO  |  JULIO      |             | ROMERO      |  CISNEROS    |  25-02-2004  |  19    |  H      |  SONORA                |  ROCF040225HSOMSRA3  |
+330524    |  PAULA      |  VICTORIA   |             | VIDAL       |  LEON        |  22-08-2003  |  20    |  M      |  MEXICO                |  VILP030822MMEDNLA5  |
+330666    |  DANIEL     |  EDUARDO    |             | SOTO        |  HERRERA     |  03-04-1995  |  28    |  H      |  AGUASCALIENTES        |  SOHD950403HAGTRN03  |
+330785    |  LUISA      |  LINDA      |             | SEGURA      |  CACERES     |  17-05-1989  |  34    |  M      |  YUCATAN               |  SECL890517MYUGCS03  |
+330791    |  MANUEL     |  CARLOS     |             | JIMENEZ     |  NAVARRO     |  13-03-2023  |  0     |  H      |  CIUDAD DE MEXICO      |  JINM230313HCIMVNA4  |
+331036    |  DAVID      |  ENRIQUE    |             | ORTEGA      |  RIOS        |  18-03-1976  |  47    |  H      |  AGUASCALIENTES        |  OERD760318HAGRSV05  |
+331386    |  SOFIA      |  CLARA      |             | SILVA       |  RUIZ        |  12-06-1966  |  57    |  M      |  AGUASCALIENTES        |  SIRS660612MAGLZF01  |
+332142    |  MIGUEL     |  ALEJANDRO  |             | CORDERO     |  PEREZ       |  13-08-1978  |  45    |  H      |  SINALOA               |  COPM780813HSIRRG01  |
+332187    |  LUISA      |  LINDA      |             | GUZMAN      |  NAVARRO     |  26-02-2002  |  21    |  M      |  MEXICO                |  GUNL020226MMEZVSA3  |
+372453    |  ANGEL      |  DANIEL     |             | SOLANO      |  MEZA        |  28-12-2004  |  19    |  H      |  BAJA CALIFORNIA       |  SOMA041228HBCLZNA4  |

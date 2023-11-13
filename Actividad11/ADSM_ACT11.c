@@ -161,7 +161,7 @@ void menu()
                     }
                 }
             }
-            system("PAUSE");
+            system("PAUSE");    
             break;
         case 4: // Buscar
             system("CLS");
