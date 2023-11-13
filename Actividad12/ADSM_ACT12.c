@@ -8,6 +8,10 @@
 //*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
+void ImprimirApagados(TReg vect[], int n);
+void ImprimirTReg(TReg vect[], int n);
+void NombreArch(char archivo[]);
+void CrearBorrados(TReg vect[], int n);
 TReg RegistroAuto();
 //****  main principal  *********
 int main()
@@ -36,15 +40,17 @@ int msges()
     scanf("%d", &op);
     return op;
 }
-//****************
+
 void menu()
 {
     srand(time(NULL));
     TReg VectReg[1500], temp;
-    int op, j, i, apagar, buscar, encontrado, ordenado, confirmar;
+    int op, j, i, apagar, buscar, encontrado, ordenado, cargado, confirmar, creado;
     char NombreArchivo[50];
     i = 0;
     ordenado = 0;
+    cargado = 0;
+    creado = 0;
     do
     {
         op = msges();
@@ -52,7 +58,15 @@ void menu()
         {
         case 1: // CARGAR ARCHIVO
             system("CLS");
-            LeerTXT(VectReg, &i, "datos.txt");
+            if (cargado)
+            {
+                printf("ARCHIVO TXT YA CARGADO\n");
+            }
+            else
+            {
+                NombreArch(NombreArchivo);
+                cargado = LeerTXT(VectReg, &i, NombreArchivo);
+            }
             system("PAUSE");
             break;
         case 2: // REGISTROS AUTOMATICOS
@@ -98,7 +112,6 @@ void menu()
                 {
                     encontrado = BusquedaBinaria(VectReg, 0, i, apagar);
                 }
-
                 if (encontrado == -1)
                 {
                     printf("MATRICULA NO EXISTENTE\n");
@@ -111,8 +124,29 @@ void menu()
                     }
                     else
                     {
-                        VectReg[encontrado].Status = 0;
-                        printf("REGISTRO CON MATRICULA %d APAGADO\n", apagar);
+                        printf("DATOS DEL REGISTRO ENCONTRADO:\n\n");
+                        printf("MATRICULA EN REGISTRO: %d\n", encontrado);
+                        printf("MATRICULA: %d\n", VectReg[encontrado].Matricula);
+                        printf("NOMBRE: %s\n", VectReg[encontrado].Nombre);
+                        printf("APELLIDO PATERNO: %s\n", VectReg[encontrado].ApPat);
+                        printf("APELLIDO MATERNO: %s\n", VectReg[encontrado].ApMat);
+                        printf("EDAD: %d\n", VectReg[encontrado].Edad);
+                        printf("SEXO: %s\n", VectReg[encontrado].Sexo);
+                        printf("DESEA ELIMINAR EL REGISTRO: 1.SI 0.NO\n");
+                        confirmar = Validar(0, 1);
+                        if (confirmar == 1)
+                        {
+                            VectReg[encontrado].Status = 0;
+                            system("CLS");
+                            printf("REGISTRO ELIMINADO\n");
+                            system("PAUSE");
+                        }
+                        else
+                        {
+                            system("CLS");
+                            printf("REGISTRO NO ELIMINADO\n");
+                            system("PAUSE");
+                        }
                     }
                 }
             }
@@ -149,6 +183,7 @@ void menu()
                     }
                     else
                     {
+                        system("CLS");
                         printf("DATOS DEL REGISTRO ENCONTRADO:\n\n");
                         printf("MATRICULA EN REGISTRO: %d\n", encontrado);
                         printf("MATRICULA: %d\n", VectReg[encontrado].Matricula);
@@ -157,68 +192,104 @@ void menu()
                         printf("APELLIDO MATERNO: %s\n", VectReg[encontrado].ApMat);
                         printf("EDAD: %d\n", VectReg[encontrado].Edad);
                         printf("SEXO: %s\n", VectReg[encontrado].Sexo);
+                        printf("DESEA ELIMINAR EL REGISTRO: 1.SI 0.NO\n");
                     }
                 }
-            }
-            system("PAUSE");
-            break;
-        case 5: // ORDENAR REGISTROS
-            system("CLS");
-            if (i <= 1)
-            {
-                if (i == 0)
+                system("PAUSE");
+                break;
+            case 5: // ORDENAR REGISTROS
+                system("CLS");
+                if (i <= 1)
                 {
-                    printf("INCAPAZ DE ORDENAR UN REGISTRO VACIO\n");
-                }
-                else
-                {
-                    printf("UN SOLO REGISTRO ORDENADO\n");
-                }
-            }
-            else
-            {
-                if (ordenado == 0)
-                {
-                    if (i < 500)
+                    if (i == 0)
                     {
-                        ordenado = OrdenarTReg(VectReg, i);
-                        printf("REGISTROS ORDENADOS\n");
+                        printf("INCAPAZ DE ORDENAR UN REGISTRO VACIO\n");
                     }
                     else
                     {
-                        Quicksort(VectReg, 0, i - 1);
-                        ordenado = 1;
-                        printf("REGISTROS ORDENADOS POR QUICKSORT\n");
+                        printf("UN SOLO REGISTRO ORDENADO\n");
                     }
                 }
                 else
                 {
-                    printf("REGISTROS YA ORDENADOS\n");
+                    if (ordenado == 0)
+                    {
+                        if (i < 500)
+                        {
+                            ordenado = OrdenarTReg(VectReg, i);
+                            printf("REGISTROS ORDENADOS\n");
+                        }
+                        else
+                        {
+                            Quicksort(VectReg, 0, i - 1);
+                            ordenado = 1;
+                            printf("REGISTROS ORDENADOS POR QUICKSORT\n");
+                        }
+                    }
+                    else
+                    {
+                        printf("REGISTROS YA ORDENADOS\n");
+                    }
                 }
+                system("PAUSE");
+                break;
+            case 6: // IMPRIMIR REGISTROS
+                system("CLS");
+                if (i == 0)
+                {
+                    printf("REGISTROS VACIOS\n");
+                }
+                else
+                {
+                    ImprimirTReg(VectReg, i);
+                }
+                system("PAUSE");
+                break;
+            case 7: // Archivo de texto
+                system("CLS");
+                if (i == 0)
+                {
+                    printf("REGISTROS VACIOS\n");
+                }
+                else
+                {
+                    NombreArch(NombreArchivo);
+                    CrearTXT(NombreArchivo, VectReg, i);
+                    creado = 1;
+                    printf("ARCHIVO CREADO EXITOSAMENTE");
+                    printf("\n");
+                    system("PAUSE");
+                }
+                break;
+            case 9:
+                system("CLS");
+                if (i == 0)
+                {
+                    printf("REGISTROS VACIOS\n");
+                }
+                else
+                {
+                    ImprimirApagados(VectReg, i);
+                }
+                system("PAUSE");
+                break;
+            case 0:
+                if (cargado == 0)
+                {
+                    if (creado)
+                    {
+                        ActualizarTXT(NombreArchivo, VectReg, i);
+                        CrearBorrados(VectReg, i);
+                    }
+                }
+                else
+                {
+                    ActualizarTXT(NombreArchivo, VectReg, i);
+                    CrearBorrados(VectReg, i);
+                }
+                break;
             }
-            system("PAUSE");
-            break;
-        case 6: // IMPRIMIR REGISTROS
-            system("CLS");
-            if (i == 0)
-            {
-                printf("REGISTROS VACIOS\n");
-            }
-            else
-            {
-                ImprimirTReg(VectReg, i);
-            }
-            system("PAUSE");
-            break;
-        case 7: // Archivo de texto
-            ValiCadena(NombreArchivo, "NOMBRE DEL ARCHIVO TXT");
-
-            CrearTXT(NombreArchivo, VectReg, i);
-            printf("\n");
-            system("PAUSE");
-            break;
         }
-
     } while (op != 0);
 }
 
@@ -230,7 +301,7 @@ TReg RegistroAuto()
     char NombresMujer[][15] = {"LUCIA", "RAQUEL", "NATALIA", " BEATRIZ", "LOURDES", "CLARA", "LINDA", "GLORIA", "ADRIANA", "VALERIA", "ALICIA", "VICTORIA", " DIANA", "SILVIA", "SARA", "MARIA", "ANA", "LAURA", "CARMEN", "ISABEL", "SOFIA", "LUISA", "ELENA", "PATRICIA", "TERESA", "ROSA", "PAULA", "MARTA", "CRISTINA", "DANNA"};
     char Apellidos[][30] = {"HARO", "SOLANO", "SANDEZ", "LOPEZ", "MEZA", "PEREZ", "SANCHEZ", "FERNANDEZ", "TORRES", "RAMIREZ", "RUIZ", "GONZALEZ", "TORRES", "MORALES", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "MORALES", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "SILVA", "CASTRO", "RIOS", "MONTOYA", "PENA", "VIDAL", "AGUILAR", "CORDERO", "MORA", "SOSA", "ROSALES", "LUGO", "SERRANO", "CACERES", "ROBLES", "SALAZAR", "LEON", "GALLEGOS", "CORDOVA", "DEL VALLE", "NAVARRO", "PAREDES", "ZAMORA", "VALDEZ", "DURAN", "CISNEROS", "GUTIERREZ", "SALINAS", "AVILA", "RIVAS", "PIZARRO", "GUERRA", "ESPINOZA", "CALDERON", "PANTOJA", "MIRANDA", "MORALES", "ROJAS", "SEGURA", "VILLANUEVA", "ROLDAN", "BENITEZ", "LUNA", "VALENCIA", "CERVANTES", "ESCOBAR", "ZUNIGA", "BARRIOS"};
     char sexos[2][8] = {"HOMBRE", "MUJER"};
-    i = NumAleatorio(0, 30);
+    i = NumAleatorio(0, 29);
     nombres = NumAleatorio(1, 2);
     sexo = NumAleatorio(1, 2);
     if (sexo == 1)
@@ -255,4 +326,104 @@ TReg RegistroAuto()
     strcpy(alum.ApMat, Apellidos[apellido]);
     alum.Edad = NumAleatorio(18, 27);
     return alum;
+}
+
+void ImprimirTReg(TReg vect[], int n)
+{
+    int i, j;
+    j = 0;
+    printf("------------------------------------------------------------------------------------------\n");
+    printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    printf("------------------------------------------------------------------------------------------\n");
+    for (i = 0; i < n; i++, j++)
+    {
+        if (vect[i].Status == 1)
+        {
+            printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-10s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
+            if (j == 39)
+            {
+                system("PAUSE");
+                system("CLS");
+                printf("------------------------------------------------------------------------------------------\n");
+                printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+                printf("------------------------------------------------------------------------------------------\n");
+                j = 0;
+            }
+        }
+    }
+}
+
+void ImprimirApagados(TReg vect[], int n)
+{
+    int i, j;
+    j = 0;
+    printf("------------------------------------------------------------------------------------------\n");
+    printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    printf("------------------------------------------------------------------------------------------\n");
+
+    for (i = 0; i < n; i++, j++)
+    {
+        if (vect[i].Status == 0)
+        {
+            printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-10s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
+            if (j == 39)
+            {
+                system("PAUSE");
+                system("CLS");
+                printf("------------------------------------------------------------------------------------------\n");
+                printf("  NO  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+                printf("------------------------------------------------------------------------------------------\n");
+                j = 0;
+            }
+        }
+    }
+}
+
+void NombreArch(char archivo[])
+{
+
+    system("CLS");
+    printf("NOMBRE DEL ARCHIVO: \n");
+    fflush(stdin);
+    gets(archivo);
+}
+
+void CrearBorrados(TReg vect[], int n)
+{
+    int i;
+    FILE *archivo;
+
+    archivo = fopen("basura.txt", "w");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    fprintf(archivo, "  NO  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].Status == 0)
+        {
+            fprintf(archivo, "%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
+        }
+    }
+
+    fclose(archivo);
+}
+
+void ActualizarTXT(char Nombre[], TReg vect[], int n)
+{
+    int i;
+    FILE *archivo;
+
+    archivo = fopen(Nombre, "w");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    fprintf(archivo, "  NO  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].Status != 0)
+        {
+            fprintf(archivo, "%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
+        }
+    }
+
+    fclose(archivo);
 }

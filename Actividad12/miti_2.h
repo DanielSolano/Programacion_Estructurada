@@ -1,7 +1,3 @@
-// Solano Meza Angel Daniel Matr. 372453
-// 05/10/2023
-// Creacion de nuestra libreria
-// ADSM_ACT9_LIB_932
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,6 +15,7 @@ typedef struct _alumnos
     char Sexo[9];
 } TReg;
 
+// ******************* ETIQUETAS *****************************
 int Validar(int inferior, int superior);
 void LlenarVector(int vector[], int m, int ri, int rf, int op);
 int BusquedaSec(int vector[], int n, int num);
@@ -31,16 +28,17 @@ int BusquedaOrdenada(int vect[], int n, int num);
 int BusquedaTReg(TReg vector[], int n, int num);
 int OrdenarTReg(TReg vector[], int n);
 int BusquedaOrdenadaTReg(TReg vect[], int n, int num);
-void ImprimirTReg(TReg vect[], int n);
 int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num);
 void CrearTXT(char Nombre[], TReg vect[], int n);
 void Intercambio(TReg Nombres[], int i, int j);
 int Particion(TReg Nombres[], int inferior, int superior);
 void Quicksort(TReg Nombres[], int inferior, int superior);
-void LeerTXT(TReg vect[], int *i, char nom[]);
+int LeerTXT(TReg vect[], int *i, char nom[]);
 
-void LeerTXT(TReg vect[], int *i, char nom[])
+// ******************* FUNCIONES *****************************
+int LeerTXT(TReg vect[], int *i, char nom[])
 {
+    strcat(nom, ".txt");
     TReg reg;
     char x[10];
     FILE *fa;
@@ -52,15 +50,20 @@ void LeerTXT(TReg vect[], int *i, char nom[])
             fscanf(fa, "%s %d %s %s %s %d %s", &x, &reg.Matricula, &reg.Nombre, &reg.ApPat, &reg.ApMat, &reg.Edad, &reg.Sexo);
             reg.Status = 1;
             reg.key = reg.Matricula;
-            vect[(*i)++] = reg;
+            if ((*i) <= 1500)
+            {
+                vect[(*i)++] = reg;
+            }
 
         } while (!feof(fa));
         fclose(fa);
         printf("ARCHIVO CARGADO CORRECTAMENTE\n");
+        return 1;
     }
     else
     {
         printf("ARCHIVO NO EXISTENTE\n");
+        return 0;
     }
 }
 void Quicksort(TReg Nombres[], int inferior, int superior)
@@ -105,16 +108,16 @@ void CrearTXT(char Nombre[], TReg vect[], int n)
 
     strcat(Nombre, ".txt");
     archivo = fopen(Nombre, "w");
-    fprintf(archivo, "NO.   MATRICULA       NOMBRE       APPAT           APMAT    EDAD      SEXO  \n\n");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    fprintf(archivo, "  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
     for (i = 0; i < n; i++)
     {
         if (vect[i].Status != 0)
         {
-            fprintf(archivo, "%-5d %-9d %-10s %-10s %-10s %-4d %-4s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
+            fprintf(archivo, "%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
         }
     }
-
-    printf("ARCHIVO CREADO EXITOSAMENTE");
     fclose(archivo);
 }
 int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
@@ -137,25 +140,6 @@ int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
         }
     }
     return -1;
-}
-void ImprimirTReg(TReg vect[], int n)
-{
-    int i, j;
-
-    printf("  NO.    MATRICULA   NOMBRE       APELLIDO P.     APELLIDO MAT.         EDAD    SEXO \n\n");
-    for (i = 0; i < n; i++)
-    {
-
-        printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-10s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
-        j++;
-        if (j == 39)
-        {
-            system("PAUSE");
-            system("CLS");
-            printf("  NO.    MATRICULA   NOMBRE       APELLIDO P.     APELLIDO MAT.         EDAD    SEXO \n\n");
-            j = 0;
-        }
-    }
 }
 int BusquedaOrdenadaTReg(TReg vect[], int n, int num)
 {
