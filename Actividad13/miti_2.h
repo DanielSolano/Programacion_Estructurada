@@ -36,60 +36,9 @@ void Intercambio(TReg Nombres[], int i, int j);
 int Particion(TReg Nombres[], int inferior, int superior);
 void Quicksort(TReg Nombres[], int inferior, int superior);
 
-int LeerTXT(TReg vect[], int *i, char nom[]);
-void CrearTXT(char Nombre[], TReg vect[], int n);
 
 // ******************* FUNCIONES *****************************
 
-int LeerTXT(TReg vect[], int *i, char nom[])
-{
-    strcat(nom, ".txt");
-    TReg reg;
-    char x[10];
-    FILE *fa;
-    fa = fopen(nom, "r");
-    if (fa)
-    {
-        do
-        {
-            fscanf(fa, "%s %d %s %s %s %d %s", &x, &reg.Matricula, &reg.Nombre, &reg.ApPat, &reg.ApMat, &reg.Edad, &reg.Sexo);
-            reg.Status = 1;
-            reg.key = reg.Matricula;
-            if ((*i) <= 1500)
-            {
-                vect[(*i)++] = reg;
-            }
-
-        } while (!feof(fa));
-        fclose(fa);
-        printf("ARCHIVO CARGADO CORRECTAMENTE\n");
-        return 1;
-    }
-    else
-    {
-        printf("ARCHIVO NO EXISTENTE\n");
-        return 0;
-    }
-}
-void CrearTXT(char Nombre[], TReg vect[], int n)
-{
-    int i;
-    FILE *archivo;
-
-    strcat(Nombre, ".txt");
-    archivo = fopen(Nombre, "w");
-    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
-    fprintf(archivo, "  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
-    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
-    for (i = 0; i < n; i++)
-    {
-        if (vect[i].Status != 0)
-        {
-            fprintf(archivo, "%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", i, vect[i].Matricula, vect[i].Nombre, vect[i].ApPat, vect[i].ApMat, vect[i].Edad, vect[i].Sexo);
-        }
-    }
-    fclose(archivo);
-}
 
 void Quicksort(TReg Nombres[], int inferior, int superior)
 {
