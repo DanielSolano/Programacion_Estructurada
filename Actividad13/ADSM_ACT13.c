@@ -6,7 +6,6 @@
 #define N 5000
 #define AUTO 100
 #include "miti_2.h"
-
 //*** PROTOTIPOS DE FUNCIONES  ******
 int msges();
 void menu();
@@ -711,10 +710,5 @@ void RespaldoBIN(char nom[])
         }
         fclose(fa);
         fclose(respaldo);
-        return 1;
-    }
-    else
-    {
-        return 0;
     }
 }
