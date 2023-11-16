@@ -6,11 +6,12 @@
 typedef struct _alumnos
 {
     int Status;
-    int Matricula;
+    int Empleado;
     int key;
-    char ApPat[30];
-    char ApMat[30];
     char Nombre[30];
+    char Paterno[30];
+    char Materno[30];
+    char Puesto[11];
     int Edad;
     char Sexo[9];
 } TReg;
@@ -53,12 +54,12 @@ void Quicksort(TReg Nombres[], int inferior, int superior)
 int Particion(TReg Nombres[], int inferior, int superior)
 {
     TReg Alumno;
-    Alumno.Matricula = Nombres[superior].Matricula;
+    Alumno.key = Nombres[superior].key;
     int i = inferior - 1;
 
     for (int j = inferior; j <= superior - 1; j++)
     {
-        if (Nombres[j].Matricula <= Alumno.Matricula)
+        if (Nombres[j].key <= Alumno.key)
         {
             i++;
             Intercambio(Nombres, i, j);
@@ -82,11 +83,11 @@ int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
     {
         int medio = izquierda + (derecha - izquierda) / 2;
 
-        if (vect[medio].Matricula == num)
+        if (vect[medio].key == num)
         {
             return medio;
         }
-        if (vect[medio].Matricula < num)
+        if (vect[medio].key < num)
         {
             izquierda = medio + 1;
         }
@@ -104,9 +105,9 @@ int BusquedaOrdenadaTReg(TReg vect[], int n, int num)
     while (i < n)
     {
 
-        if (num >= vect[i].Matricula)
+        if (num >= vect[i].key)
         {
-            if (num == vect[i].Matricula)
+            if (num == vect[i].key)
             {
                 return i;
             }
@@ -127,7 +128,7 @@ int OrdenarTReg(TReg vector[], int n)
     {
         for (j = i + 1; j < n; j++)
         {
-            if (vector[j].Matricula < vector[i].Matricula)
+            if (vector[j].key < vector[i].key)
             {
                 temp = vector[i];
                 vector[i] = vector[j];
