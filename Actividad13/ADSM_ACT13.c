@@ -53,7 +53,7 @@ int msges()
 void menu()
 {
     srand(time(NULL));
-    TReg VectReg[1500], temp;
+    TReg VectReg[5000], temp;
     int op, j, i, apagar, buscar, encontrado, ordenado, cargado, confirmar, creado, registros, editar, campo, sexo, puesto;
     char NombreTXT[50], Mostrar[50], NombreBIN[11] = {"datos.dll"};
     char Nombre[60];
