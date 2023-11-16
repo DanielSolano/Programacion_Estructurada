@@ -75,7 +75,7 @@ void menu()
                 temp = RegistroAuto();
                 while (BusquedaTReg(VectReg, i, temp.key) != -1)
                 {
-                    temp.key = NumAleatorio(300000, 399999);
+                    temp.key = NumAleatorio(1, 2000);
                 }
                 if (i <= N)
                 {
