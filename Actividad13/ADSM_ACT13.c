@@ -537,9 +537,9 @@ void CrearBorrados(TReg vect[], int n)
     FILE *archivo;
 
     archivo = fopen("eliminados.txt", "w");
-    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
-    fprintf(archivo, "  NO.  | NO. EMPLEADO |             NOMBRE           |  EDAD  |     PUESTO      |   SEXO | \n");
-    fprintf(archivo, "------------------------------------------------------------------------------------------\n");
+    fprintf(archivo, "----------------------------------------------------------------------------------------------------------------------------\n");
+    fprintf(archivo, "  NO. |  NO. EMPLEADO |                      NOMBRE                     |  EDAD  |           PUESTO            |   SEXO    | \n");
+    fprintf(archivo, "----------------------------------------------------------------------------------------------------------------------------\n");
     for (i = 0; i < n; i++)
     {
         if (vect[i].Status == 0)
