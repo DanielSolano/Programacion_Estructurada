@@ -21,7 +21,7 @@
 #define CONTINUAR 1
 
 int mainMenu(Sound seleccion);
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion);
+int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras);
 int juegoMenu(Sound seleccion);
 
 void juego(int diflvl);
@@ -54,7 +54,8 @@ int main(void)
     //******************************************************* AUDIOS **********************************************************************
     InitAudioDevice();
     Music musica_menu = LoadMusicStream("sonidos/musica.mp3");
-    Sound seleccion = LoadSound("sonidos/seleccion.wav");
+    Sound barras = LoadSound("sonidos/beep.mp3");
+    Sound seleccion = LoadSound("sonidos/volumen.mp3");
 
     //************************************************************* LOOP PRINCIPAL ****************************************************************
     while (!WindowShouldClose())
@@ -107,7 +108,7 @@ int main(void)
                 BeginDrawing();
                 UpdateMusicStream(musica_menu);
                 DrawTexture(fondo, 0, 0, WHITE);
-                subOp = opMenu(vol, diflvl, volumen[vol], dif[diflvl], seleccion);
+                subOp = opMenu(vol, diflvl, volumen[vol], dif[diflvl], seleccion, barras);
                 EndDrawing();
 
             } while (subOp != -1);
@@ -160,6 +161,9 @@ int mainMenu(Sound seleccion)
 {
     static int op = 0;
     int sizeTxt[3], j;
+    int fontSize[2] = {70, 40};
+    char mensajes[5][30] = {"JUGAR", "OPCIONES", "SALIR", "MECANICO ARITMETICO"};
+
     for (j = 0; j < 3; j++)
     {
         if (j == op)
@@ -172,10 +176,12 @@ int mainMenu(Sound seleccion)
         }
     }
 
-    DrawText("Mecánico Aritmético", 265, 65, 70, WHITE);
-    DrawText("Jugar", 510, 200, sizeTxt[0], WHITE);
-    DrawText("Opciones", 510, 300, sizeTxt[1], WHITE);
-    DrawText("Salir", 510, 400, sizeTxt[2], WHITE);
+    DrawRectangle(170, 45, 927, 90, WHITE);
+    DrawText(mensajes[3], 200, 55, 70, BLACK);
+
+    DrawText("JUGAR", 510, 300, sizeTxt[0], WHITE);
+    DrawText("OPCIONES", 510, 450, sizeTxt[1], WHITE);
+    DrawText("SALIR", 510, 600, sizeTxt[2], WHITE);
 
     if (IsKeyPressed(KEY_UP))
     {
@@ -204,7 +210,7 @@ int mainMenu(Sound seleccion)
     return -1;
 }
 
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion)
+int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras)
 {
     static int op = 0;
     int sizeTxt[3], j;
@@ -220,7 +226,7 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
         }
     }
 
-    DrawText("Opciones", 450, 65, 70, WHITE);
+    DrawText("OPCIONES", 450, 65, 70, WHITE);
     DrawText("Dificultad", 510, 200, sizeTxt[0], WHITE);
     DrawText("Sonido", 510, 350, sizeTxt[1], WHITE);
     DrawText("Regresar", 510, 500, sizeTxt[2], WHITE);
@@ -235,6 +241,7 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
             if (diflvl != 0)
             {
                 diflvl--;
+                PlaySound(barras);
             }
         }
         else
@@ -244,6 +251,7 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
                 if (diflvl != 2)
                 {
                     diflvl++;
+                    PlaySound(barras);
                 }
             }
         }
@@ -271,6 +279,7 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
             if (vol != 0)
             {
                 vol--;
+                PlaySound(barras);
             }
         }
         else
@@ -280,6 +289,7 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
                 if (vol != 6)
                 {
                     vol++;
+                    PlaySound(barras);
                 }
             }
         }
