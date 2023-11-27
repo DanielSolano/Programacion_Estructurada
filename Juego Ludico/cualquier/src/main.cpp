@@ -20,8 +20,8 @@
 #define NEWP 0
 #define CONTINUAR 1
 
-int mainMenu(Sound seleccion);
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras);
+int mainMenu(Sound seleccion, Font fuente);
+int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras, Font fuente);
 int juegoMenu(Sound seleccion);
 
 void juego(int diflvl);
@@ -37,6 +37,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "window");
     //****************************************************** TEXTURAS ***********************************************************************
 
+    Font fuente = LoadFont("texturas/fuente.ttf");
     Texture2D fondo = LoadTexture("texturas\\menuok.png");
     Texture2D volumen[7];
     Texture2D dif[3];
@@ -68,7 +69,7 @@ int main(void)
             BeginDrawing();
             UpdateMusicStream(musica_menu);
             DrawTexture(fondo, 0, 0, WHITE);
-            op = mainMenu(seleccion);
+            op = mainMenu(seleccion, fuente);
             EndDrawing();
         } while (op == -1);
 
@@ -108,7 +109,7 @@ int main(void)
                 BeginDrawing();
                 UpdateMusicStream(musica_menu);
                 DrawTexture(fondo, 0, 0, WHITE);
-                subOp = opMenu(vol, diflvl, volumen[vol], dif[diflvl], seleccion, barras);
+                subOp = opMenu(vol, diflvl, volumen[vol], dif[diflvl], seleccion, barras, fuente);
                 EndDrawing();
 
             } while (subOp != -1);
@@ -157,31 +158,65 @@ int main(void)
     return 0;
 }
 
-int mainMenu(Sound seleccion)
+int mainMenu(Sound seleccion, Font fuente)
 {
     static int op = 0;
     int sizeTxt[3], j;
     int fontSize[2] = {70, 40};
-    char mensajes[5][30] = {"JUGAR", "OPCIONES", "SALIR", "MECANICO ARITMETICO"};
+    char mensajes[4][30] = {"JUGAR", "OPCIONES", "SALIR", "MECANICO ARITMETICO"};
+    Rectangle fondo[4];
+
+    fondo[3] = {170, 45, 927, 90};
+    DrawRectangleRec(fondo[3], LIGHTGRAY);
+    DrawText(mensajes[3], 200, 55, 70, WHITE);
+
+    fondo[0] = {500, 293, 200, 50};
+    DrawRectangleRec(fondo[0], BLACK);
+    DrawText(mensajes[0], 535, 300, 40, WHITE);
+
+    fondo[1] = {500, 440, 200, 50};
+    DrawRectangleRec(fondo[1], BLACK);
+    DrawText(mensajes[1], 507, 450, 37, WHITE);
+
+    fondo[2] = {500, 590, 200, 50};
+    DrawRectangleRec(fondo[2], BLACK);
+    DrawText(mensajes[2], 535, 598, 40, WHITE);
 
     for (j = 0; j < 3; j++)
     {
         if (j == op)
         {
-            sizeTxt[j] = 60;
+            DrawRectangleRec(fondo[j], LIME);
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 535, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 507, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 535, 598, 40, WHITE);
+            }
         }
         else
         {
-            sizeTxt[j] = 40;
+            DrawRectangleRec(fondo[j], BLACK);
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 535, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 507, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 535, 598, 40, WHITE);
+            }
         }
     }
-
-    DrawRectangle(170, 45, 927, 90, WHITE);
-    DrawText(mensajes[3], 200, 55, 70, BLACK);
-
-    DrawText("JUGAR", 510, 300, sizeTxt[0], WHITE);
-    DrawText("OPCIONES", 510, 450, sizeTxt[1], WHITE);
-    DrawText("SALIR", 510, 600, sizeTxt[2], WHITE);
 
     if (IsKeyPressed(KEY_UP))
     {
@@ -210,7 +245,7 @@ int mainMenu(Sound seleccion)
     return -1;
 }
 
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras)
+int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras, Font fuente)
 {
     static int op = 0;
     int sizeTxt[3], j;
