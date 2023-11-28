@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "adsm_act6": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "miti_2.h": "c"
     }
 }
