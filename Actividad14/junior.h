@@ -4,14 +4,21 @@
 #include <time.h>
 
 typedef int TKey;
+
+typedef struct _indices
+{
+    int index;
+    int enrollment;
+}TIndex;
+
 typedef struct _alumnos
 {
     int status;
     TKey enrollment;
     char name[30];
-    char LastName1[30];
-    char LastName2[30];
-    char Sexo[15];
+    char LastName1[50];
+    char LastName2[50];
+    char sex[15];
     char JobPosition[30];
     char State[30];
     int age;
@@ -32,9 +39,9 @@ void Mayusculas(char cadena[]);
 
 int BusquedaOrdenada(int vect[], int n, int num);
 int BusquedaTReg(TReg vector[], int n, int num);
-int OrdenarTReg(TReg vector[], int n);
-int BusquedaOrdenadaTReg(TReg vect[], int n, int num);
-int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num);
+TKey BusquedaTIndex(TIndex vector[], int n, int num)
+TKey BusquedaBinaria(TIndex vect[], int izquierda, int derecha, int num)
+int BusquedaOrdenadaTReg(TIndex vect[], int n, int num);
 void Intercambio(TReg Nombres[], int i, int j);
 int Particion(TReg Nombres[], int inferior, int superior);
 void Quicksort(TReg Nombres[], int inferior, int superior);
@@ -78,9 +85,9 @@ void Intercambio(TReg Nombres[], int i, int j)
     Nombres[i] = Nombres[j];
     Nombres[j] = temp;
 }
-
-int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
+TKey BusquedaBinaria(TIndex vect[], int izquierda, int derecha, int num)
 {
+    TKey medio;
     while (izquierda <= derecha)
     {
         int medio = izquierda + (derecha - izquierda) / 2;
@@ -100,7 +107,7 @@ int BusquedaBinaria(TReg vect[], int izquierda, int derecha, int num)
     }
     return -1;
 }
-int BusquedaOrdenadaTReg(TReg vect[], int n, int num)
+int BusquedaOrdenadaTReg(TIndex vect[], int n, int num)
 {
     int i;
     i = 0;
@@ -140,9 +147,9 @@ int OrdenarTReg(TReg vector[], int n)
     }
     return 1;
 }
-int BusquedaTReg(TReg vector[], int n, int num)
+TKey BusquedaTIndex(TIndex vector[], int n, int num)
 {
-    int i;
+    TKey i;
     for (i = 0; i < n; i++)
     {
         if (vector[i].enrollment == num)

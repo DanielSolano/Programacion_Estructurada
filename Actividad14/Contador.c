@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     strcpy(nombre, argv[1]);
     strcat(nombre, ".dat");
-
+    
     fa = fopen(nombre, "rb");
     if (fa)
     {
