@@ -19,7 +19,11 @@ TKey Busquedas(TIndex vect[], int n, int i, int *ordenado);
 void AgregarRegistro(TIndex vect[], int *i, int ordenado);
 void EliminarRegistro(TIndex vect[], int *i, int ordenado);
 void BuscarRegistro(TIndex vect[], int *i, int ordenado);
-void MostrarNormal(int i);
+void MostrarNormal(void);
+void MostrarOrdenado(int i, int ordenado, TIndex vect[], int movimientos);
+void GenerarOrdenado(char nom[], int ordenado, TIndex vect[], int movimientos, int i);
+void GenerarNormal(char nom[]);
+void Empaquetar();
 
 int main()
 {
@@ -39,8 +43,9 @@ int msges()
     printf("4.- ORDENAR \n");
     printf("5.- IMPRIMIR REGISTROS ARCHIVO ORIGINAL \n");
     printf("6.- IMPRIMIR REGISTROS ARCHIVO ORDENADO \n");
-    printf("7.- GENERAR ARCHIVO TXT \n");
-    printf("8.- EMPAQUETAR \n");
+    printf("7.- GENERAR ARCHIVO TXT ORDENADO\n");
+    printf("8.- GENERAR ARCHIVO TXT NORMAL\n");
+    printf("9.- EMPAQUETAR \n");
     printf("0.- SALIR \n");
     printf("ESCOGE UNA OPCION: ");
     scanf("%d", &op);
@@ -51,13 +56,12 @@ void menu()
 {
     srand(time(NULL));
     int op, n, i = 0, ordenado = 0, movimientos = 0;
-
+    char nom[50];
     n = ContarReg("datos");
     n *= 1.25;
     TIndex IndexReg[n];
     CrearIndices(IndexReg, &i);
     RespaldoBIN("datos");
-    TReg reg;
     do
     {
         op = msges();
@@ -86,6 +90,7 @@ void menu()
             {
                 printf("INDICES ORDENADOS\n");
                 ordenado = 1;
+                movimientos = 0;
             }
             else
             {
@@ -95,20 +100,26 @@ void menu()
             break;
         case 5: // ORDENAR REGISTROS
             system("CLS");
-            MostrarNormal(i);
+            MostrarNormal();
             system("PAUSE");
             break;
         case 6: // IMPRIMIR REGISTROS
-
+            system("CLS");
+            MostrarOrdenado(i, ordenado, IndexReg, movimientos);
+            system("PAUSE");
             break;
         case 7: // GENERAR TXT
-
+            system("CLS");
+            GenerarOrdenado(nom, ordenado, IndexReg, movimientos, i);
+            system("PAUSE");
             break;
         case 8: // MOSTRAR ARCHIVO TXT
-
+            system("CLS");
+            GenerarNormal(nom);
+            system("PAUSE");
             break;
-        case 0:
-
+        case 9:
+            Empaquetar();
             break;
         }
     } while (op != 0);
@@ -194,6 +205,7 @@ TReg AgregarAuto(void)
 
     trabajador.age = NumAleatorio(18, 65);
     trabajador.enrollment = NumAleatorio(300000, 399999);
+    trabajador.status = 1;
 
     return trabajador;
 }
@@ -230,7 +242,8 @@ void AgregarRegistro(TIndex vect[], int *i, int ordenado)
     {
         reg.enrollment = NumAleatorio(300000, 399999);
     }
-    fa = fopen("datos.tmp", "ab");
+    fa = fopen("datos.dat", "a+b");
+    fseek(fa, 0, SEEK_END);
     fwrite(&reg, sizeof(TReg), 1, fa);
     fclose(fa);
 
@@ -282,7 +295,7 @@ void EliminarRegistro(TIndex vect[], int *i, int ordenado)
             system("CLS");
             if (op == 1)
             {
-                fa = fopen("datos.tmp", "r+b");
+                fa = fopen("datos.dat", "r+b");
                 if (fa)
                 {
                     fseek(fa, sizeof(TReg) * vect[encontrado].index, SEEK_SET);
@@ -343,7 +356,7 @@ int Ordenacion(TIndex vect[], int i, int movimientos)
 {
     if (movimientos == 0)
     {
-        Quicksort(vect, 0, i);
+        Quicksort(vect, 0, i - 1);
     }
     else
     {
@@ -351,25 +364,25 @@ int Ordenacion(TIndex vect[], int i, int movimientos)
         {
             Burbuja(vect, i);
         }
+        else
+        {
+            Quicksort(vect, 0, i - 1);
+        }
     }
     return 1;
 }
 
-void MostrarNormal(int i)
+void MostrarNormal(void)
 {
     FILE *fa;
     TReg reg;
     int j = 0;
-    fa = fopen("datos.tmp", "rb");
-    if (fa)
+    fa = fopen("datos.dat", "rb");
+    while (fread(&reg, sizeof(TReg), 1, fa))
     {
-
-        while (fread(&reg, sizeof(TReg), 1, fa))
-        {
-            printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", j++, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
-        }
-        fclose(fa);
+        printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", j++, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
     }
+    fclose(fa);
 }
 
 void MostrarOrdenado(int i, int ordenado, TIndex vect[], int movimientos)
@@ -380,17 +393,84 @@ void MostrarOrdenado(int i, int ordenado, TIndex vect[], int movimientos)
     {
         Ordenacion(vect, i, movimientos);
     }
-    fa = fopen("datos.tmp", "rb");
+    fa = fopen("datos.dat", "rb");
     if (fa)
     {
         for (int j = 0; j < i; j++)
         {
-
-            while (fread(&reg, sizeof(TReg), 1, fa))
-            {
-                printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", j, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
-            }
+            fseek(fa, vect[j].index * sizeof(TReg), SEEK_SET);
+            fread(&reg, sizeof(TReg), 1, fa);
+            printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", vect[j].index, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
         }
         fclose(fa);
     }
+}
+    
+void GenerarOrdenado(char nom[], int ordenado, TIndex vect[], int movimientos, int i)
+{
+    FILE *fa, *bin;
+    TReg reg;
+    NombreArch(nom);
+    strcat(nom, ".txt");
+    if (ordenado == 0)
+    {
+        Ordenacion(vect, i, movimientos);
+    }
+    bin = fopen("datos.dat", "rb");
+    fa = fopen(nom, "w");
+    for (int j = 0; j < i; j++)
+    {
+        fseek(bin, vect[j].index * sizeof(TReg), SEEK_SET);
+        fread(&reg, sizeof(TReg), 1, bin);
+        if (reg.status == 1)
+        {
+            fprintf(fa, "%10d || %10d || %9s || %16s || %16s || %12s || %16s || %4d || %10d\n", vect[j].index, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.sex, reg.JobPosition, reg.age, reg.cellPhone);
+        }
+    }
+    fclose(fa);
+    fclose(bin);
+}
+
+void GenerarNormal(char nom[])
+{
+    FILE *fa, *bin;
+    TReg reg;
+    int j = 0;
+    NombreArch(nom);
+    strcat(nom, ".txt");
+    bin = fopen("datos.dat", "rb");
+    fa = fopen(nom, "w");
+
+    while (fread(&reg, sizeof(TReg), 1, bin))
+    {
+        if (reg.status == 1)
+        {
+            fprintf(fa, "%-10d || %10d || %9s || %16s || %16s || %12s || %16s || %16s || %4d || %10d\n", j++, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.sex, reg.JobPosition,reg.State, reg.age, reg.cellPhone);
+        }
+    }
+
+    fclose(fa);
+    fclose(bin);
+}
+
+void Empaquetar()
+{
+    FILE *doc = fopen("datos.dat", "rb");
+    FILE *fa = fopen("datos.bak", "wb");
+
+    TReg reg;
+
+    if (doc)
+    {
+        while (fread(&reg, sizeof(TReg), 1, doc))
+        {
+            if (reg.status == 1)
+            {
+                fwrite(&reg, sizeof(TReg), 1, fa);
+            }
+        }
+    }
+
+    fclose(doc);
+    fclose(fa);
 }

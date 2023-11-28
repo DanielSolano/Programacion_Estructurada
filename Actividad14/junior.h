@@ -41,8 +41,8 @@ int BusquedaTReg(TReg vector[], int n, int num);
 TKey BusquedaTIndex(TIndex vector[], int n, int num);
 TKey BusquedaBinaria(TIndex vect[], int izquierda, int derecha, int num);
 int BusquedaOrdenadaTReg(TIndex vect[], int n, int num);
-void Intercambio(TReg Nombres[], int i, int j);
-int Particion(TReg Nombres[], int inferior, int superior);
+void Intercambio(TIndex Nombres[], int i, int j);
+int Particion(TIndex Nombres[], int inferior, int superior);
 void Quicksort(TIndex Nombres[], int inferior, int superior);
 void Burbuja(TIndex arr[], int n);
 
@@ -71,9 +71,9 @@ void Quicksort(TIndex Nombres[], int inferior, int superior)
         Quicksort(Nombres, pi + 1, superior);
     }
 }
-int Particion(TReg Nombres[], int inferior, int superior)
+int Particion(TIndex Nombres[], int inferior, int superior)
 {
-    TReg Alumno;
+    TIndex Alumno;
     Alumno.enrollment = Nombres[superior].enrollment;
     int i = inferior - 1;
 
@@ -88,9 +88,9 @@ int Particion(TReg Nombres[], int inferior, int superior)
     Intercambio(Nombres, i + 1, superior);
     return i + 1;
 }
-void Intercambio(TReg Nombres[], int i, int j)
+void Intercambio(TIndex Nombres[], int i, int j)
 {
-    TReg temp;
+    TIndex temp;
 
     temp = Nombres[i];
     Nombres[i] = Nombres[j];
