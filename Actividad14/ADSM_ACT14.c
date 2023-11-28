@@ -15,8 +15,11 @@ int ContarReg(char nombre[]);
 int CrearIndices(TIndex vect[], int *i);
 TReg AgregarAuto(void);
 void RespaldoBIN(char nom[]);
-TKey Busquedas(TIndex vect[], int n, int i, int ordenado);
+TKey Busquedas(TIndex vect[], int n, int i, int *ordenado);
 void AgregarRegistro(TIndex vect[], int *i, int ordenado);
+void EliminarRegistro(TIndex vect[], int *i, int ordenado);
+void BuscarRegistro(TIndex vect[], int *i, int ordenado);
+void MostrarNormal(int i);
 
 int main()
 {
@@ -47,7 +50,7 @@ int msges()
 void menu()
 {
     srand(time(NULL));
-    int op, n, i = 0, ordenado = 0;
+    int op, n, i = 0, ordenado = 0, movimientos = 0;
 
     n = ContarReg("datos");
     n *= 1.25;
@@ -61,20 +64,39 @@ void menu()
         switch (op)
         {
         case 1: // AGREGAR
+            system("CLS");
             AgregarRegistro(IndexReg, &i, ordenado);
+            movimientos++;
+            ordenado = 0;
             system("PAUSE");
             break;
         case 2: // EDITAR REGISTRO
-
+            system("CLS");
+            EliminarRegistro(IndexReg, &i, ordenado);
+            system("PAUSE");
             break;
-        case 3: // ELIMINAR REGISTRO
-
+        case 3: // BUSCAR REGISTRO
+            system("CLS");
+            BuscarRegistro(IndexReg, &i, ordenado);
+            system("PAUSE");
             break;
         case 4: // ORDENAR REGISTROS
-
+            system("CLS");
+            if (ordenado = 0)
+            {
+                printf("INDICES ORDENADOS\n");
+                ordenado = 1;
+            }
+            else
+            {
+                printf("INDICES YA ORDENADOS\n");
+            }
+            system("PAUSE");
             break;
         case 5: // ORDENAR REGISTROS
-
+            system("CLS");
+            MostrarNormal(i);
+            system("PAUSE");
             break;
         case 6: // IMPRIMIR REGISTROS
 
@@ -137,15 +159,14 @@ int CrearIndices(TIndex vect[], int *i)
 TReg AgregarAuto(void)
 {
     TReg trabajador;
-    int sexo, cuatro, tres, telefono;
-    char numero[11];
+    int sexo = 0, cuatro, tres, telefono;
     char puestos[][11] = {"GERENTE", "TECNICO", "EMPLEADO", "ASISTENTE", "TECNICO", "ANALISTA"};
     char NombresHombre[][15] = {" ", "ALBERTO", "FERNANDO", "MARIO", "ALEJANDRO", "GABRIEL", "SERGIO", "CARLOS", "HECTOR", "LUIS", "ENRIQUE", "JULIO", "RODRIGO", "EDUARDO", "OSCAR", "GUSTAVO", "JUAN", "CARLOS", "LUIS", "JOSE", "MIGUEL", "PEDRO", "ANTONIO", "MANUEL", "JAVIER", "PABLO", "DAVID", "FRANCISCO", "ALEJANDRO", "DANIEL", "ANDRES"};
     char NombresMujer[][15] = {" ", "LUCIA", "RAQUEL", "NATALIA", "BEATRIZ", "LOURDES", "CLARA", "LINDA", "GLORIA", "ADRIANA", "VALERIA", "ALICIA", "VICTORIA", "DIANA", "SILVIA", "SARA", "MARIA", "ANA", "LAURA", "CARMEN", "ISABEL", "SOFIA", "LUISA", "ELENA", "PATRICIA", "TERESA", "ROSA", "PAULA", "MARTA", "CRISTINA", "DANNA"};
     char Apellidos[][30] = {"HARO", "SOLANO", "SANDEZ", "LOPEZ", "MEZA", "PEREZ", "SANCHEZ", "FERNANDEZ", "TORRES", "RAMIREZ", "RUIZ", "GONZALEZ", "TORRES", "MORALES", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "MORALES", "CASTRO", "RIOS", "MEDINA", "VARGAS", "MENDOZA", "REYES", "BLANCO", "NAVARRO", "GUZMAN", "ROMERO", "ORTEGA", "JIMENEZ", "SOTO", "HERRERA", "DELGADO", "CASTRO", "RIOS", "MEDINA", "SILVA", "CASTRO", "RIOS", "MONTOYA", "PENA", "VIDAL", "AGUILAR", "CORDERO", "MORA", "SOSA", "ROSALES", "LUGO", "SERRANO", "CACERES", "ROBLES", "SALAZAR", "LEON", "GALLEGOS", "CORDOVA", "VALLE", "NAVARRO", "PAREDES", "ZAMORA", "VALDEZ", "DURAN", "CISNEROS", "GUTIERREZ", "SALINAS", "AVILA", "RIVAS", "PIZARRO", "GUERRA", "ESPINOZA", "CALDERON", "PANTOJA", "MIRANDA", "MORALES", "ROJAS", "SEGURA", "VILLANUEVA", "ROLDAN", "BENITEZ", "LUNA", "VALENCIA", "CERVANTES", "ESCOBAR", "ZUNIGA", "BARRIOS"};
     char Estados[33][30] = {"AGUASCALIENTES", "BAJA CALIFORNIA", "BAJA CALIFORNIA SUR", "CAMPECHE", "CHIAPAS", "CHIHUAHUA", "COAHUILA", "COLIMA", "CIUDAD DE MEXICO", "DURANGO", "GUANAJUATO", "GUERRERO", "HIDALGO", "JALISCO", "MEXICO", "MICHOACAN", "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA", "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI", "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA", "VERACRUZ", "YUCATAN", "ZACATECAS", "NACIDO EN EL EXTRANJERO"};
-
     char sexos[2][8] = {"HOMBRE", "MUJER"};
+    sexo = NumAleatorio(0, 1);
     if (sexo == 1)
     {
 
@@ -157,7 +178,7 @@ TReg AgregarAuto(void)
     else
     {
 
-        strcpy(trabajador.name, NombresHombre[NumAleatorio(1, 29)]);
+        strcpy(trabajador.name, NombresMujer[NumAleatorio(1, 29)]);
         strcpy(trabajador.LastName1, Apellidos[NumAleatorio(0, 88)]);
         strcpy(trabajador.LastName2, Apellidos[NumAleatorio(0, 88)]);
         strcpy(trabajador.sex, sexos[1]);
@@ -205,7 +226,6 @@ void AgregarRegistro(TIndex vect[], int *i, int ordenado)
     TReg reg;
     FILE *fa;
     reg = AgregarAuto();
-
     while (Busquedas(vect, *i, reg.enrollment, ordenado) != -1)
     {
         reg.enrollment = NumAleatorio(300000, 399999);
@@ -215,31 +235,162 @@ void AgregarRegistro(TIndex vect[], int *i, int ordenado)
     fclose(fa);
 
     vect[*i].index = *i;
-    vect[(*i)++].enrollment = reg.enrollment;
+    vect[*i].enrollment = reg.enrollment;
+    (*i)++;
     printf("REGISTRO AGREGADO\n");
 }
 
-TKey Busquedas(TIndex vect[], int n, int i, int ordenado)
+TKey Busquedas(TIndex vect[], int n, int i, int *ordenado)
 {
     TKey j;
 
-    if (ordenado >= 1)
+    if (ordenado)
     {
-        if (ordenado <= 5)
-        {
-            // BurbujaTIndex
-        }
-        else
-        {
-            if (ordenado == 1)
-            {
-                j = BusquedaBinaria(vect, 0, i, n);
-            }
-        }
+
+        j = BusquedaBinaria(vect, 0, i, n);
     }
     else
     {
         j = BusquedaTIndex(vect, n, i);
     }
     return j;
+}
+
+void EliminarRegistro(TIndex vect[], int *i, int ordenado)
+{
+    int eliminar, encontrado, op;
+    TReg reg;
+    FILE *fa;
+    printf("NO. DE EMPLEADO A ELIMINAR: ");
+    eliminar = Validar(300000, 399999);
+    encontrado = Busquedas(vect, *i, eliminar, ordenado);
+    if (encontrado != -1)
+    {
+        fa = fopen("datos.dat", "rb");
+        fseek(fa, sizeof(TReg) * vect[encontrado].index, SEEK_SET);
+        fread(&reg, sizeof(TReg), 1, fa);
+        fclose(fa);
+        if (reg.status == 0)
+        {
+            printf("MATRICULA YA ELIMINADA\n");
+        }
+        else
+        {
+            printf("NOMBRE: %s\nAPELLIDOS: %s %s\nSEXO: %s \nPUESTO: %s \nESTADO: %s\nEDAD: %d\nTELEFONO: %d\n", reg.name, reg.LastName1, reg.LastName2, reg.sex, reg.JobPosition, reg.State, reg.age, reg.cellPhone);
+            printf("ELIMINAR\n1-SI\n2-NO\nSELECCIONE UNA OPCION: ");
+            op = Validar(1, 2);
+            system("CLS");
+            if (op == 1)
+            {
+                fa = fopen("datos.tmp", "r+b");
+                if (fa)
+                {
+                    fseek(fa, sizeof(TReg) * vect[encontrado].index, SEEK_SET);
+                    fread(&reg, sizeof(TReg), 1, fa);
+                    reg.status = 0;
+                    fseek(fa, sizeof(TReg) * vect[encontrado].index, SEEK_SET);
+                    fwrite(&reg, sizeof(TReg), 1, fa);
+                    printf("REGISTRO ELIMINADO\n");
+                    fclose(fa);
+                }
+                else
+                {
+                    printf("ERROR, NO ABIERTO\n");
+                }
+            }
+            else
+            {
+                printf("REGISTRO NO ELIMINADO\n");
+            }
+        }
+    }
+    else
+    {
+        printf("MATRICULA NO ENCONTRADA\n");
+    }
+}
+
+void BuscarRegistro(TIndex vect[], int *i, int ordenado)
+{
+    int buscar, encontrado;
+    TReg reg;
+    FILE *fa;
+    printf("NO. DE EMPLEADO A BUSCAR: ");
+    buscar = Validar(300000, 399999);
+    encontrado = Busquedas(vect, *i, buscar, ordenado);
+    if (encontrado != -1)
+    {
+        fa = fopen("datos.dat", "rb");
+        fseek(fa, sizeof(TReg) * vect[encontrado].index, SEEK_SET);
+        fread(&reg, sizeof(TReg), 1, fa);
+        fclose(fa);
+        if (reg.status == 0)
+        {
+            printf("MATRICULA ELIMINADA\n");
+        }
+        else
+        {
+            printf("INDICE: %d\nNOMBRE: %s\nAPELLIDOS: %s %s\nSEXO: %s \nPUESTO: %s \nESTADO: %s\nEDAD: %d\nTELEFONO: %d\n", encontrado, reg.name, reg.LastName1, reg.LastName2, reg.sex, reg.JobPosition, reg.State, reg.age, reg.cellPhone);
+        }
+    }
+    else
+    {
+        printf("MATRICULA NO ENCONTRADA\n");
+    }
+}
+
+int Ordenacion(TIndex vect[], int i, int movimientos)
+{
+    if (movimientos == 0)
+    {
+        Quicksort(vect, 0, i);
+    }
+    else
+    {
+        if (movimientos < 3)
+        {
+            Burbuja(vect, i);
+        }
+    }
+    return 1;
+}
+
+void MostrarNormal(int i)
+{
+    FILE *fa;
+    TReg reg;
+    int j = 0;
+    fa = fopen("datos.tmp", "rb");
+    if (fa)
+    {
+
+        while (fread(&reg, sizeof(TReg), 1, fa))
+        {
+            printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", j++, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
+        }
+        fclose(fa);
+    }
+}
+
+void MostrarOrdenado(int i, int ordenado, TIndex vect[], int movimientos)
+{
+    FILE *fa;
+    TReg reg;
+    if (ordenado == 0)
+    {
+        Ordenacion(vect, i, movimientos);
+    }
+    fa = fopen("datos.tmp", "rb");
+    if (fa)
+    {
+        for (int j = 0; j < i; j++)
+        {
+
+            while (fread(&reg, sizeof(TReg), 1, fa))
+            {
+                printf("%-9d  %-11d  %-15s  %-20s  %-17s  %-7d  %-13s  %-18s  %-13s  %d\n", j, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.age, reg.sex, reg.JobPosition, reg.State, reg.cellPhone);
+            }
+        }
+        fclose(fa);
+    }
 }

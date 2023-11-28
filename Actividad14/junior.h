@@ -9,7 +9,7 @@ typedef struct _indices
 {
     int index;
     int enrollment;
-}TIndex;
+} TIndex;
 
 typedef struct _alumnos
 {
@@ -36,21 +36,32 @@ int NumAleatorio(int ri, int rf);
 void ValiCadena(char cadena[], char msg[]);
 void Mayusculas(char cadena[]);
 
-
 int BusquedaOrdenada(int vect[], int n, int num);
 int BusquedaTReg(TReg vector[], int n, int num);
-TKey BusquedaTIndex(TIndex vector[], int n, int num)
-TKey BusquedaBinaria(TIndex vect[], int izquierda, int derecha, int num)
+TKey BusquedaTIndex(TIndex vector[], int n, int num);
+TKey BusquedaBinaria(TIndex vect[], int izquierda, int derecha, int num);
 int BusquedaOrdenadaTReg(TIndex vect[], int n, int num);
 void Intercambio(TReg Nombres[], int i, int j);
 int Particion(TReg Nombres[], int inferior, int superior);
-void Quicksort(TReg Nombres[], int inferior, int superior);
-
+void Quicksort(TIndex Nombres[], int inferior, int superior);
+void Burbuja(TIndex arr[], int n);
 
 // ******************* FUNCIONES *****************************
 
+void Burbuja(TIndex arr[], int n)
+{
+    int i, j;
+    for (i = 0; i < n - 1; i++)
 
-void Quicksort(TReg Nombres[], int inferior, int superior)
+        for (j = 0; j < n - i - 1; j++)
+        {
+            if (arr[j].enrollment > arr[j + 1].enrollment)
+            {
+                Intercambio(arr, j, j + 1);
+            }
+        }
+}
+void Quicksort(TIndex Nombres[], int inferior, int superior)
 {
     if (inferior < superior)
     {
