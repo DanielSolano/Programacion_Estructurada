@@ -1,7 +1,7 @@
 // Solano Meza Angel Daniel Matr. 372453
-// 13/11/2023
+// 28/11/2023
 // Uso de archivos binarios
-// ADSM_ACT13_932
+// ADSM_ACT14_932
 
 #define N 5000
 #define AUTO 100
@@ -86,7 +86,7 @@ void menu()
             break;
         case 4: // ORDENAR REGISTROS
             system("CLS");
-            if (ordenado = 0)
+            if (ordenado == 0)
             {
                 printf("INDICES ORDENADOS\n");
                 ordenado = 1;
@@ -405,7 +405,7 @@ void MostrarOrdenado(int i, int ordenado, TIndex vect[], int movimientos)
         fclose(fa);
     }
 }
-    
+
 void GenerarOrdenado(char nom[], int ordenado, TIndex vect[], int movimientos, int i)
 {
     FILE *fa, *bin;
@@ -423,6 +423,7 @@ void GenerarOrdenado(char nom[], int ordenado, TIndex vect[], int movimientos, i
         fseek(bin, vect[j].index * sizeof(TReg), SEEK_SET);
         fread(&reg, sizeof(TReg), 1, bin);
         if (reg.status == 1)
+
         {
             fprintf(fa, "%10d || %10d || %9s || %16s || %16s || %12s || %16s || %4d || %10d\n", vect[j].index, reg.enrollment, reg.name, reg.LastName1, reg.LastName2, reg.sex, reg.JobPosition, reg.age, reg.cellPhone);
         }

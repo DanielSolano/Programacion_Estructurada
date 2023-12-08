@@ -1,414 +1,1153 @@
-
-
 #include "raylib.h"
-// Texture2D sub=LoadTexture("texturas\\SUB.png");
-// Texture2D nave=LoadTexture("texturas\\navepix2.png");
-// Texture2D car=LoadTexture("texturas\\pixel_car2.png");
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-// DrawTexture(sub, 190, 200,WHITE);
-// DrawTexture(nave, 500,300,WHITE);
-// DrawTexture(car, 800,300,WHITE);
+#define RANCHO 1280
+#define RALTO 720
+#define CAMY 360
+#define CAMX 640
 
-#define JUGAR 0
-#define OPCIONES 1
-#define SALIR 2
+#define ALTOP 85
+#define ANCHOP 50
+#define SUELO 650
 
-#define DIFICULTAD 0
-#define SONIDO 1
-#define REGRESAR 2
+#define G 0.1
+#define GD 0.2
 
-#define NEWP 0
-#define CONTINUAR 1
+#define VX 4
+#define VS -11
+#define VD 10
 
-int mainMenu(Sound seleccion, Font fuente);
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras, Font fuente);
-int juegoMenu(Sound seleccion);
+#define MAXAVE 5
+#define AVESPEED 7
+#define MAXEGG 8
+#define MAXCAR 2
+#define CARSPEED 9
 
-void juego(int diflvl);
+#define MAXPLAT 30
 
-int main(void)
+// blank transparente
+
+// typedef Rectangle Tplayer;
+
+typedef Rectangle Thit;
+
+typedef Rectangle Trec;
+
+typedef struct _plataforma
+{
+    Trec pos;
+    int status;
+    int flag;
+} Tplat;
+
+typedef struct _vehiculo
+{
+    Trec pos;
+    int status;
+
+} Tpart;
+
+typedef struct _jugador
+{
+    Trec pos;
+    int y0;
+    float v0;
+    int timeDash;
+    int jump;
+    int jumpjump;
+    int fall;
+} Tplayer;
+
+typedef struct _ave
+{
+    Trec pos;
+    int status = 0;
+    int right = 0;
+    int left = 0;
+
+} Tave;
+
+typedef struct _huevo
+{
+    Trec pos;
+    int status;
+    int y0;
+    int time;
+} Tegg;
+
+typedef struct _car
+{
+    Trec pos;
+    int status;
+    int movimiento;
+    int time;
+} Tcar;
+
+float velocidad(float v0, float time);
+int ColisionPlat(Tplayer player, Tplat plat);
+// devuelve 0
+int Reposo(float &time, float &v0, int &y0, int y);
+
+int Salto(float &time, float &v0, int &y0, int y);
+
+// y0+v0*time+GD*time*time;
+int Posicion(int y0, float v0, float time, int g);
+
+void CalculaPosEnemigo(Tave &mob);
+int CheckMobColision(Trec mob, Thit hit);
+int CheckPlayerColision(Trec player, Trec mob);
+// int CheckPiezaColision(Trec player,Trec mob); // duplicado para probar sin daño
+void DropEgg(Tave mob, Tegg &egg);
+void LimpiaEnemigos(Tave ave[], Tcar car[]);
+
+int main()
 {
     SetTargetFPS(60);
+    InitWindow(RANCHO, RALTO, "juego");
+    srand(time(NULL));
+    int j, i;
+    int y0Cam;
 
-    int op, subOp, opJug;
-    int diflvl = 1, vol = 3;
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-    InitWindow(screenWidth, screenHeight, "window");
-    //****************************************************** TEXTURAS ***********************************************************************
+    int framesAutom = 0;
 
-    Font fuente = LoadFont("texturas/fuente.ttf");
-    Texture2D fondo = LoadTexture("texturas\\menuok.png");
-    Texture2D volumen[7];
-    Texture2D dif[3];
-    volumen[0] = LoadTexture("texturas\\vol0.png");
-    volumen[1] = LoadTexture("texturas\\vol1.png");
-    volumen[2] = LoadTexture("texturas\\vol2.png");
-    volumen[3] = LoadTexture("texturas\\vol3.png");
-    volumen[4] = LoadTexture("texturas\\vol4.png");
-    volumen[5] = LoadTexture("texturas\\vol5.png");
-    volumen[6] = LoadTexture("texturas\\vol6.png");
-    dif[0] = LoadTexture("texturas\\dif1.png");
-    dif[1] = LoadTexture("texturas\\dif2.png");
-    dif[2] = LoadTexture("texturas\\dif3.png");
+    int framesSpeed = 8;
+    int currentFrame = 0;
 
-    //******************************************************* AUDIOS **********************************************************************
+    int currentPersonaje = 0;
+    int framesPersonaje = 0;
+
+    int currentSalto = 0;
+    int framesSalto = 0;
+
+    // contadores
+    int frameC = 0;
+    float time = 0;
+    int c = 0;
+    int igncolision = 0;
+    int hitc = 0;
+    int platc = 0;
+    // int caminarc=0;
+
+    // banderas
+    int bsuelo = 0;
+    int bdown = 0;
+    // int caminar=0;
+    int lookR = 1;
+    int lookL = 0;
+    int lookUp = 0;
+    int lookDown = 0;
+    int hit = 0;
+    int dash = 0;
+
+    // auxiliar
+    int random;
+
+    // ************************************************ TEXTURAS ********************************************************************
+    Texture2D pajaro = LoadTexture("texturas/pajaro.png");
+    Rectangle framesPajaro = {0.0f, 0.0f, (float)pajaro.width / 6, (float)pajaro.height};
+
+    Texture2D pajaroizq = LoadTexture("texturas/pajaroizq.png");
+    Rectangle framesPajaroizq = {0.0f, 0.0f, (float)pajaroizq.width / 6, (float)pajaroizq.height};
+
+    Texture2D huevo = LoadTexture("texturas/egg.png");
+    Rectangle framesHuevo = {0.0f, 0.0f, (float)huevo.width, (float)huevo.height};
+
+    Texture2D carro = LoadTexture("texturas/carrito.png");
+    Rectangle framesCarro = {0.0f, 0.0f, (float)carro.width, (float)carro.height};
+
+    Texture2D caminar = LoadTexture("texturas/Cyborg_run.png");
+    Rectangle framesCaminar = {0.0f, 0.0f, (float)caminar.width / 6, (float)caminar.height};
+
+    Texture2D caminarizq = LoadTexture("texturas/Cyborg_run_left.png");
+    Rectangle framesCaminarizq = {0.0f, 0.0f, (float)caminarizq.width / 6, (float)caminarizq.height};
+
+    Texture2D reposo = LoadTexture("texturas/Cyborg_idle.png");
+    Rectangle framesReposo = {0.0f, 0.0f, (float)reposo.width / 4, (float)reposo.height};
+
+    Texture2D reposoizq = LoadTexture("texturas/Cyborg_idle_left.png");
+    Rectangle framesReposoizq = {0.0f, 0.0f, (float)reposoizq.width / 4, (float)reposoizq.height};
+
+    Texture2D danio = LoadTexture("texturas/Cyborg_hurt.png");
+    Rectangle framesDanio = {0.0f, 0.0f, (float)danio.width, (float)danio.height};
+
+    Texture2D salto = LoadTexture("texturas/Cyborg_jump.png");
+    Rectangle frameSalto = {0.0f, 0.0f, (float)salto.width / 4, (float)salto.height};
+
+    Texture2D saltoder = LoadTexture("texturas/Cyborg_jumpr.png");
+    Rectangle frameSaltoder = {0.0f, 0.0f, (float)saltoder.width / 4, (float)saltoder.height};
+
+    Texture2D background = LoadTexture("texturas/fondo1.png");
+    Rectangle frameBackground = {0.0f, 0.0f, (float)RANCHO, (float)RALTO};
+
+    Texture2D ground = LoadTexture("texturas/ground.png");
+    Rectangle frameGround = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
+
+    // ************************************************ SONIDOS ********************************************************************
+
     InitAudioDevice();
-    Music musica_menu = LoadMusicStream("sonidos/musica.mp3");
-    Sound barras = LoadSound("sonidos/beep.mp3");
-    Sound seleccion = LoadSound("sonidos/volumen.mp3");
 
-    //************************************************************* LOOP PRINCIPAL ****************************************************************
-    while (!WindowShouldClose())
+    Sound dolor = LoadSound("sonidos/danio.wav");
+
+    // Inicializacion ***************************************************************************************
+    // Inicializacion Plataformas
+    Tplat plat[MAXPLAT];
+    plat[0].pos.x = 400;
+    plat[0].status = 1;
+    plat[0].flag = 0;
+    plat[0].pos.width = 350;
+    plat[0].pos.height = 40;
+    plat[0].pos.y = (rand() % 300) + 200;
+    for (j = 1; j < MAXPLAT; j++)
     {
-        // Menu principal
-        PlayMusicStream(musica_menu);
-        do
+        if (plat[j - 1].pos.x < -7200)
         {
-        menu:
-            BeginDrawing();
-            UpdateMusicStream(musica_menu);
-            DrawTexture(fondo, 0, 0, WHITE);
-            op = mainMenu(seleccion, fuente);
-            EndDrawing();
-        } while (op == -1);
-
-        // Menu jugar
-        switch (op)
-        {
-        case JUGAR:
-            do
+            for (i = j + 1; i < MAXPLAT; i++)
             {
-                BeginDrawing();
-                DrawTexture(fondo, 0, 0, WHITE);
-                UpdateMusicStream(musica_menu);
-                opJug = juegoMenu(seleccion);
-                EndDrawing();
-            } while (opJug == -1);
-
-            switch (opJug)
-            {
-            case NEWP:
-                goto juegoL;
-                break;
-            case CONTINUAR:
-                goto continuar;
-                break;
-            case REGRESAR:
-                UpdateMusicStream(musica_menu);
-                goto menu;
-                break;
+                plat[i].status = 0;
+                plat[i].flag = 0;
+                plat[i].pos.width = 0;
+                plat[i].pos.height = 0;
+                plat[i].pos.y = 0;
+                plat[i].pos.x = 0;
             }
-
-            break;
-        // Menu opciones
-        case OPCIONES:
-            UpdateMusicStream(musica_menu);
-            do
-            {
-                BeginDrawing();
-                UpdateMusicStream(musica_menu);
-                DrawTexture(fondo, 0, 0, WHITE);
-                subOp = opMenu(vol, diflvl, volumen[vol], dif[diflvl], seleccion, barras, fuente);
-                EndDrawing();
-
-            } while (subOp != -1);
-            goto menu;
-            break;
-        // Salir
-        case SALIR:
-            CloseWindow();
-            return 0;
-            break;
+            j = MAXPLAT;
         }
-
-    juegoL:
-        UnloadTexture(fondo);
-        do
+        else
         {
-            juego(diflvl);
-        } while (0);
-
-    continuar:
-        UnloadTexture(fondo);
-        do
-        {
-            juego(diflvl);
-        } while (0);
+            plat[j].status = 1;
+            plat[j].flag = 0;
+            plat[j].pos.width = 350;
+            plat[j].pos.height = 40;
+            plat[j].pos.y = (rand() % 250) + 200;
+            plat[j].pos.x = plat[j - 1].pos.x - plat[j].pos.width - ((rand() % 200) + 50);
+            platc++;
+        }
     }
 
-    //*********************************************************** UNLOAD ******************************************************************
-    StopMusicStream(musica_menu);
-    UnloadTexture(volumen[0]);
-    UnloadTexture(volumen[1]);
-    UnloadTexture(volumen[2]);
-    UnloadTexture(volumen[3]);
-    UnloadTexture(volumen[4]);
-    UnloadTexture(volumen[5]);
-    UnloadTexture(volumen[6]);
-    UnloadTexture(dif[0]);
-    UnloadTexture(dif[1]);
-    UnloadTexture(dif[2]);
-    UnloadMusicStream(musica_menu);
-    UnloadSound(seleccion);
-    CloseAudioDevice();
-    CloseWindow();
-    //*****************************************************************************************************************************
+    // Inicializacion piezas
+    Tpart pieza[3];
+    int piezac = 0;
+    random = (platc) / 3;
+    for (j = 0; j < 3; j++)
+    {
+        pieza[j].status = 1;
+        pieza[j].pos.height = 80;
+        pieza[j].pos.width = 50;
+        pieza[j].status = 1;
+        if (j == 0)
+        {
+            pieza[j].pos.y = plat[platc - 1].pos.y - pieza[j].pos.height;
+            pieza[j].pos.x = plat[platc - 1].pos.x + plat[platc].pos.width / 2;
+        }
+        else
+        {
+            pieza[j].pos.y = plat[platc - random * j].pos.y - pieza[j].pos.height;
+            pieza[j].pos.x = plat[platc - random * j].pos.x + plat[platc - random * j].pos.width / 2;
+        }
+    }
 
+    // Inicializa la posicion
+    Tplayer player;
+    player.pos.height = ALTOP;
+    player.pos.width = ANCHOP;
+    player.pos.x = 400;   // Posicion incial
+    player.pos.y = SUELO; //""
+    player.y0 = player.pos.y;
+    player.v0 = 0;
+    player.timeDash = 70;
+
+    // Inicializacion enemigos
+    Tave ave[MAXAVE];
+    for (j = 0; j < MAXAVE; j++)
+    {
+        ave[j].status = 0;
+        ave[j].right = 0;
+        ave[j].left = 0;
+        ave[j].pos.x = 2000;
+        ave[j].pos.y = 800;
+        ave[j].pos.height = 20;
+        ave[j].pos.width = 40;
+    }
+
+    Tegg egg[MAXEGG];
+    for (j = 0; j < MAXEGG; j++)
+    {
+        egg[j].status = 0;
+        egg[j].pos.height = 30;
+        egg[j].pos.width = 20;
+        egg[j].pos.x = 0;
+        egg[j].pos.y = 800;
+    }
+
+    Tcar car[MAXCAR];
+    for (j = 0; j < MAXCAR; j++)
+    {
+        car[j].status = 0;
+        car[j].pos.height = 90 + 50;
+        car[j].pos.width = 200 + 150;
+        car[j].pos.x = 0;
+        car[j].pos.y = 800;
+        car[j].movimiento = 0;
+        car[j].time = 120;
+    }
+
+    Thit hithit;
+
+    // Inicializacion camara
+    Camera2D camara = {0};
+    camara.target.x = player.pos.x + 30;
+    camara.target.y = player.pos.y;
+    camara.offset.x = 640;
+    camara.offset.y = CAMY;
+    camara.rotation = 0;
+    camara.zoom = 1;
+
+    while (!WindowShouldClose())
+    {
+
+        time += 1;
+        igncolision++;
+        frameC++;
+        player.timeDash++;
+        // **************************************************** DIBUJO *******************************************************
+
+        BeginDrawing();
+
+        BeginMode2D(camara);
+
+        DrawTexture(background, 0, 0, WHITE);
+
+        ClearBackground(DARKBLUE);
+        //****************************************************** PIEZAS **********************************************************************
+        for (j = 0; j < 3; j++)
+        {
+            if (CheckPlayerColision(player.pos, pieza[j].pos))
+            {
+                if (pieza[j].pos.x < 0)
+                {
+                    pieza[j].status = 0;
+                    pieza[j].pos.y = SUELO - pieza[j].pos.height;
+                    pieza[j].pos.x = 900;
+                    piezac++;
+                    switch (piezac)
+                    {
+                    case 1:
+                        pieza[j].pos.x = 900;
+                        break;
+                    case 2:
+                        pieza[j].pos.x = 950;
+                        break;
+                    case 3:
+                        pieza[j].pos.x = 1000;
+                        break;
+                    }
+                }
+                else
+                {
+                    pieza[j].status = 1;
+                }
+            }
+        }
+
+        //******************************************************** AVES **************************************************************************
+        for (j = 0; j < MAXAVE; j++)
+        {
+            // comportameinto
+            if (ave[j].status)
+            {
+                // movimiento enemigo **si sale de la pantalla se elimina**
+                if (ave[j].right)
+                {
+                    ave[j].pos.x -= AVESPEED;
+                    if (ave[j].pos.x <= player.pos.x - 750 - ave[j].pos.width)
+                    {
+                        ave[j].status = 0;
+                    }
+                }
+                else
+                {
+                    if (ave[j].left)
+                    {
+                        ave[j].pos.x += AVESPEED;
+                        if (ave[j].pos.x >= player.pos.x + 750)
+                        {
+                            ave[j].status = 0;
+                        }
+                    }
+                }
+
+                // ataque enemigo ***********************************************************************************
+                random = (rand() % 11) + 1;
+                if (random == 1)
+                {
+                    if (ave[j].pos.x <= player.pos.x + player.pos.width + 200)
+                    {
+                        if (ave[j].pos.x >= player.pos.x - 200)
+                        {
+                            random = rand() % MAXEGG;
+                            DropEgg(ave[j], egg[random]);
+                        }
+                    }
+                }
+                // Colision con golpe
+                if (hit)
+                {
+                    if (CheckMobColision(ave[j].pos, hithit))
+                    {
+                        ave[j].status = 0;
+                    }
+                }
+                // Colision con jugador
+                if (ave[j].status)
+                {
+                    if (CheckPlayerColision(player.pos, ave[j].pos))
+                    {
+                        PlaySound(dolor);
+                        DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
+                        player.pos.x = 400;   // Posicion incial
+                        player.pos.y = SUELO; //""
+                        player.y0 = player.pos.y;
+                        player.v0 = 0;
+                        player.timeDash = 70;
+                        LimpiaEnemigos(ave, car);
+                    }
+                }
+            }
+            else
+            {
+                // generacion
+                random = (rand() % 100) + 1;
+                if (random == 1)
+                {
+                    ave[j].right = rand() % 2;
+                    if (ave[j].right)
+                    {
+                        ave[j].status = 1;
+                        ave[j].pos.x = player.pos.x + 610 + player.pos.width;
+                        ave[j].pos.y = (rand() % 90) + 1;
+                        ave[j].left = 0;
+                    }
+                    else
+                    {
+                        ave[j].status = 1;
+                        ave[j].pos.x = player.pos.x - 610;
+                        ave[j].pos.y = (rand() % 101) + 1;
+                        ave[j].left = 1;
+                    }
+                }
+            }
+        }
+
+        //** comportamiento huevo ********************************************************************************************************************************
+        for (j = 0; j < MAXEGG; j++)
+        {
+            // elinacion de huevo
+            if (egg[j].pos.y - egg[j].pos.height >= SUELO)
+            {
+                egg[j].status = 0;
+                egg[j].pos.y = 800;
+            }
+            // caida de huevo
+            if (egg[j].status)
+            {
+                egg[j].time += 1;
+                egg[j].pos.y = Posicion(egg[j].y0, 0, egg[j].time, 0);
+            }
+
+            // Colision con golpe
+            if (hit)
+            {
+                if (CheckMobColision(egg[j].pos, hithit))
+                {
+                    egg[j].status = 0;
+                }
+            }
+
+            // Colision con jugador
+            if (egg[j].status)
+            {
+                if (CheckPlayerColision(player.pos, egg[j].pos))
+                {
+                    PlaySound(dolor);
+                    DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
+                    player.pos.x = 400;   // Posicion incial
+                    player.pos.y = SUELO; //""
+                    player.y0 = player.pos.y;
+                    player.v0 = 0;
+                    player.timeDash = 70;
+                    LimpiaEnemigos(ave, car);
+                }
+            }
+        }
+
+        //** enemigo2 carro ********************************************************************************************************************************
+        for (j = 0; j < MAXCAR; j++)
+        {
+            // comportameinto
+            if (car[j].status)
+            {
+                // movimiento enemigo
+                if (car[j].movimiento)
+                {
+                    car[j].pos.x += CARSPEED;
+                }
+                else
+                {
+                    car[j].time++;
+                    if (car[j].time > 60)
+                    {
+                        car[j].movimiento = 1;
+                    }
+                }
+                // eliminacion del enemigo
+                if (car[j].pos.x >= player.pos.x + 720)
+                {
+                    car[j].status = 0;
+                }
+
+                // Colision con golpe
+                if (hit)
+                {
+                    if (CheckMobColision(car[j].pos, hithit))
+                    {
+                        car[j].movimiento = 0;
+                        car[j].time = 0;
+                    }
+                }
+
+                // Colision con jugador
+                if (car[j].status)
+                {
+                    if (CheckPlayerColision(player.pos, car[j].pos))
+                    {
+                        player.pos.x = 400;   // Posicion incial
+                        player.pos.y = SUELO; //""
+                        player.y0 = player.pos.y;
+                        player.v0 = 0;
+                        player.timeDash = 70;
+                        LimpiaEnemigos(ave, car);
+                    }
+                }
+            }
+            else
+            {
+                // generacion
+                // random=GetRandomValue(1,1);
+                if (player.pos.x < -60)
+                {
+                    car[j].status = 1;
+                    car[j].movimiento = 1;
+                    car[j].pos.x = player.pos.x - 610 - car[j].pos.width;
+                    car[j].pos.y = SUELO - car[j].pos.height;
+                }
+            }
+        }
+
+        //** caluclar posicion y ********************************************************************************************************************************
+        if (player.fall)
+        {
+            if (bdown)
+            {
+                if (velocidad(player.v0, time) > 0)
+                {
+                    if (++c == 1)
+                    {
+                        player.v0 = velocidad(player.v0, time); // velocidad inicial igual a velocidad actual
+                        player.y0 = player.pos.y;
+                        time = 1;
+                    }
+                }
+                else
+                {
+                    Reposo(time, player.v0, player.y0, player.pos.y);
+                }
+                player.pos.y = Posicion(player.y0, player.v0, time, bdown);
+            }
+            else
+            {
+                player.pos.y = Posicion(player.y0, player.v0, time, bdown);
+            }
+        }
+
+        //** colisiones ********************************************************************************************************************************
+        // suelo
+        if (player.pos.y + player.pos.height > SUELO)
+        {
+            player.pos.y = SUELO - player.pos.height;
+            Reposo(time, player.v0, player.y0, player.pos.y);
+            player.fall = 0;
+            bsuelo = 1;
+            player.jump = 1;
+            player.jumpjump = 1;
+        }
+
+        // plataformas
+        if (igncolision > 20)
+        {
+            // plataforma cuando cae
+            if (velocidad(player.v0, time) > 0)
+            {
+                for (j = 0; j < platc; j++)
+                {
+                    if (plat[j].status)
+                    {
+                        if (ColisionPlat(player, plat[j]))
+                        {
+                            player.pos.y = plat[j].pos.y - player.pos.height;
+                            Reposo(time, player.v0, player.y0, player.pos.y);
+                            player.fall = 0;
+                            plat[j].flag = 1;
+                            player.jump = 1;
+                            player.jumpjump = 1;
+                            bdown = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // si salio de la paltaforma
+        for (j = 0; j < platc; j++)
+        {
+            if (plat[j].status)
+            {
+                if (plat[j].flag)
+                {
+                    if (!ColisionPlat(player, plat[j]))
+                    {
+                        Reposo(time, player.v0, player.y0, player.pos.y);
+                        player.fall = 1;
+                        plat[j].flag = 0;
+                        player.jump = 1;
+                        player.jumpjump = 0;
+                        bdown = 0;
+                    }
+                }
+            }
+        }
+
+        //** golpe ********************************************************************************************************************************
+        if (hit)
+        {
+            if (lookR)
+            {
+                hithit.x = player.pos.x + ANCHOP - 20;
+                hithit.y = player.pos.y - 20;
+            }
+            else
+            {
+                if (lookL)
+                {
+                    hithit.x = player.pos.x - 60;
+                    hithit.y = player.pos.y - 20;
+                }
+            }
+
+            if (lookUp)
+            {
+                hithit.x = player.pos.x - player.pos.width / 2;
+                hithit.y = player.pos.y - player.pos.height;
+            }
+            else
+            {
+                if (lookDown)
+                {
+                    hithit.x = player.pos.x - player.pos.width / 2;
+                    hithit.y = player.pos.y + player.pos.height - player.pos.height / 3;
+                }
+            }
+            if (hitc < 50)
+            {
+                hitc++;
+            }
+            else
+            {
+                hitc = 0;
+                hit = 0;
+            }
+        }
+
+        //** dash ********************************************************************************************************************************
+        if (dash)
+        {
+            if (player.timeDash < 20)
+            {
+                if (lookR)
+                {
+                    player.pos.x += VD;
+                }
+                else
+                {
+                    if (lookL)
+                    {
+                        player.pos.x -= VD;
+                    }
+                }
+            }
+            else
+            {
+                if (player.pos.x > -10)
+                {
+                    player.jump = 1;
+                    player.jumpjump = 0;
+                }
+                else
+                {
+                    player.jump == 0;
+                    player.jumpjump = 0;
+                }
+                player.fall = 1;
+                dash = Reposo(time, player.v0, player.y0, player.pos.y);
+            }
+        }
+
+        //** camara ********************************************************************************************************************************
+        camara.target.y = player.pos.y;
+        if (player.pos.y > 100)
+        {
+            camara.target.y = CAMY;
+            camara.offset.y = CAMY;
+            camara.target.x = player.pos.x + 25;
+        }
+        else
+        {
+            camara.offset.y = RANCHO / 12.5;
+            camara.target.x = player.pos.x + 25;
+        }
+
+        //** intput ********************************************************************************************************************************
+        if (!dash) // right left
+        {
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                if (player.pos.x < 1280)
+                {
+                    player.pos.x += VX;
+                    lookR = 1;
+                    lookL = 0;
+                }
+            }
+            else
+            {
+                if (IsKeyDown(KEY_LEFT))
+                {
+                    if (player.pos.x > plat[platc - 1].pos.x - 610)
+                    {
+                        player.pos.x -= VX;
+                        lookR = 0;
+                        lookL = 1;
+                    }
+                }
+            }
+        }
+
+        if (!dash) // up down
+        {
+            if (IsKeyPressed(KEY_UP))
+            {
+                if (player.jump)
+                {
+                    Reposo(time, player.v0, player.y0, player.pos.y);
+                    Salto(time, player.v0, player.y0, player.pos.y);
+                    player.fall = 1;
+                    if (player.jumpjump) //! doblesalto
+                    {
+                        player.jump = 1;
+                        player.jumpjump = 0;
+                    }
+                    else
+                    {
+                        player.jump = 0;
+                    }
+                    for (j = 0; j < MAXPLAT; j++)
+                    {
+                        if (plat[j].status)
+                        {
+                            plat[j].flag = 0;
+                        }
+                    }
+                    bsuelo = 0;
+                    bdown = 0;
+                }
+            }
+            else
+            {
+                if (IsKeyPressed(KEY_DOWN))
+                {
+                    for (j = 0; j < MAXPLAT; j++)
+                    {
+                        if (plat[j].flag)
+                        {
+                            // if(IsKeyPressedRepeat(KEY_DOWN))
+                            {
+                                player.fall = 1;
+                                igncolision = 0;
+                                bdown = 0;
+                            }
+                        }
+                        else
+                        {
+                            bdown = 1;
+                            player.fall = 1;
+                            c = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // hit
+        if (IsKeyPressed(KEY_X))
+        {
+            if (IsKeyDown(KEY_UP))
+            {
+                hithit.width = ALTOP + 30;
+                hithit.height = 90;
+                hit = 1;
+                dash = 0;
+                player.fall = 1;
+                lookUp = 1;
+                lookDown = 0;
+            }
+            else
+            {
+                if (IsKeyDown(KEY_DOWN))
+                {
+                    hithit.width = ALTOP + 30;
+                    hithit.height = 90;
+                    hit = 1;
+                    dash = 0;
+                    player.fall = 1;
+                    lookDown = 1;
+                    lookUp = 0;
+                }
+                else
+                {
+                    hithit.width = 90;
+                    hithit.height = ALTOP + 30;
+                    hit = 1;
+                    dash = 0;
+                    player.fall = 1;
+                    lookDown = 0;
+                    lookUp = 0;
+                }
+            }
+        }
+
+        // dash KEY C
+        if (player.pos.x < 1250)
+        {
+            if (player.pos.x > plat[platc - 1].pos.x - 590)
+            {
+                if (player.timeDash > 80)
+                {
+                    if (!dash)
+                    {
+                        if (IsKeyPressed(KEY_C))
+                        {
+                            dash = 1;
+                            player.timeDash = 0;
+                            Reposo(time, player.v0, player.y0, player.pos.y);
+                            player.fall = 0;
+                            player.jump = 0;
+                            player.jumpjump = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        framesAutom++;
+        if (framesAutom >= (60 / framesSpeed))
+        {
+            framesAutom = 0;
+            currentFrame++;
+
+            if (currentFrame > 5)
+                currentFrame = 0;
+            framesPajaro.x = (float)currentFrame * (float)pajaro.width / 6;
+            framesPajaroizq.x = (float)currentFrame * (float)pajaroizq.width / 6;
+            framesReposo.x = (float)currentFrame * (float)reposo.width / 4;
+            framesReposoizq.x = (float)currentFrame * (float)reposoizq.width / 4;
+        }
+
+        DrawRectangle(player.pos.x, player.pos.y, player.pos.width, player.pos.height, BLACK);
+
+        if (player.fall)
+        {
+            framesSalto++;
+            if (framesSalto >= (60 / framesSpeed))
+            {
+                framesSalto = 0;
+                currentSalto++;
+
+                if (currentSalto > 3)
+                    currentSalto = 0;
+                frameSalto.x = (float)currentSalto * (float)salto.width / 4;
+                frameSaltoder.x = (float)currentSalto * (float)saltoder.width / 4;
+            }
+            if (lookL)
+            {
+                DrawTextureRec(salto, frameSalto, Vector2{player.pos.x - 80, player.pos.y - 60}, WHITE);
+            }
+            if (lookR)
+            {
+                DrawTextureRec(saltoder, frameSalto, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
+            }
+        }
+        else
+        {
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                framesPersonaje++;
+                framesSalto = 0;
+                if (framesPersonaje >= (60 / framesSpeed))
+                {
+                    framesPersonaje = 0;
+                    currentPersonaje++;
+
+                    if (currentPersonaje > 5)
+                        currentPersonaje = 0;
+                    framesCaminar.x = (float)currentPersonaje * (float)caminar.width / 6;
+                }
+                DrawTextureRec(caminar, framesCaminar, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
+            }
+            else if (IsKeyDown(KEY_LEFT))
+            {
+                framesPersonaje++;
+                if (framesPersonaje >= (60 / framesSpeed))
+                {
+                    framesPersonaje = 0;
+                    currentPersonaje++;
+
+                    if (currentPersonaje > 5)
+                        currentPersonaje = 0;
+                    framesCaminarizq.x = (float)currentPersonaje * (float)caminarizq.width / 6;
+                }
+                DrawTextureRec(caminarizq, framesCaminarizq, Vector2{player.pos.x - 80, player.pos.y - 60}, WHITE);
+            }
+            else
+            {
+                framesPersonaje = 0;
+                if (lookL)
+                {
+                    DrawTextureRec(reposoizq, framesReposoizq, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
+                }
+                if (lookR)
+                {
+                    DrawTextureRec(reposo, framesReposo, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
+                }
+            }
+        }
+        // suelo
+        DrawTextureRec(ground, frameGround, Vector2{player.pos.x, SUELO}, WHITE);
+        // DrawRectangle(player.pos.x - 610, SUELO, 1280, 70, DARKGREEN);
+        // plataformas
+        for (j = 0; j < platc; j++)
+        {
+            // if(plat[j].status)
+            {
+                DrawRectangleRec(plat[j].pos, DARKGREEN);
+            }
+        }
+        // enemigos
+        for (j = 0; j < MAXAVE; j++)
+        {
+            if (ave[j].status)
+            {
+                if (ave[j].left)
+                {
+                    DrawTextureRec(pajaro, framesPajaro, Vector2{ave[j].pos.x, ave[j].pos.y - 50}, WHITE);
+                }
+
+                if (ave[j].right)
+                {
+                    DrawTextureRec(pajaroizq, framesPajaro, Vector2{ave[j].pos.x, ave[j].pos.y - 50}, WHITE);
+                }
+            }
+        }
+        for (j = 0; j < MAXEGG; j++)
+        {
+            if (egg[j].status)
+            {
+                DrawTextureRec(huevo, framesHuevo, Vector2{egg[j].pos.x, egg[j].pos.y}, WHITE);
+            }
+        }
+        for (j = 0; j < MAXCAR; j++)
+        {
+            if (car[j].status)
+            {
+                DrawTextureRec(carro, framesCarro, Vector2{car[j].pos.x, car[j].pos.y}, WHITE);
+            }
+        }
+        // piezas
+        for (j = 0; j < 3; j++)
+        {
+            if (pieza[j].status)
+            {
+                DrawRectangleRec(pieza[j].pos, ORANGE);
+            }
+        }
+        // golpe
+        if (hit)
+        {
+            DrawRectangleRec(hithit, RED);
+        }
+
+        EndMode2D();
+        EndDrawing();
+    }
+
+    UnloadSound(dolor);
+    UnloadTexture(danio);
+    UnloadTexture(caminar);
+    UnloadTexture(caminarizq);
+    UnloadTexture(reposoizq);
+    UnloadTexture(huevo);
+    UnloadTexture(pajaro);
+    // CloseAudioDevice();
+    CloseWindow();
     return 0;
 }
 
-int mainMenu(Sound seleccion, Font fuente)
+float velocidad(float v0, float time)
 {
-    static int op = 0;
-    int sizeTxt[3], j;
-    int fontSize[2] = {70, 40};
-    char mensajes[4][30] = {"JUGAR", "OPCIONES", "SALIR", "MECANICO ARITMETICO"};
-    Rectangle fondo[4];
-
-    fondo[3] = {170, 45, 927, 90};
-    DrawRectangleRec(fondo[3], LIGHTGRAY);
-    DrawText(mensajes[3], 200, 55, 70, WHITE);
-
-    fondo[0] = {500, 293, 200, 50};
-    DrawRectangleRec(fondo[0], BLACK);
-    DrawText(mensajes[0], 535, 300, 40, WHITE);
-
-    fondo[1] = {500, 440, 200, 50};
-    DrawRectangleRec(fondo[1], BLACK);
-    DrawText(mensajes[1], 507, 450, 37, WHITE);
-
-    fondo[2] = {500, 590, 200, 50};
-    DrawRectangleRec(fondo[2], BLACK);
-    DrawText(mensajes[2], 535, 598, 40, WHITE);
-
-    for (j = 0; j < 3; j++)
-    {
-        if (j == op)
-        {
-            DrawRectangleRec(fondo[j], LIME);
-            if (j == 0)
-            {
-                DrawText(mensajes[0], 535, 300, 40, WHITE);
-            }
-            if (j == 1)
-            {
-                DrawText(mensajes[1], 507, 450, 37, WHITE);
-            }
-            if (j == 2)
-            {
-                DrawText(mensajes[2], 535, 598, 40, WHITE);
-            }
-        }
-        else
-        {
-            DrawRectangleRec(fondo[j], BLACK);
-            if (j == 0)
-            {
-                DrawText(mensajes[0], 535, 300, 40, WHITE);
-            }
-            if (j == 1)
-            {
-                DrawText(mensajes[1], 507, 450, 37, WHITE);
-            }
-            if (j == 2)
-            {
-                DrawText(mensajes[2], 535, 598, 40, WHITE);
-            }
-        }
-    }
-
-    if (IsKeyPressed(KEY_UP))
-    {
-        if (op != JUGAR)
-        {
-            op--;
-        }
-    }
-    else
-    {
-        if (IsKeyPressed(KEY_DOWN))
-        {
-            if (op != SALIR)
-            {
-                op++;
-            }
-        }
-    }
-
-    if (IsKeyPressed(KEY_ENTER))
-    {
-        PlaySound(seleccion);
-        return op;
-    }
-
-    return -1;
+    return (v0 + 2 * G * time);
 }
 
-int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras, Font fuente)
+int ColisionPlat(Tplayer player, Tplat plat)
 {
-    static int op = 0;
-    int sizeTxt[3], j;
-    for (j = 0; j < 3; j++)
+    if (player.pos.x <= plat.pos.x + plat.pos.width) // Si esta tocando el lado derecho de la plataforma n
     {
-        if (j == op)
+        if (plat.pos.x <= player.pos.x + ANCHOP) // si esta tocando el lado izquierdo de la platforma n
         {
-            sizeTxt[j] = 60;
-        }
-        else
-        {
-            sizeTxt[j] = 40;
-        }
-    }
-
-    DrawText("OPCIONES", 450, 65, 70, WHITE);
-    DrawText("Dificultad", 510, 200, sizeTxt[0], WHITE);
-    DrawText("Sonido", 510, 350, sizeTxt[1], WHITE);
-    DrawText("Regresar", 510, 500, sizeTxt[2], WHITE);
-
-    switch (op)
-    {
-    case DIFICULTAD:
-        DrawTexture(dif, 520, -125, WHITE);
-
-        if (IsKeyPressed(KEY_LEFT))
-        {
-            if (diflvl != 0)
+            if (player.pos.y + player.pos.height <= (plat.pos.y + 30))
             {
-                diflvl--;
-                PlaySound(barras);
-            }
-        }
-        else
-        {
-            if (IsKeyPressed(KEY_RIGHT))
-            {
-                if (diflvl != 2)
+                if (player.pos.y + player.pos.height >= plat.pos.y)
                 {
-                    diflvl++;
-                    PlaySound(barras);
+                    return 1;
                 }
             }
         }
+    }
+    return 0;
+}
 
-        switch (diflvl)
+int Reposo(float &time, float &v0, int &y0, int y)
+{
+    time = 0;
+    v0 = 0;
+    y0 = y;
+    return 0;
+}
+
+int Salto(float &time, float &v0, int &y0, int y)
+{
+    time = 0;
+    y0 = y;
+    v0 = VS;
+    return 0;
+}
+
+int Posicion(int y0, float v0, float time, int g)
+{
+    return (y0 + v0 * time + (g ? GD : G) * time * time);
+}
+
+void CalculaPosEnemigo(Tave &mob)
+{
+    if (mob.right)
+    {
+        mob.pos.x -= 6;
+    }
+    else
+    {
+        if (mob.left)
         {
-        case 0:
-            DrawText("Fácil", 862, 100, 60, WHITE);
-            break;
-        case 1:
-            DrawText("Normal", 853, 100, 60, WHITE);
-            break;
-        case 2:
-            DrawText("Difícil", 856, 100, 60, WHITE);
-            break;
+            mob.pos.x += 6;
         }
+    }
+}
 
-        break;
-
-    case SONIDO:
-        DrawTexture(volumen, 485, 25, WHITE);
-
-        if (IsKeyPressed(KEY_LEFT))
+int CheckPlayerColision(Trec player, Trec mob)
+{
+    if (player.x < (mob.x + mob.width))
+    {
+        if ((player.x + player.width) > mob.x)
         {
-            if (vol != 0)
+            if (player.y < (mob.y + mob.height))
             {
-                vol--;
-                PlaySound(barras);
-            }
-        }
-        else
-        {
-            if (IsKeyPressed(KEY_RIGHT))
-            {
-                if (vol != 6)
+                if ((player.y + player.height) > mob.y)
                 {
-                    vol++;
-                    PlaySound(barras);
+                    return 1;
                 }
             }
         }
-
-        break;
-
-    case REGRESAR:
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            PlaySound(seleccion);
-            return -1;
-        }
-        break;
     }
+    return 0;
+}
+/*
+int CheckPiezaColision(Trec player,Trec mob) //duplicado para probar sin daño
+{
 
-    if (IsKeyPressed(KEY_UP))
+    if(player.x<(mob.x+mob.width))
     {
-        if (op != DIFICULTAD)
+        if((player.x+player.width)>mob.x)
         {
-            op--;
-        }
-    }
-    else
-    {
-        if (IsKeyPressed(KEY_DOWN))
-        {
-            if (op != REGRESAR)
+            if(player.y<(mob.y+mob.height))
             {
-                op++;
+                if((player.y+player.height)>mob.y)
+                {
+                    return 1;
+                }
             }
         }
     }
 
-    return op;
+    return 0;
 }
-
-int juegoMenu(Sound seleccion)
+*/
+int CheckMobColision(Trec mob, Thit hit)
 {
-    static int op = 0;
-    int sizeTxt[3], j;
-    for (j = 0; j < 3; j++)
+    if (mob.x < (hit.x + hit.width))
     {
-        if (j == op)
+        if ((mob.x + mob.width) > hit.x)
         {
-            sizeTxt[j] = 60;
-        }
-        else
-        {
-            sizeTxt[j] = 40;
-        }
-    }
-
-    DrawText("Mecánico Aritmético", 265, 65, 70, WHITE);
-    DrawText("Nueva Partida", 450, 200, sizeTxt[0], WHITE);
-    DrawText("Continuar", 450, 300, sizeTxt[1], WHITE);
-    DrawText("Regresar", 450, 400, sizeTxt[2], WHITE);
-
-    if (IsKeyPressed(KEY_UP))
-    {
-        if (op != NEWP)
-        {
-            op--;
-        }
-    }
-    else
-    {
-        if (IsKeyPressed(KEY_DOWN))
-        {
-            if (op != REGRESAR)
+            if (mob.y < (hit.y + hit.height))
             {
-                op++;
+                if ((mob.y + mob.height) > hit.y)
+                {
+                    return 1;
+                }
             }
         }
     }
-
-    if (IsKeyPressed(KEY_ENTER))
-    {
-        PlaySound(seleccion);
-        return op;
-    }
-
-    return -1;
+    return 0;
 }
 
-void juego(int diflvl)
+void DropEgg(Tave mob, Tegg &egg)
 {
+    if (!egg.status)
+    {
+        egg.time = 0;
+        egg.y0 = mob.pos.y;
+        egg.pos.y = mob.pos.y;
+        egg.pos.x = mob.pos.x + 14;
+        egg.status = 1;
+    }
+}
+
+void LimpiaEnemigos(Tave ave[], Tcar car[])
+{
+    int j;
+    for (j = 0; j < MAXAVE; j++)
+    {
+        ave[j].status = 0;
+    }
+    for (j = 0; j < MAXCAR; j++)
+    {
+        car[j].status = 0;
+    }
 }
