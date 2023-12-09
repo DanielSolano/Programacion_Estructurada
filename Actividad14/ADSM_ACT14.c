@@ -3,7 +3,6 @@
 // Uso de archivos binarios
 // ADSM_ACT14_932
 
-#define N 5000
 #define AUTO 100
 #include "junior.h"
 
