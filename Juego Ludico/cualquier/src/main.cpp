@@ -154,8 +154,11 @@ int main()
     Texture2D huevo = LoadTexture("texturas/egg.png");
     Rectangle framesHuevo = {0.0f, 0.0f, (float)huevo.width, (float)huevo.height};
 
-    Texture2D carro = LoadTexture("texturas/carrito.png");
+    Texture2D carro = LoadTexture("texturas/Ranger.png");
     Rectangle framesCarro = {0.0f, 0.0f, (float)carro.width, (float)carro.height};
+
+    Texture2D carro2 = LoadTexture("texturas/Ranger.png");
+    Rectangle framesCarro2 = {0.0f, 0.0f, (float)carro2.width, (float)carro2.height};
 
     Texture2D caminar = LoadTexture("texturas/Cyborg_run.png");
     Rectangle framesCaminar = {0.0f, 0.0f, (float)caminar.width / 6, (float)caminar.height};
@@ -183,6 +186,23 @@ int main()
 
     Texture2D ground = LoadTexture("texturas/ground.png");
     Rectangle frameGround = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
+
+    Texture2D back = LoadTexture("texturas/back1.png");
+    Texture2D middle = LoadTexture("texturas/middle.png");
+    Texture2D front = LoadTexture("texturas/front.png");
+
+    Texture2D plataforma = LoadTexture("texturas/plataforma1.png");
+
+    Texture2D piezas[3];
+    Rectangle framePiezas[3] = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
+
+    piezas[0] = LoadTexture("texturas/pieza1.png");
+    piezas[1] = LoadTexture("texturas/pieza2.png");
+    piezas[3] = LoadTexture("texturas/pieza3.png");
+
+    framePiezas[0] = {0.0f, 0.0f, (float)piezas[0].width, (float)piezas[0].height};
+    framePiezas[1] = {0.0f, 0.0f, (float)piezas[1].width, (float)piezas[1].height};
+    framePiezas[2] = {0.0f, 0.0f, (float)piezas[2].width, (float)piezas[2].height};
 
     // ************************************************ SONIDOS ********************************************************************
 
@@ -285,8 +305,8 @@ int main()
     for (j = 0; j < MAXCAR; j++)
     {
         car[j].status = 0;
-        car[j].pos.height = 90 + 50;
-        car[j].pos.width = 200 + 150;
+        car[j].pos.height = 140;
+        car[j].pos.width = 315;
         car[j].pos.x = 0;
         car[j].pos.y = 800;
         car[j].movimiento = 0;
@@ -304,6 +324,8 @@ int main()
     camara.rotation = 0;
     camara.zoom = 1;
 
+    float posicion = player.pos.x;
+
     while (!WindowShouldClose())
     {
 
@@ -312,14 +334,28 @@ int main()
         frameC++;
         player.timeDash++;
         // **************************************************** DIBUJO *******************************************************
-
         BeginDrawing();
 
         BeginMode2D(camara);
 
-        DrawTexture(background, 0, 0, WHITE);
+        ClearBackground(LIGHTGRAY);
 
-        ClearBackground(DARKBLUE);
+        float ancho = 700;
+        for (int x = 0; x < 8; x++)
+        {
+
+            DrawTextureEx(back, Vector2{ancho, 0}, 0, 1, WHITE);
+            DrawTextureEx(middle, Vector2{ancho, 0}, 0, 1, WHITE);
+            DrawTextureEx(front, Vector2{ancho, 0}, 0, 1, WHITE);
+            ancho -= back.width;
+        }
+
+        float piso = 2000;
+        for (int x = 0; x < 2000; x++)
+        {
+            DrawTextureEx(ground, Vector2{piso, SUELO}, 0, 1, WHITE);
+            piso -= ground.width;
+        }
         //****************************************************** PIEZAS **********************************************************************
         for (j = 0; j < 3; j++)
         {
@@ -399,6 +435,7 @@ int main()
                         ave[j].status = 0;
                     }
                 }
+
                 // Colision con jugador
                 if (ave[j].status)
                 {
@@ -522,6 +559,8 @@ int main()
                 {
                     if (CheckPlayerColision(player.pos, car[j].pos))
                     {
+                        PlaySound(dolor);
+                        DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
                         player.pos.x = 400;   // Posicion incial
                         player.pos.y = SUELO; //""
                         player.y0 = player.pos.y;
@@ -873,8 +912,6 @@ int main()
             framesReposoizq.x = (float)currentFrame * (float)reposoizq.width / 4;
         }
 
-        DrawRectangle(player.pos.x, player.pos.y, player.pos.width, player.pos.height, BLACK);
-
         if (player.fall)
         {
             framesSalto++;
@@ -941,17 +978,12 @@ int main()
                 }
             }
         }
-        // suelo
-        DrawTextureRec(ground, frameGround, Vector2{player.pos.x, SUELO}, WHITE);
-        // DrawRectangle(player.pos.x - 610, SUELO, 1280, 70, DARKGREEN);
         // plataformas
         for (j = 0; j < platc; j++)
         {
-            // if(plat[j].status)
-            {
-                DrawRectangleRec(plat[j].pos, DARKGREEN);
-            }
+            DrawTexture(plataforma, plat[j].pos.x, plat[j].pos.y, WHITE);
         }
+
         // enemigos
         for (j = 0; j < MAXAVE; j++)
         {
@@ -979,6 +1011,7 @@ int main()
         {
             if (car[j].status)
             {
+                // DrawRectangle(car[j].pos.x,car[j].pos.y, car[j].pos.width, car[j].pos.y, RED);
                 DrawTextureRec(carro, framesCarro, Vector2{car[j].pos.x, car[j].pos.y}, WHITE);
             }
         }
@@ -987,7 +1020,7 @@ int main()
         {
             if (pieza[j].status)
             {
-                DrawRectangleRec(pieza[j].pos, ORANGE);
+                DrawTextureRec(piezas[j], framePiezas[j], Vector2{pieza[j].pos.x,pieza[j].pos.y}, WHITE);
             }
         }
         // golpe
@@ -995,19 +1028,26 @@ int main()
         {
             DrawRectangleRec(hithit, RED);
         }
-
         EndMode2D();
         EndDrawing();
     }
 
     UnloadSound(dolor);
-    UnloadTexture(danio);
+    UnloadTexture(back);
+    UnloadTexture(front);
+    UnloadTexture(middle);
+    UnloadTexture(ground);
+    UnloadTexture(carro);
+    UnloadTexture(plataforma);
+    UnloadTexture(saltoder);
+    UnloadTexture(salto);
+    UnloadTexture(pajaroizq);
     UnloadTexture(caminar);
     UnloadTexture(caminarizq);
     UnloadTexture(reposoizq);
     UnloadTexture(huevo);
     UnloadTexture(pajaro);
-    // CloseAudioDevice();
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
