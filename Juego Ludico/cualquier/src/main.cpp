@@ -193,12 +193,15 @@ int main()
 
     Texture2D plataforma = LoadTexture("texturas/plataforma1.png");
 
+    Texture2D escudo = LoadTexture("texturas/escudo.png");
+    Rectangle frameEscudo = {0.0f, 0.0f, (float)escudo.width, (float)escudo.height};
+
     Texture2D piezas[3];
     Rectangle framePiezas[3] = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
 
     piezas[0] = LoadTexture("texturas/pieza1.png");
     piezas[1] = LoadTexture("texturas/pieza2.png");
-    piezas[3] = LoadTexture("texturas/pieza3.png");
+    piezas[2] = LoadTexture("texturas/pieza3.png");
 
     framePiezas[0] = {0.0f, 0.0f, (float)piezas[0].width, (float)piezas[0].height};
     framePiezas[1] = {0.0f, 0.0f, (float)piezas[1].width, (float)piezas[1].height};
@@ -209,6 +212,18 @@ int main()
     InitAudioDevice();
 
     Sound dolor = LoadSound("sonidos/danio.wav");
+    Sound brinco = LoadSound("sonidos/salto.mp3");
+    Sound paso = LoadSound("sonidos/paso1.wav");
+    Sound pajarin = LoadSound("sonidos/pajaro.wav");
+    Sound agarrar = LoadSound("sonidos/pieza.wav");
+    Sound carrillo = LoadSound("sonidos/carrillo2.wav");
+    Music nivel2 = LoadMusicStream("sonidos/nivel2_musica.mp3");
+    Sound sdash = LoadSound("sonidos/dash.mp3");
+    SetSoundVolume(brinco, -0.15f);
+    SetSoundVolume(pajarin, -0.5f);
+    SetMusicVolume(nivel2, -0.5f);
+    SetSoundVolume(carrillo, -0.1f);
+    SetSoundVolume(sdash, +15);
 
     // Inicializacion ***************************************************************************************
     // Inicializacion Plataformas
@@ -252,18 +267,20 @@ int main()
     random = (platc) / 3;
     for (j = 0; j < 3; j++)
     {
+
         pieza[j].status = 1;
-        pieza[j].pos.height = 80;
-        pieza[j].pos.width = 50;
+        pieza[j].pos.height = piezas[j].width;
+        pieza[j].pos.width = piezas[j].height;
         pieza[j].status = 1;
+
         if (j == 0)
         {
-            pieza[j].pos.y = plat[platc - 1].pos.y - pieza[j].pos.height;
+            pieza[j].pos.y = plat[platc - 1].pos.y - pieza[j].pos.height - 20;
             pieza[j].pos.x = plat[platc - 1].pos.x + plat[platc].pos.width / 2;
         }
         else
         {
-            pieza[j].pos.y = plat[platc - random * j].pos.y - pieza[j].pos.height;
+            pieza[j].pos.y = plat[platc - random * j].pos.y - pieza[j].pos.height - 20;
             pieza[j].pos.x = plat[platc - random * j].pos.x + plat[platc - random * j].pos.width / 2;
         }
     }
@@ -339,7 +356,6 @@ int main()
         BeginMode2D(camara);
 
         ClearBackground(LIGHTGRAY);
-
         float ancho = 700;
         for (int x = 0; x < 8; x++)
         {
@@ -363,20 +379,23 @@ int main()
             {
                 if (pieza[j].pos.x < 0)
                 {
+                    if ((pieza[j].pos.x == player.pos.x) && (pieza[j].pos.y == player.pos.y))
+                        PlaySound(agarrar);
                     pieza[j].status = 0;
-                    pieza[j].pos.y = SUELO - pieza[j].pos.height;
-                    pieza[j].pos.x = 900;
                     piezac++;
                     switch (piezac)
                     {
                     case 1:
-                        pieza[j].pos.x = 900;
+                        pieza[j].pos.x = 1200;
+                        pieza[j].pos.y = SUELO - 160;
                         break;
                     case 2:
-                        pieza[j].pos.x = 950;
+                        pieza[j].pos.x = 1314;
+                        pieza[j].pos.y = SUELO - 159;
                         break;
                     case 3:
-                        pieza[j].pos.x = 1000;
+                        pieza[j].pos.x = 1408.5;
+                        pieza[j].pos.y = SUELO - 115;
                         break;
                     }
                 }
@@ -465,6 +484,7 @@ int main()
                         ave[j].pos.x = player.pos.x + 610 + player.pos.width;
                         ave[j].pos.y = (rand() % 90) + 1;
                         ave[j].left = 0;
+                        PlaySound(pajarin);
                     }
                     else
                     {
@@ -472,6 +492,7 @@ int main()
                         ave[j].pos.x = player.pos.x - 610;
                         ave[j].pos.y = (rand() % 101) + 1;
                         ave[j].left = 1;
+                        PlaySound(pajarin);
                     }
                 }
             }
@@ -580,6 +601,7 @@ int main()
                     car[j].movimiento = 1;
                     car[j].pos.x = player.pos.x - 610 - car[j].pos.width;
                     car[j].pos.y = SUELO - car[j].pos.height;
+                    PlaySound(carrillo);
                 }
             }
         }
@@ -711,6 +733,7 @@ int main()
         //** dash ********************************************************************************************************************************
         if (dash)
         {
+            PlaySound(sdash);
             if (player.timeDash < 20)
             {
                 if (lookR)
@@ -788,11 +811,13 @@ int main()
             {
                 if (player.jump)
                 {
+                    PlaySound(brinco);
                     Reposo(time, player.v0, player.y0, player.pos.y);
                     Salto(time, player.v0, player.y0, player.pos.y);
                     player.fall = 1;
                     if (player.jumpjump) //! doblesalto
                     {
+                        PlaySound(brinco);
                         player.jump = 1;
                         player.jumpjump = 0;
                     }
@@ -946,7 +971,10 @@ int main()
                     currentPersonaje++;
 
                     if (currentPersonaje > 5)
+                    {
                         currentPersonaje = 0;
+                        PlaySound(paso);
+                    }
                     framesCaminar.x = (float)currentPersonaje * (float)caminar.width / 6;
                 }
                 DrawTextureRec(caminar, framesCaminar, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
@@ -960,7 +988,10 @@ int main()
                     currentPersonaje++;
 
                     if (currentPersonaje > 5)
+                    {
                         currentPersonaje = 0;
+                        PlaySound(paso);
+                    }
                     framesCaminarizq.x = (float)currentPersonaje * (float)caminarizq.width / 6;
                 }
                 DrawTextureRec(caminarizq, framesCaminarizq, Vector2{player.pos.x - 80, player.pos.y - 60}, WHITE);
@@ -985,8 +1016,10 @@ int main()
         }
 
         // enemigos
+
         for (j = 0; j < MAXAVE; j++)
         {
+
             if (ave[j].status)
             {
                 if (ave[j].left)
@@ -1011,7 +1044,6 @@ int main()
         {
             if (car[j].status)
             {
-                // DrawRectangle(car[j].pos.x,car[j].pos.y, car[j].pos.width, car[j].pos.y, RED);
                 DrawTextureRec(carro, framesCarro, Vector2{car[j].pos.x, car[j].pos.y}, WHITE);
             }
         }
@@ -1020,14 +1052,23 @@ int main()
         {
             if (pieza[j].status)
             {
-                DrawTextureRec(piezas[j], framePiezas[j], Vector2{pieza[j].pos.x,pieza[j].pos.y}, WHITE);
+                DrawTextureRec(piezas[j], framePiezas[j], Vector2{pieza[j].pos.x, pieza[j].pos.y}, WHITE);
             }
         }
-        // golpe
         if (hit)
         {
-            DrawRectangleRec(hithit, RED);
+            if (lookR)
+            {
+                DrawTextureRec(escudo, frameEscudo, {hithit.x + 10, hithit.y + 7}, WHITE);
+            }
+            else
+            {
+                DrawTextureRec(escudo, frameEscudo, {hithit.x - 15, hithit.y + 7}, WHITE);
+            }
         }
+        PlayMusicStream(nivel2);
+        UpdateMusicStream(nivel2);
+
         EndMode2D();
         EndDrawing();
     }
