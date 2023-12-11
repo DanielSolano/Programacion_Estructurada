@@ -196,6 +196,9 @@ int main()
     Texture2D escudo = LoadTexture("texturas/escudo.png");
     Rectangle frameEscudo = {0.0f, 0.0f, (float)escudo.width, (float)escudo.height};
 
+    Texture2D escudoh = LoadTexture("texturas/escudoh.png");
+    Rectangle frameEscudoh = {0.0f, 0.0f, (float)escudoh.width, (float)escudoh.height};
+
     Texture2D piezas[3];
     Rectangle framePiezas[3] = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
 
@@ -222,7 +225,7 @@ int main()
     SetSoundVolume(brinco, -0.15f);
     SetSoundVolume(pajarin, -0.5f);
     SetMusicVolume(nivel2, -0.5f);
-    SetSoundVolume(carrillo, -0.1f);
+    SetSoundVolume(carrillo, -0.2f);
     SetSoundVolume(sdash, +15);
 
     // Inicializacion ***************************************************************************************
@@ -1009,6 +1012,7 @@ int main()
                 }
             }
         }
+
         // plataformas
         for (j = 0; j < platc; j++)
         {
@@ -1059,11 +1063,29 @@ int main()
         {
             if (lookR)
             {
-                DrawTextureRec(escudo, frameEscudo, {hithit.x + 10, hithit.y + 7}, WHITE);
+                if (lookDown || lookUp)
+                {
+                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y + 7}, WHITE);
+                }
+                else
+                {
+                    DrawTextureRec(escudo, frameEscudo, {hithit.x + 25, hithit.y + 7}, WHITE);
+                }
             }
-            else
+            if (lookL)
             {
-                DrawTextureRec(escudo, frameEscudo, {hithit.x - 15, hithit.y + 7}, WHITE);
+                if (lookUp)
+                {
+                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y - 7}, WHITE);
+                }
+                else if (lookDown)
+                {
+                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y  + 7}, WHITE);
+                }
+                else
+                {
+                    DrawTextureRec(escudo, frameEscudo, {hithit.x - 15, hithit.y + 7}, WHITE);
+                }
             }
         }
         PlayMusicStream(nivel2);
