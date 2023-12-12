@@ -532,7 +532,7 @@ int juegoMenu(Sound seleccion)
 
     fondo[0] = {500, 293, 200, 50};
     DrawRectangleRec(fondo[0], GetColor(0x03D1339));
-    DrawText(mensajes[0], 420, 300, 40, WHITE);
+    DrawText(mensajes[0], 423, 300, 40, WHITE);
 
     fondo[1] = {500, 440, 200, 50};
     DrawRectangleRec(fondo[1], GetColor(0x03D1339));
@@ -545,7 +545,7 @@ int juegoMenu(Sound seleccion)
             DrawRectangleRec(fondo[j], GetColor(0x0CB4C11));
             if (j == 0)
             {
-                DrawText(mensajes[0], 420, 300, 40, WHITE);
+                DrawText(mensajes[0], 423, 300, 40, WHITE);
             }
             if (j == 1)
             {
@@ -557,7 +557,7 @@ int juegoMenu(Sound seleccion)
             DrawRectangleRec(fondo[j], GetColor(0x03D1339));
             if (j == 0)
             {
-                DrawText(mensajes[0], 420, 300, 40, WHITE);
+                DrawText(mensajes[0], 423, 300, 40, WHITE);
             }
             if (j == 1)
             {
