@@ -187,6 +187,33 @@ int main()
     int currentFrame = 0;
     int currentPersonaje = 0;
 
+    int framesAtaque = 0;
+    int currentAtaque = 0;
+
+    // ********************************** TEXTURAS **************************************************
+    Texture2D tortuga = LoadTexture("texturas/tortuga_der1.png");
+    Rectangle framesTortuga = {0.0f, 0.0f, (float)tortuga.width / 6, (float)tortuga.height};
+
+    Texture2D tortugaizq = LoadTexture("texturas/tortuga_izq.png");
+    Rectangle framesTortugaizq = {0.0f, 0.0f, (float)tortugaizq.width / 6, (float)tortugaizq.height};
+
+    Texture2D anguila = LoadTexture("texturas/anguila.png");
+    Rectangle framesAnguila = {0.0f, 0.0f, (float)anguila.width / 6, (float)anguila.height};
+
+    Texture2D anguilaizq = LoadTexture("texturas/anguila_izq.png");
+    Rectangle framesAnguilaizq = {0.0f, 0.0f, (float)anguilaizq.width / 6, (float)anguilaizq.height};
+
+    Texture2D ataque_anizq = LoadTexture("texturas/ataqueizq.png");
+    Rectangle framesAtaque_anizq = {0.0f, 0.0f, (float)ataque_anizq.width / 6, (float)ataque_anizq.height};
+
+    Texture2D ataque_ani = LoadTexture("texturas/ataqueizq.png");
+    Rectangle framesAtaque_ani = {0.0f, 0.0f, (float)ataque_ani.width / 6, (float)ataque_ani.height};
+
+    Texture2D pulpo = LoadTexture("texturas/pulpo.png");
+    Rectangle framesPulpo = {0.0f, 0.0f, (float)pulpo.width / 6, (float)pulpo.height};
+
+    Texture2D pulpoizq = LoadTexture("texturas/pulpoizq.png");
+    Rectangle framesPulpoizq = {0.0f, 0.0f, (float)pulpoizq.width / 6, (float)pulpoizq.height};
     //** proyectil ************************************************************************************************************************
     Thit hit[MAXHIT];
     for (i = 0; i < MAXHIT; i++)
@@ -236,21 +263,23 @@ int main()
         shark[i].left = 0;
         shark[i].pos.x = 2000;
         shark[i].pos.y = 800;
-        shark[i].pos.height = 60;
+        shark[i].pos.height = 100;
         shark[i].pos.width = 120;
     }
 
     Ttortu tort[MAXTORTUGA];
-    for (i = 0; i < MAXSHARK; i++)
+    for (i = 0; i < MAXTORTUGA; i++)
     {
         tort[i].status = 0;
-        tort[i].right = 0;
-        tort[i].left = 0;
         tort[i].pos.x = 2000;
         tort[i].pos.y = 800;
-        tort[i].pos.height = 60;
-        tort[i].pos.width = 80;
+        tort[i].pos.height = tortuga.height - 100;
+        tort[i].pos.width = (tortuga.width / 6) - 40;
     }
+    tort[0].left = 1;
+    tort[0].right = 0;
+    tort[1].right = 1;
+    tort[1].left = 0;
 
     Tangui ang[MAXANGUILA];
     for (i = 0; i < MAXANGUILA; i++)
@@ -260,8 +289,8 @@ int main()
         ang[i].left = 0;
         ang[i].pos.x = 2000;
         ang[i].pos.y = 800;
-        ang[i].pos.height = 20;
-        ang[i].pos.width = 85;
+        ang[i].pos.height = anguila.height - 65;
+        ang[i].pos.width = (anguila.width / 6) - 20;
         ang[i].hit.pos.height = ang[0].pos.height * 3;
         ang[i].hit.pos.width = ang[0].pos.width * 1.5;
         ang[i].hit.pos.y = 800;
@@ -278,13 +307,6 @@ int main()
     camara.offset.y = 0;
     camara.rotation = 0;
     camara.zoom = 1;
-
-    // ********************************** TEXTURAS **************************************************
-    Texture2D tortuga = LoadTexture("texturas/tortuga_der.png");
-    Rectangle framesTortuga = {0.0f, 0.0f, (float)tortuga.width / 6, (float)tortuga.height};
-
-    Texture2D tortugaizq = LoadTexture("texturas/tortuga_izq.png");
-    Rectangle framesTortugaizq = {0.0f, 0.0f, (float)tortugaizq.width / 6, (float)tortugaizq.height};
 
     while (!WindowShouldClose())
     {
@@ -647,20 +669,17 @@ int main()
                     random = (rand() % 100) + 1;
                     if (random == 1)
                     {
-                        tort[i].right = rand() % 2;
                         if (tort[i].right)
                         {
                             tort[i].status = 1;
                             tort[i].pos.x = RANCHO;
                             tort[i].pos.y = (rand() % 550) + 50;
-                            tort[i].left = 0;
                         }
                         else
                         {
                             tort[i].status = 1;
                             tort[i].pos.x = 0 - tort[i].pos.width;
                             tort[i].pos.y = (rand() % 550) + 50;
-                            tort[i].left = 1;
                         }
                     }
                 }
@@ -1058,6 +1077,10 @@ int main()
                 currentFrame = 0;
             framesTortuga.x = (float)currentFrame * (float)tortuga.width / 6;
             framesTortugaizq.x = (float)currentFrame * (float)tortugaizq.width / 6;
+            framesAnguila.x = (float)currentFrame * (float)anguila.width / 6;
+            framesAnguilaizq.x = (float)currentFrame * (float)anguilaizq.width / 6;
+            framesPulpo.x = (float)currentFrame * (float)pulpo.width / 6;
+            framesPulpoizq.x = (float)currentFrame * (float)pulpoizq.width / 6;
         }
 
         for (i = 0; i < MAXHIT; i++)
@@ -1082,35 +1105,87 @@ int main()
         {
             if (shark[i].status)
             {
-                DrawRectangleRec(shark[i].pos, GRAY);
+                if (shark[i].right)
+                {
+                    //DrawRectangleRec(shark[i].pos, RED);
+                    DrawTextureRec(pulpoizq, framesPulpoizq, Vector2{shark[i].pos.x - 25, shark[i].pos.y - 20}, WHITE);
+                }
+
+                if (shark[i].left)
+                {
+                    //DrawRectangleRec(shark[i].pos, RED);
+                    DrawTextureRec(pulpo, framesPulpo, Vector2{shark[i].pos.x + 13, shark[i].pos.y - 20}, WHITE);
+                }
             }
         }
+
         for (i = 0; i < MAXTORTUGA; i++)
         {
             if (tort[i].status)
             {
-                if (tort[j].right)
+                if (tort[i].right)
                 {
-                    printf("%d", tort[j].left);
-                    DrawTextureRec(tortugaizq, framesTortugaizq, Vector2{tort[i].pos.x, tort[i].pos.y}, WHITE);
+                    DrawTextureRec(tortugaizq, framesTortugaizq, Vector2{tort[i].pos.x - 15, tort[i].pos.y - 50}, WHITE);
                 }
-                else
+
+                if (tort[i].left)
                 {
-                    printf("%d", tort[j].left);
-                    if (tort[j].left)
-                        DrawTextureRec(tortuga, framesTortuga, Vector2{tort[i].pos.x, tort[i].pos.y}, WHITE);
+                    DrawTextureRec(tortuga, framesTortuga, Vector2{tort[i].pos.x - 15, tort[i].pos.y - 50}, WHITE);
                 }
             }
         }
+
         for (i = 0; i < MAXANGUILA; i++)
         {
             if (ang[i].status)
             {
-                if (ang[i].hit.status)
+                if (!ang[i].hit.status)
                 {
-                    DrawRectangleRec(ang[i].hit.pos, YELLOW);
+                    if (ang[i].left)
+                    {
+                        // DrawRectangleRec(ang[i].pos, RED);
+                        DrawTextureRec(anguila, framesAnguila, Vector2{ang[i].pos.x - 5, ang[i].pos.y - 33}, WHITE);
+                    }
+                    if (ang[i].right)
+                    {
+                        // DrawRectangleRec(ang[i].pos, RED);
+                        DrawTextureRec(anguilaizq, framesAnguilaizq, Vector2{ang[i].pos.x - 12, ang[i].pos.y - 33}, WHITE);
+                    }
                 }
-                DrawRectangleRec(ang[i].pos, DARKGRAY);
+                else
+                {
+
+                    if (ang[i].left)
+                    {
+                        framesAtaque++;
+                        if (framesAtaque >= (60 / framesSpeed))
+                        {
+                            framesAtaque = 0;
+                            currentAtaque++;
+
+                            if (currentAtaque > 6)
+                                currentAtaque = 0;
+                            framesAtaque_ani.x = (float)currentAtaque * (float)ataque_ani.width / 6;
+                            framesAtaque_anizq.x = (float)currentAtaque * (float)ataque_anizq.width / 6;
+                        }
+                        DrawTextureRec(ataque_ani, framesAtaque_ani, Vector2{ang[i].hit.pos.x - 12, ang[i].pos.y - 33}, WHITE);
+                    }
+                    if (ang[i].right)
+                    {
+                        framesAtaque++;
+                        if (framesAtaque >= (60 / framesSpeed))
+                        {
+                            framesAtaque = 0;
+                            currentAtaque++;
+
+                            if (currentAtaque > 6)
+                                currentAtaque = 0;
+                            framesAtaque_ani.x = (float)currentAtaque * (float)ataque_ani.width / 6;
+                            framesAtaque_anizq.x = (float)currentAtaque * (float)ataque_anizq.width / 6;
+                        }
+                        DrawTextureRec(ataque_anizq, framesAtaque_anizq, Vector2{ang[i].hit.pos.x - 12, ang[i].pos.y - 33}, WHITE);
+                    }
+                }
             }
         }
         // piezas
