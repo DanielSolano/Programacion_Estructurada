@@ -274,7 +274,7 @@ int main()
 
     SetSoundVolume(disparo_nv1, -0.1f);
     SetSoundVolume(sdash, +10.0f);
-    SetMusicVolume(musica_nv1, -1.5f);
+    SetMusicVolume(musica_nv1, -1.2f);
 
     //** proyectil ************************************************************************************************************************
     Thit hit[MAXHIT];
@@ -823,7 +823,6 @@ int main()
                         {
                             if (ang[i].hit.status)
                             {
-                                PlaySound(anguilasound);
                                 if (ang[i].hit.time < 120)
                                 {
                                     ang[i].hit.pos.y = ang[i].pos.y - ang[i].pos.height;
@@ -835,11 +834,13 @@ int main()
                                     {
                                         if (CheckPlayerColision(player.pos, ang[i].hit.pos))
                                         {
+                                            PlaySound(anguilasound);
                                             if (player.vida.num < 1)
                                             {
                                                 piezac = 0;
                                                 time = 0;
                                                 muerteLvl1(player, shark, tort, ang, pieza, plat);
+                                                PlaySound(anguilasound);
                                             }
                                             else
                                             {
@@ -1342,7 +1343,7 @@ int main()
                     }
                 }
                 else
-                {   
+                {
                     if (ang[i].left)
                     {
                         framesAtaque++;
@@ -1356,6 +1357,7 @@ int main()
                             framesAtaque_ani.x = (float)currentAtaque * (float)ataque_ani.width / 6;
                             framesAtaque_anizq.x = (float)currentAtaque * (float)ataque_anizq.width / 6;
                         }
+                        PlaySound(anguilasound);
                         DrawTextureRec(ataque_ani, framesAtaque_ani, Vector2{ang[i].hit.pos.x - 12, ang[i].pos.y - 33}, WHITE);
                     }
                     if (ang[i].right)
