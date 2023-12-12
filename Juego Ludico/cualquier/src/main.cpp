@@ -78,10 +78,10 @@ int main(void)
         {
         menu:
             scrollingBack -= 0.01f;
-            scrollingBigPlanet -= 0.25f;
-            scrollingFarPlanet -= 0.5f;
-            scrollingRingPlanet -= 0.55f;
-            scrollingSpaceStar -= 0.1;
+            scrollingBigPlanet -= 0.025f;
+            scrollingFarPlanet -= 0.05f;
+            scrollingRingPlanet -= 0.055f;
+            scrollingSpaceStar -= 0.01;
 
             if (scrollingBack <= -back.height)
                 scrollingBack = 0;
@@ -125,10 +125,10 @@ int main(void)
                 BeginDrawing();
                 UpdateMusicStream(musica_menu);
                 scrollingBack -= 0.01f;
-                scrollingBigPlanet -= 0.25f;
-                scrollingFarPlanet -= 0.5f;
-                scrollingRingPlanet -= 0.55f;
-                scrollingSpaceStar -= 0.1;
+                scrollingBigPlanet -= 0.025f;
+                scrollingFarPlanet -= 0.05f;
+                scrollingRingPlanet -= 0.055f;
+                scrollingSpaceStar -= 0.01;
 
                 if (scrollingBack <= -back.height)
                     scrollingBack = 0;
@@ -186,10 +186,10 @@ int main(void)
                 BeginDrawing();
                 UpdateMusicStream(musica_menu);
                 scrollingBack -= 0.01f;
-                scrollingBigPlanet -= 0.25f;
-                scrollingFarPlanet -= 0.5f;
-                scrollingRingPlanet -= 0.55f;
-                scrollingSpaceStar -= 0.1;
+                scrollingBigPlanet -= 0.025f;
+                scrollingFarPlanet -= 0.05f;
+                scrollingRingPlanet -= 0.055f;
+                scrollingSpaceStar -= 0.01;
 
                 if (scrollingBack <= -back.height)
                     scrollingBack = 0;
@@ -272,30 +272,31 @@ int mainMenu(Sound seleccion)
     static int op = 0;
     int sizeTxt[3], j;
     int fontSize[2] = {70, 40};
+
     char mensajes[4][30] = {"JUGAR", "OPCIONES", "SALIR", "MECANICO ARITMETICO"};
     Rectangle fondo[4];
 
     fondo[3] = {170, 45, 927, 90};
-    DrawRectangleRec(fondo[3], LIGHTGRAY);
+    DrawRectangleRec(fondo[3], GetColor(0x03D1339));
     DrawText(mensajes[3], 200, 55, 70, WHITE);
 
     fondo[0] = {500, 293, 200, 50};
-    DrawRectangleRec(fondo[0], BLACK);
+    DrawRectangleRec(fondo[0], GetColor(0x03D1339));
     DrawText(mensajes[0], 535, 300, 40, WHITE);
 
     fondo[1] = {500, 440, 200, 50};
-    DrawRectangleRec(fondo[1], BLACK);
+    DrawRectangleRec(fondo[1], GetColor(0x03D1339));
     DrawText(mensajes[1], 507, 450, 37, WHITE);
 
     fondo[2] = {500, 590, 200, 50};
-    DrawRectangleRec(fondo[2], BLACK);
+    DrawRectangleRec(fondo[2], GetColor(0x03D1339));
     DrawText(mensajes[2], 535, 598, 40, WHITE);
 
     for (j = 0; j < 3; j++)
     {
         if (j == op)
         {
-            DrawRectangleRec(fondo[j], LIME);
+            DrawRectangleRec(fondo[j], GetColor(0x0CB4C11));
             if (j == 0)
             {
                 DrawText(mensajes[0], 535, 300, 40, WHITE);
@@ -311,7 +312,7 @@ int mainMenu(Sound seleccion)
         }
         else
         {
-            DrawRectangleRec(fondo[j], BLACK);
+            DrawRectangleRec(fondo[j], GetColor(0x03D1339));
             if (j == 0)
             {
                 DrawText(mensajes[0], 535, 300, 40, WHITE);
@@ -370,15 +371,65 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
         }
     }
 
-    DrawText("OPCIONES", 450, 65, 70, WHITE);
-    DrawText("DIFICULTAD", 510, 200, sizeTxt[0], WHITE);
-    DrawText("SONIDO", 510, 350, sizeTxt[1], WHITE);
-    DrawText("REGRESAR", 510, 500, sizeTxt[2], WHITE);
+    char mensajes[4][30] = {"DIFICULTAD", "SONIDO", "REGRESAR", "OPCIONES"};
+    Rectangle fondo[4];
+
+    fondo[3] = {170, 45, 927, 90};
+    DrawRectangleRec(fondo[3], GetColor(0x03D1339));
+    DrawText(mensajes[3], 432, 55, 70, WHITE);
+
+    fondo[0] = {500, 293, 200, 50};
+    DrawRectangleRec(fondo[0], GetColor(0x03D1339));
+    DrawText(mensajes[0], 476, 300, 40, WHITE);
+
+    fondo[1] = {500, 440, 200, 50};
+    DrawRectangleRec(fondo[1], GetColor(0x03D1339));
+    DrawText(mensajes[1], 529, 450, 37, WHITE);
+
+    fondo[2] = {500, 590, 200, 50};
+    DrawRectangleRec(fondo[2], GetColor(0x03D1339));
+    DrawText(mensajes[2], 490, 598, 40, WHITE);
+
+    for (j = 0; j < 3; j++)
+    {
+        if (j == op)
+        {
+            DrawRectangleRec(fondo[j], GetColor(0x0CB4C11));
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 476, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 529, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 490, 598, 40, WHITE);
+            }
+        }
+        else
+        {
+            DrawRectangleRec(fondo[j], GetColor(0x03D1339));
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 476, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 529, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 490, 598, 40, WHITE);
+            }
+        }
+    }
 
     switch (op)
     {
     case DIFICULTAD:
-        DrawTexture(dif, 520, -125, WHITE);
+        DrawTexture(dif, 520, -125 + 100, WHITE);
 
         if (IsKeyPressed(KEY_LEFT))
         {
@@ -403,20 +454,20 @@ int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound selecc
         switch (diflvl)
         {
         case 0:
-            DrawText("FACIL", 862, 100, 60, WHITE);
+            DrawText("FACIL", 862, 100 + 150, 40, WHITE);
             break;
         case 1:
-            DrawText("NORMAL", 853, 100, 60, WHITE);
+            DrawText("NORMAL", 853, 100 + 150, 40, WHITE);
             break;
         case 2:
-            DrawText("DIFICL", 856, 100, 60, WHITE);
+            DrawText("DIFICL", 856, 100 + 150, 40, WHITE);
             break;
         }
 
         break;
 
     case SONIDO:
-        DrawTexture(volumen, 485, 25, WHITE);
+        DrawTexture(volumen, 485, 25 + 100, WHITE);
 
         if (IsKeyPressed(KEY_LEFT))
         {
@@ -486,11 +537,60 @@ int juegoMenu(Sound seleccion)
         }
     }
 
-    DrawText("MECANICO ARITMETICO", 265, 65, 70, WHITE);
-    DrawText("NUEVA PARTIDA", 450, 200, sizeTxt[0], WHITE);
-    DrawText("CONTINUAR", 450, 300, sizeTxt[1], WHITE);
-    DrawText("REGRESAR", 450, 400, sizeTxt[2], WHITE);
+    char mensajes[4][30] = {"NUEVA PARTIDA", "CONTINUAR", "REGRESAR", "MECANICO ARITMETICO"};
+    Rectangle fondo[4];
 
+    fondo[3] = {170, 45, 927, 90};
+    DrawRectangleRec(fondo[3], GetColor(0x03D1339));
+    DrawText(mensajes[3], 200, 55, 70, WHITE);
+
+    fondo[0] = {500, 293, 200, 50};
+    DrawRectangleRec(fondo[0], GetColor(0x03D1339));
+    DrawText(mensajes[0], 420, 300, 40, WHITE);
+
+    fondo[1] = {500, 440, 200, 50};
+    DrawRectangleRec(fondo[1], GetColor(0x03D1339));
+    DrawText(mensajes[1], 490, 450, 37, WHITE);
+
+    fondo[2] = {500, 590, 200, 50};
+    DrawRectangleRec(fondo[2], GetColor(0x03D1339));
+    DrawText(mensajes[2], 490, 598, 40, WHITE);
+
+    for (j = 0; j < 3; j++)
+    {
+        if (j == op)
+        {
+            DrawRectangleRec(fondo[j], GetColor(0x0CB4C11));
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 420, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 495, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 490, 598, 40, WHITE);
+            }
+        }
+        else
+        {
+            DrawRectangleRec(fondo[j], GetColor(0x03D1339));
+            if (j == 0)
+            {
+                DrawText(mensajes[0], 420, 300, 40, WHITE);
+            }
+            if (j == 1)
+            {
+                DrawText(mensajes[1], 490, 450, 37, WHITE);
+            }
+            if (j == 2)
+            {
+                DrawText(mensajes[2], 490, 598, 40, WHITE);
+            }
+        }
+    }
     if (IsKeyPressed(KEY_UP))
     {
         if (op != NEWP)
