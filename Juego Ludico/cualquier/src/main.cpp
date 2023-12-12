@@ -18,7 +18,7 @@
 #define REGRESAR 2
 
 #define NEWP 0
-#define CONTINUAR 1
+#define SALIRJ 1
 
 int mainMenu(Sound seleccion);
 int opMenu(int &vol, int &diflvl, Texture2D volumen, Texture2D dif, Sound seleccion, Sound barras);
@@ -167,9 +167,6 @@ int main(void)
             {
             case NEWP:
                 goto juegoL;
-                break;
-            case CONTINUAR:
-                goto continuar;
                 break;
             case REGRESAR:
                 UpdateMusicStream(musica_menu);
@@ -525,24 +522,13 @@ int juegoMenu(Sound seleccion)
 {
     static int op = 0;
     int sizeTxt[3], j;
-    for (j = 0; j < 3; j++)
-    {
-        if (j == op)
-        {
-            sizeTxt[j] = 60;
-        }
-        else
-        {
-            sizeTxt[j] = 40;
-        }
-    }
 
-    char mensajes[4][30] = {"NUEVA PARTIDA", "CONTINUAR", "REGRESAR", "MECANICO ARITMETICO"};
-    Rectangle fondo[4];
+    char mensajes[3][30] = {"NUEVA PARTIDA", "REGRESAR", "MECANICO ARITMETICO"};
+    Rectangle fondo[3];
 
-    fondo[3] = {170, 45, 927, 90};
-    DrawRectangleRec(fondo[3], GetColor(0x03D1339));
-    DrawText(mensajes[3], 200, 55, 70, WHITE);
+    fondo[2] = {170, 45, 927, 90};
+    DrawRectangleRec(fondo[2], GetColor(0x03D1339));
+    DrawText(mensajes[2], 200, 55, 70, WHITE);
 
     fondo[0] = {500, 293, 200, 50};
     DrawRectangleRec(fondo[0], GetColor(0x03D1339));
@@ -550,13 +536,9 @@ int juegoMenu(Sound seleccion)
 
     fondo[1] = {500, 440, 200, 50};
     DrawRectangleRec(fondo[1], GetColor(0x03D1339));
-    DrawText(mensajes[1], 490, 450, 37, WHITE);
+    DrawText(mensajes[1], 490, 450, 40, WHITE);
 
-    fondo[2] = {500, 590, 200, 50};
-    DrawRectangleRec(fondo[2], GetColor(0x03D1339));
-    DrawText(mensajes[2], 490, 598, 40, WHITE);
-
-    for (j = 0; j < 3; j++)
+    for (j = 0; j < 2; j++)
     {
         if (j == op)
         {
@@ -567,11 +549,7 @@ int juegoMenu(Sound seleccion)
             }
             if (j == 1)
             {
-                DrawText(mensajes[1], 495, 450, 37, WHITE);
-            }
-            if (j == 2)
-            {
-                DrawText(mensajes[2], 490, 598, 40, WHITE);
+                DrawText(mensajes[1], 490, 450, 40, WHITE);
             }
         }
         else
@@ -583,14 +561,11 @@ int juegoMenu(Sound seleccion)
             }
             if (j == 1)
             {
-                DrawText(mensajes[1], 490, 450, 37, WHITE);
-            }
-            if (j == 2)
-            {
-                DrawText(mensajes[2], 490, 598, 40, WHITE);
+                DrawText(mensajes[1], 490, 450, 40, WHITE);
             }
         }
     }
+
     if (IsKeyPressed(KEY_UP))
     {
         if (op != NEWP)
@@ -602,7 +577,7 @@ int juegoMenu(Sound seleccion)
     {
         if (IsKeyPressed(KEY_DOWN))
         {
-            if (op != REGRESAR)
+            if (op != SALIRJ)
             {
                 op++;
             }
