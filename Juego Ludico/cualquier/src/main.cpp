@@ -1,39 +1,108 @@
 #include "raylib.h"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
+#define COLUMNAS1 3
+#define RENGLONES1 3
 
 #define RANCHO 1280
 #define RALTO 720
 #define CAMY 360
 #define CAMX 640
 
-#define ALTOP 85
+#define ALTOP 60
 #define ANCHOP 50
 #define SUELO 650
+#define MAXVIDA 3
+#define INVULERABILIDAD 120
 
 #define G 0.1
-#define GD 0.2
+#define GD 0.15
 
-#define VX 4
+#define VX 3
 #define VS -11
-#define VD 10
+#define VSi -4
+#define VY 3
+#define VD 7.5
 
-#define MAXAVE 5
-#define AVESPEED 7
-#define MAXEGG 8
-#define MAXCAR 2
-#define CARSPEED 9
+#define MAXANGUILA 3
+#define ANGUILASPEED 5
+#define MAXSHARK 2
+#define SHARKSPEED 7
+#define MAXTORTUGA 2
+#define TORTUGASPEED 3
 
-#define MAXPLAT 30
+#define MAXPLAT 3
 
+#define MAXHIT 500
+#define VATAQUE 40
+#define VATAQUEBUFF 30
+#define VPROYECTIL 10
+
+typedef Rectangle Trec;
 // blank transparente
 
 // typedef Rectangle Tplayer;
 
-typedef Rectangle Thit;
+typedef struct _tabla
+{
+    Trec pos;
+    int num;
+    char opRight[2];
+    char opDown[2];
+    int status;
+} Ttab;
 
-typedef Rectangle Trec;
+typedef struct _velocidad
+{
+    float vx;
+    float vy;
+} Tvel;
+
+typedef struct _shark
+{
+    Trec pos;
+    int status = 0;
+    int right = 0;
+    int left = 0;
+    Tvel v;
+} Tshark;
+
+typedef struct _tortuga
+{
+    Trec pos;
+    int status = 0;
+    int right = 0;
+    int left = 0;
+} Ttortu;
+
+typedef struct _anghit
+{
+    Trec pos;
+    int status;
+    int time;
+} Tanghit;
+
+typedef struct _anguila
+{
+    Trec pos;
+    int status = 0;
+    int right = 0;
+    int left = 0;
+    Tvel v;
+    Tanghit hit;
+} Tangui;
+
+typedef struct _hit
+{
+    Trec pos;      // 7   0    1
+    int status;    //
+    int direccion; //--------------------->  //6   p    2
+    Tvel v;        //
+} Thit;            // 5   4    3
 
 typedef struct _plataforma
 {
@@ -46,880 +115,933 @@ typedef struct _vehiculo
 {
     Trec pos;
     int status;
-
+    int listo;
 } Tpart;
+
+typedef struct _vida
+{
+    Trec pos;
+    int num;
+    int time;
+} Tvida;
 
 typedef struct _jugador
 {
     Trec pos;
-    int y0;
-    float v0;
     int timeDash;
-    int jump;
-    int jumpjump;
-    int fall;
+    int dash;
+    int x0;
+    int AtkC;
+    Tvida vida;
 } Tplayer;
 
-typedef struct _ave
-{
-    Trec pos;
-    int status = 0;
-    int right = 0;
-    int left = 0;
-
-} Tave;
-
-typedef struct _huevo
-{
-    Trec pos;
-    int status;
-    int y0;
-    int time;
-} Tegg;
-
-typedef struct _car
-{
-    Trec pos;
-    int status;
-    int movimiento;
-    int time;
-} Tcar;
-
-float velocidad(float v0, float time);
-int ColisionPlat(Tplayer player, Tplat plat);
-// devuelve 0
-int Reposo(float &time, float &v0, int &y0, int y);
-
-int Salto(float &time, float &v0, int &y0, int y);
-
-// y0+v0*time+GD*time*time;
-int Posicion(int y0, float v0, float time, int g);
-
-void CalculaPosEnemigo(Tave &mob);
+void Direccioniugador(int &l, int &r, int &up, int &down, Tplayer player);
+void InicializaProyectil(int l, int r, int up, int down, Tplayer player, Thit &hit);
+void CalculaComponentesVelocidad(float velocidad, float grados, Tvel &v);
+float Radianes(float grados);
+void PosicionObieto(float vx, float vy, Trec &pos);
 int CheckMobColision(Trec mob, Thit hit);
 int CheckPlayerColision(Trec player, Trec mob);
-// int CheckPiezaColision(Trec player,Trec mob); // duplicado para probar sin daño
-void DropEgg(Tave mob, Tegg &egg);
-void LimpiaEnemigos(Tave ave[], Tcar car[]);
+void LimpiaEnemigosLvl1(/*Tave ave[],Tcar car[]*/ Tshark shark[], Ttortu tort[], Tangui ang[]);
+float CalculaAnguloAnguila(Trec ang, Trec player);
+void AngElectro(Tangui &ang);
+void muerteLvl1(Tplayer &player, Tshark shark[], Ttortu tort[], Tangui ang[], Tpart pieza[], Trec plat[]);
+void cinemaPuzleNivel1(void);
 
 int main()
 {
+    float VDDIAGONAL = VD * sin(45) / sin(90);
     SetTargetFPS(60);
-    InitWindow(RANCHO, RALTO, "juego");
+    InitWindow(RANCHO, RALTO, "iuego");
     srand(time(NULL));
-    int j, i;
-    int y0Cam;
+    int i, j;
+    Tplayer player;
+    player.pos.height = ALTOP;
+    player.pos.width = ANCHOP;
+    player.pos.x = RANCHO / 2;
+    player.pos.y = SUELO - player.pos.height;
+    player.dash = 0;
+    player.timeDash = 0;
+    player.x0 = player.pos.x;
+    player.AtkC = 0;
 
-    int framesAutom = 0;
+    // vida
+    player.vida.num = MAXVIDA;
+    player.vida.pos.width = 25;
+    player.vida.pos.height = 25;
+    player.vida.pos.x = 25;
+    player.vida.pos.y = 25;
 
-    int framesSpeed = 8;
-    int currentFrame = 0;
-
-    int currentPersonaje = 0;
-    int framesPersonaje = 0;
-
-    int currentSalto = 0;
-    int framesSalto = 0;
-
-    // contadores
-    int frameC = 0;
-    float time = 0;
-    int c = 0;
-    int igncolision = 0;
-    int hitc = 0;
-    int platc = 0;
-    // int caminarc=0;
-
-    // banderas
-    int bsuelo = 0;
-    int bdown = 0;
-    // int caminar=0;
     int lookR = 1;
     int lookL = 0;
     int lookUp = 0;
     int lookDown = 0;
-    int hit = 0;
-    int dash = 0;
-
-    // auxiliar
+    int fin = 0;
     int random;
 
-    // ************************************************ TEXTURAS ********************************************************************
-    Texture2D pajaro = LoadTexture("texturas/pajaro.png");
-    Rectangle framesPajaro = {0.0f, 0.0f, (float)pajaro.width / 6, (float)pajaro.height};
+    int framesAutom = 0;
+    int framesPersonaje = 0;
 
-    Texture2D pajaroizq = LoadTexture("texturas/pajaroizq.png");
-    Rectangle framesPajaroizq = {0.0f, 0.0f, (float)pajaroizq.width / 6, (float)pajaroizq.height};
+    int framesSpeed = 8;
 
-    Texture2D huevo = LoadTexture("texturas/egg.png");
-    Rectangle framesHuevo = {0.0f, 0.0f, (float)huevo.width, (float)huevo.height};
+    int currentFrame = 0;
+    int currentPersonaje = 0;
 
-    Texture2D carro = LoadTexture("texturas/Ranger.png");
-    Rectangle framesCarro = {0.0f, 0.0f, (float)carro.width, (float)carro.height};
-
-    Texture2D carro2 = LoadTexture("texturas/Ranger.png");
-    Rectangle framesCarro2 = {0.0f, 0.0f, (float)carro2.width, (float)carro2.height};
-
-    Texture2D caminar = LoadTexture("texturas/Cyborg_run.png");
-    Rectangle framesCaminar = {0.0f, 0.0f, (float)caminar.width / 6, (float)caminar.height};
-
-    Texture2D caminarizq = LoadTexture("texturas/Cyborg_run_left.png");
-    Rectangle framesCaminarizq = {0.0f, 0.0f, (float)caminarizq.width / 6, (float)caminarizq.height};
-
-    Texture2D reposo = LoadTexture("texturas/Cyborg_idle.png");
-    Rectangle framesReposo = {0.0f, 0.0f, (float)reposo.width / 4, (float)reposo.height};
-
-    Texture2D reposoizq = LoadTexture("texturas/Cyborg_idle_left.png");
-    Rectangle framesReposoizq = {0.0f, 0.0f, (float)reposoizq.width / 4, (float)reposoizq.height};
-
-    Texture2D danio = LoadTexture("texturas/Cyborg_hurt.png");
-    Rectangle framesDanio = {0.0f, 0.0f, (float)danio.width, (float)danio.height};
-
-    Texture2D salto = LoadTexture("texturas/Cyborg_jump.png");
-    Rectangle frameSalto = {0.0f, 0.0f, (float)salto.width / 4, (float)salto.height};
-
-    Texture2D saltoder = LoadTexture("texturas/Cyborg_jumpr.png");
-    Rectangle frameSaltoder = {0.0f, 0.0f, (float)saltoder.width / 4, (float)saltoder.height};
-
-    Texture2D background = LoadTexture("texturas/fondo1.png");
-    Rectangle frameBackground = {0.0f, 0.0f, (float)RANCHO, (float)RALTO};
-
-    Texture2D ground = LoadTexture("texturas/ground.png");
-    Rectangle frameGround = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
-
-    Texture2D back = LoadTexture("texturas/back1.png");
-    Texture2D middle = LoadTexture("texturas/middle.png");
-    Texture2D front = LoadTexture("texturas/front.png");
-
-    Texture2D plataforma = LoadTexture("texturas/plataforma1.png");
-
-    Texture2D escudo = LoadTexture("texturas/escudo.png");
-    Rectangle frameEscudo = {0.0f, 0.0f, (float)escudo.width, (float)escudo.height};
-
-    Texture2D escudoh = LoadTexture("texturas/escudoh.png");
-    Rectangle frameEscudoh = {0.0f, 0.0f, (float)escudoh.width, (float)escudoh.height};
-
-    Texture2D piezas[3];
-    Rectangle framePiezas[3] = {0.0f, 0.0f, (float)ground.width, (float)ground.height};
-
-    piezas[0] = LoadTexture("texturas/pieza1.png");
-    piezas[1] = LoadTexture("texturas/pieza2.png");
-    piezas[2] = LoadTexture("texturas/pieza3.png");
-
-    framePiezas[0] = {0.0f, 0.0f, (float)piezas[0].width, (float)piezas[0].height};
-    framePiezas[1] = {0.0f, 0.0f, (float)piezas[1].width, (float)piezas[1].height};
-    framePiezas[2] = {0.0f, 0.0f, (float)piezas[2].width, (float)piezas[2].height};
-
-    // ************************************************ SONIDOS ********************************************************************
-
-    InitAudioDevice();
-
-    Sound dolor = LoadSound("sonidos/danio.wav");
-    Sound brinco = LoadSound("sonidos/salto.mp3");
-    Sound paso = LoadSound("sonidos/paso1.wav");
-    Sound pajarin = LoadSound("sonidos/pajaro.wav");
-    Sound agarrar = LoadSound("sonidos/pieza.wav");
-    Sound carrillo = LoadSound("sonidos/carrillo2.wav");
-    Music nivel2 = LoadMusicStream("sonidos/nivel2_musica.mp3");
-    Sound sdash = LoadSound("sonidos/dash.mp3");
-    SetSoundVolume(brinco, -0.15f);
-    SetSoundVolume(pajarin, -0.5f);
-    SetMusicVolume(nivel2, -0.5f);
-    SetSoundVolume(carrillo, -0.2f);
-    SetSoundVolume(sdash, +15);
-
-    // Inicializacion ***************************************************************************************
-    // Inicializacion Plataformas
-    Tplat plat[MAXPLAT];
-    plat[0].pos.x = 400;
-    plat[0].status = 1;
-    plat[0].flag = 0;
-    plat[0].pos.width = 350;
-    plat[0].pos.height = 40;
-    plat[0].pos.y = (rand() % 300) + 200;
-    for (j = 1; j < MAXPLAT; j++)
+    //** proyectil ************************************************************************************************************************
+    Thit hit[MAXHIT];
+    for (i = 0; i < MAXHIT; i++)
     {
-        if (plat[j - 1].pos.x < -7200)
-        {
-            for (i = j + 1; i < MAXPLAT; i++)
-            {
-                plat[i].status = 0;
-                plat[i].flag = 0;
-                plat[i].pos.width = 0;
-                plat[i].pos.height = 0;
-                plat[i].pos.y = 0;
-                plat[i].pos.x = 0;
-            }
-            j = MAXPLAT;
-        }
-        else
-        {
-            plat[j].status = 1;
-            plat[j].flag = 0;
-            plat[j].pos.width = 350;
-            plat[j].pos.height = 40;
-            plat[j].pos.y = (rand() % 250) + 200;
-            plat[j].pos.x = plat[j - 1].pos.x - plat[j].pos.width - ((rand() % 200) + 50);
-            platc++;
-        }
+        hit[i].status = 0;
+        hit[i].pos.width = 45;
+        hit[i].pos.height = 45;
+        hit[i].pos.x = 1280;
+        hit[i].pos.y = 1500;
     }
 
-    // Inicializacion piezas
+    //** plataformas **************************************************************************************************************************
+    Trec plat[MAXPLAT];
+    for (i = 0; i < MAXPLAT; i++)
+    {
+        plat[i].height = 30;
+        plat[i].width = 200;
+    }
+    plat[0].x = 100;
+    plat[0].y = 200;
+    plat[1].x = RANCHO / 2 - plat[1].width / 2;
+    plat[1].y = 400;
+    plat[2].x = RANCHO - 100 - plat[2].width;
+    plat[2].y = 200;
+
+    //** piezas **********************************************************************************************************************************
+    int time = 0;
     Tpart pieza[3];
     int piezac = 0;
-    random = (platc) / 3;
     for (j = 0; j < 3; j++)
     {
-
+        pieza[j].status = 0;
+        pieza[j].pos.height = 80;
+        pieza[j].pos.width = 50;
         pieza[j].status = 1;
-        pieza[j].pos.height = piezas[j].width;
-        pieza[j].pos.width = piezas[j].height;
-        pieza[j].status = 1;
-
-        if (j == 0)
-        {
-            pieza[j].pos.y = plat[platc - 1].pos.y - pieza[j].pos.height - 20;
-            pieza[j].pos.x = plat[platc - 1].pos.x + plat[platc].pos.width / 2;
-        }
-        else
-        {
-            pieza[j].pos.y = plat[platc - random * j].pos.y - pieza[j].pos.height - 20;
-            pieza[j].pos.x = plat[platc - random * j].pos.x + plat[platc - random * j].pos.width / 2;
-        }
+        pieza[j].pos.x = plat[j].x + plat[j].width / 2 - pieza[j].pos.width / 2;
+        pieza[j].pos.y = -300;
+        pieza[j].listo = 0;
     }
 
-    // Inicializa la posicion
-    Tplayer player;
-    player.pos.height = ALTOP;
-    player.pos.width = ANCHOP;
-    player.pos.x = 400;   // Posicion incial
-    player.pos.y = SUELO; //""
-    player.y0 = player.pos.y;
-    player.v0 = 0;
-    player.timeDash = 70;
-
-    // Inicializacion enemigos
-    Tave ave[MAXAVE];
-    for (j = 0; j < MAXAVE; j++)
+    //** enemigos **********************************************************************************************************************************
+    Tshark shark[MAXSHARK];
+    for (i = 0; i < MAXSHARK; i++)
     {
-        ave[j].status = 0;
-        ave[j].right = 0;
-        ave[j].left = 0;
-        ave[j].pos.x = 2000;
-        ave[j].pos.y = 800;
-        ave[j].pos.height = 20;
-        ave[j].pos.width = 40;
+        shark[i].status = 0;
+        shark[i].right = 0;
+        shark[i].left = 0;
+        shark[i].pos.x = 2000;
+        shark[i].pos.y = 800;
+        shark[i].pos.height = 60;
+        shark[i].pos.width = 120;
     }
 
-    Tegg egg[MAXEGG];
-    for (j = 0; j < MAXEGG; j++)
+    Ttortu tort[MAXTORTUGA];
+    for (i = 0; i < MAXSHARK; i++)
     {
-        egg[j].status = 0;
-        egg[j].pos.height = 30;
-        egg[j].pos.width = 20;
-        egg[j].pos.x = 0;
-        egg[j].pos.y = 800;
+        tort[i].status = 0;
+        tort[i].right = 0;
+        tort[i].left = 0;
+        tort[i].pos.x = 2000;
+        tort[i].pos.y = 800;
+        tort[i].pos.height = 60;
+        tort[i].pos.width = 80;
     }
 
-    Tcar car[MAXCAR];
-    for (j = 0; j < MAXCAR; j++)
+    Tangui ang[MAXANGUILA];
+    for (i = 0; i < MAXANGUILA; i++)
     {
-        car[j].status = 0;
-        car[j].pos.height = 140;
-        car[j].pos.width = 315;
-        car[j].pos.x = 0;
-        car[j].pos.y = 800;
-        car[j].movimiento = 0;
-        car[j].time = 120;
+        ang[i].status = 0;
+        ang[i].right = 0;
+        ang[i].left = 0;
+        ang[i].pos.x = 2000;
+        ang[i].pos.y = 800;
+        ang[i].pos.height = 20;
+        ang[i].pos.width = 85;
+        ang[i].hit.pos.height = ang[0].pos.height * 3;
+        ang[i].hit.pos.width = ang[0].pos.width * 1.5;
+        ang[i].hit.pos.y = 800;
+        ang[i].hit.pos.x = 2000;
+        ang[i].hit.status = 0;
+        ang[i].hit.time = 0;
     }
-
-    Thit hithit;
 
     // Inicializacion camara
     Camera2D camara = {0};
-    camara.target.x = player.pos.x + 30;
-    camara.target.y = player.pos.y;
-    camara.offset.x = 640;
-    camara.offset.y = CAMY;
+    camara.target.x = 0;
+    camara.target.y = 0;
+    camara.offset.x = 0;
+    camara.offset.y = 0;
     camara.rotation = 0;
     camara.zoom = 1;
 
-    float posicion = player.pos.x;
+    // ********************************** TEXTURAS **************************************************
+    Texture2D tortuga = LoadTexture("texturas/tortuga_der.png");
+    Rectangle framesTortuga = {0.0f, 0.0f, (float)tortuga.width / 6, (float)tortuga.height};
+
+    Texture2D tortugaizq = LoadTexture("texturas/tortuga_izq.png");
+    Rectangle framesTortugaizq = {0.0f, 0.0f, (float)tortugaizq.width / 6, (float)tortugaizq.height};
 
     while (!WindowShouldClose())
     {
-
-        time += 1;
-        igncolision++;
-        frameC++;
+        // printf("x = %f y = %f\n",player.pos.x,player.pos.y);
         player.timeDash++;
-        // **************************************************** DIBUJO *******************************************************
+        player.AtkC++;
+        time++;
+        player.vida.time++;
         BeginDrawing();
-
         BeginMode2D(camara);
-
-        ClearBackground(LIGHTGRAY);
-        float ancho = 700;
-        for (int x = 0; x < 8; x++)
+        ClearBackground(SKYBLUE);
+        DrawRectangle(0, 50, RANCHO, RALTO, BLUE);
+        DrawRectangleRec(player.pos, DARKBLUE);
+        //** terminar el nivel ***********************************************************************************
+        if (pieza[0].status)
         {
-
-            DrawTextureEx(back, Vector2{ancho, 0}, 0, 1, WHITE);
-            DrawTextureEx(middle, Vector2{ancho, 0}, 0, 1, WHITE);
-            DrawTextureEx(front, Vector2{ancho, 0}, 0, 1, WHITE);
-            ancho -= back.width;
-        }
-
-        float piso = 2000;
-        for (int x = 0; x < 2000; x++)
-        {
-            DrawTextureEx(ground, Vector2{piso, SUELO}, 0, 1, WHITE);
-            piso -= ground.width;
-        }
-        //****************************************************** PIEZAS **********************************************************************
-        for (j = 0; j < 3; j++)
-        {
-            if (CheckPlayerColision(player.pos, pieza[j].pos))
+            if (pieza[0].pos.y == SUELO - pieza[0].pos.height)
             {
-                if (pieza[j].pos.x < 0)
+                if (pieza[1].status)
                 {
-                    if ((pieza[j].pos.x == player.pos.x) && (pieza[j].pos.y == player.pos.y))
-                        PlaySound(agarrar);
-                    pieza[j].status = 0;
-                    piezac++;
-                    switch (piezac)
+                    if (pieza[1].pos.y == SUELO - pieza[1].pos.height)
                     {
-                    case 1:
-                        pieza[j].pos.x = 1200;
-                        pieza[j].pos.y = SUELO - 160;
-                        break;
-                    case 2:
-                        pieza[j].pos.x = 1314;
-                        pieza[j].pos.y = SUELO - 159;
-                        break;
-                    case 3:
-                        pieza[j].pos.x = 1408.5;
-                        pieza[j].pos.y = SUELO - 115;
-                        break;
-                    }
-                }
-                else
-                {
-                    pieza[j].status = 1;
-                }
-            }
-        }
-
-        //******************************************************** AVES **************************************************************************
-        for (j = 0; j < MAXAVE; j++)
-        {
-            // comportameinto
-            if (ave[j].status)
-            {
-                // movimiento enemigo **si sale de la pantalla se elimina**
-                if (ave[j].right)
-                {
-                    ave[j].pos.x -= AVESPEED;
-                    if (ave[j].pos.x <= player.pos.x - 750 - ave[j].pos.width)
-                    {
-                        ave[j].status = 0;
-                    }
-                }
-                else
-                {
-                    if (ave[j].left)
-                    {
-                        ave[j].pos.x += AVESPEED;
-                        if (ave[j].pos.x >= player.pos.x + 750)
+                        if (pieza[2].status)
                         {
-                            ave[j].status = 0;
-                        }
-                    }
-                }
-
-                // ataque enemigo ***********************************************************************************
-                random = (rand() % 11) + 1;
-                if (random == 1)
-                {
-                    if (ave[j].pos.x <= player.pos.x + player.pos.width + 200)
-                    {
-                        if (ave[j].pos.x >= player.pos.x - 200)
-                        {
-                            random = rand() % MAXEGG;
-                            DropEgg(ave[j], egg[random]);
-                        }
-                    }
-                }
-                // Colision con golpe
-                if (hit)
-                {
-                    if (CheckMobColision(ave[j].pos, hithit))
-                    {
-                        ave[j].status = 0;
-                    }
-                }
-
-                // Colision con jugador
-                if (ave[j].status)
-                {
-                    if (CheckPlayerColision(player.pos, ave[j].pos))
-                    {
-                        PlaySound(dolor);
-                        DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
-                        player.pos.x = 400;   // Posicion incial
-                        player.pos.y = SUELO; //""
-                        player.y0 = player.pos.y;
-                        player.v0 = 0;
-                        player.timeDash = 70;
-                        LimpiaEnemigos(ave, car);
-                    }
-                }
-            }
-            else
-            {
-                // generacion
-                random = (rand() % 100) + 1;
-                if (random == 1)
-                {
-                    ave[j].right = rand() % 2;
-                    if (ave[j].right)
-                    {
-                        ave[j].status = 1;
-                        ave[j].pos.x = player.pos.x + 610 + player.pos.width;
-                        ave[j].pos.y = (rand() % 90) + 1;
-                        ave[j].left = 0;
-                        PlaySound(pajarin);
-                    }
-                    else
-                    {
-                        ave[j].status = 1;
-                        ave[j].pos.x = player.pos.x - 610;
-                        ave[j].pos.y = (rand() % 101) + 1;
-                        ave[j].left = 1;
-                        PlaySound(pajarin);
-                    }
-                }
-            }
-        }
-
-        //** comportamiento huevo ********************************************************************************************************************************
-        for (j = 0; j < MAXEGG; j++)
-        {
-            // elinacion de huevo
-            if (egg[j].pos.y - egg[j].pos.height >= SUELO)
-            {
-                egg[j].status = 0;
-                egg[j].pos.y = 800;
-            }
-            // caida de huevo
-            if (egg[j].status)
-            {
-                egg[j].time += 1;
-                egg[j].pos.y = Posicion(egg[j].y0, 0, egg[j].time, 0);
-            }
-
-            // Colision con golpe
-            if (hit)
-            {
-                if (CheckMobColision(egg[j].pos, hithit))
-                {
-                    egg[j].status = 0;
-                }
-            }
-
-            // Colision con jugador
-            if (egg[j].status)
-            {
-                if (CheckPlayerColision(player.pos, egg[j].pos))
-                {
-                    PlaySound(dolor);
-                    DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
-                    player.pos.x = 400;   // Posicion incial
-                    player.pos.y = SUELO; //""
-                    player.y0 = player.pos.y;
-                    player.v0 = 0;
-                    player.timeDash = 70;
-                    LimpiaEnemigos(ave, car);
-                }
-            }
-        }
-
-        //** enemigo2 carro ********************************************************************************************************************************
-        for (j = 0; j < MAXCAR; j++)
-        {
-            // comportameinto
-            if (car[j].status)
-            {
-                // movimiento enemigo
-                if (car[j].movimiento)
-                {
-                    car[j].pos.x += CARSPEED;
-                }
-                else
-                {
-                    car[j].time++;
-                    if (car[j].time > 60)
-                    {
-                        car[j].movimiento = 1;
-                    }
-                }
-                // eliminacion del enemigo
-                if (car[j].pos.x >= player.pos.x + 720)
-                {
-                    car[j].status = 0;
-                }
-
-                // Colision con golpe
-                if (hit)
-                {
-                    if (CheckMobColision(car[j].pos, hithit))
-                    {
-                        car[j].movimiento = 0;
-                        car[j].time = 0;
-                    }
-                }
-
-                // Colision con jugador
-                if (car[j].status)
-                {
-                    if (CheckPlayerColision(player.pos, car[j].pos))
-                    {
-                        PlaySound(dolor);
-                        DrawTextureRec(danio, framesDanio, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
-                        player.pos.x = 400;   // Posicion incial
-                        player.pos.y = SUELO; //""
-                        player.y0 = player.pos.y;
-                        player.v0 = 0;
-                        player.timeDash = 70;
-                        LimpiaEnemigos(ave, car);
-                    }
-                }
-            }
-            else
-            {
-                // generacion
-                // random=GetRandomValue(1,1);
-                if (player.pos.x < -60)
-                {
-                    car[j].status = 1;
-                    car[j].movimiento = 1;
-                    car[j].pos.x = player.pos.x - 610 - car[j].pos.width;
-                    car[j].pos.y = SUELO - car[j].pos.height;
-                    PlaySound(carrillo);
-                }
-            }
-        }
-
-        //** caluclar posicion y ********************************************************************************************************************************
-        if (player.fall)
-        {
-            if (bdown)
-            {
-                if (velocidad(player.v0, time) > 0)
-                {
-                    if (++c == 1)
-                    {
-                        player.v0 = velocidad(player.v0, time); // velocidad inicial igual a velocidad actual
-                        player.y0 = player.pos.y;
-                        time = 1;
-                    }
-                }
-                else
-                {
-                    Reposo(time, player.v0, player.y0, player.pos.y);
-                }
-                player.pos.y = Posicion(player.y0, player.v0, time, bdown);
-            }
-            else
-            {
-                player.pos.y = Posicion(player.y0, player.v0, time, bdown);
-            }
-        }
-
-        //** colisiones ********************************************************************************************************************************
-        // suelo
-        if (player.pos.y + player.pos.height > SUELO)
-        {
-            player.pos.y = SUELO - player.pos.height;
-            Reposo(time, player.v0, player.y0, player.pos.y);
-            player.fall = 0;
-            bsuelo = 1;
-            player.jump = 1;
-            player.jumpjump = 1;
-        }
-
-        // plataformas
-        if (igncolision > 20)
-        {
-            // plataforma cuando cae
-            if (velocidad(player.v0, time) > 0)
-            {
-                for (j = 0; j < platc; j++)
-                {
-                    if (plat[j].status)
-                    {
-                        if (ColisionPlat(player, plat[j]))
-                        {
-                            player.pos.y = plat[j].pos.y - player.pos.height;
-                            Reposo(time, player.v0, player.y0, player.pos.y);
-                            player.fall = 0;
-                            plat[j].flag = 1;
-                            player.jump = 1;
-                            player.jumpjump = 1;
-                            bdown = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        // si salio de la paltaforma
-        for (j = 0; j < platc; j++)
-        {
-            if (plat[j].status)
-            {
-                if (plat[j].flag)
-                {
-                    if (!ColisionPlat(player, plat[j]))
-                    {
-                        Reposo(time, player.v0, player.y0, player.pos.y);
-                        player.fall = 1;
-                        plat[j].flag = 0;
-                        player.jump = 1;
-                        player.jumpjump = 0;
-                        bdown = 0;
-                    }
-                }
-            }
-        }
-
-        //** golpe ********************************************************************************************************************************
-        if (hit)
-        {
-            if (lookR)
-            {
-                hithit.x = player.pos.x + ANCHOP - 20;
-                hithit.y = player.pos.y - 20;
-            }
-            else
-            {
-                if (lookL)
-                {
-                    hithit.x = player.pos.x - 60;
-                    hithit.y = player.pos.y - 20;
-                }
-            }
-
-            if (lookUp)
-            {
-                hithit.x = player.pos.x - player.pos.width / 2;
-                hithit.y = player.pos.y - player.pos.height;
-            }
-            else
-            {
-                if (lookDown)
-                {
-                    hithit.x = player.pos.x - player.pos.width / 2;
-                    hithit.y = player.pos.y + player.pos.height - player.pos.height / 3;
-                }
-            }
-            if (hitc < 50)
-            {
-                hitc++;
-            }
-            else
-            {
-                hitc = 0;
-                hit = 0;
-            }
-        }
-
-        //** dash ********************************************************************************************************************************
-        if (dash)
-        {
-            PlaySound(sdash);
-            if (player.timeDash < 20)
-            {
-                if (lookR)
-                {
-                    player.pos.x += VD;
-                }
-                else
-                {
-                    if (lookL)
-                    {
-                        player.pos.x -= VD;
-                    }
-                }
-            }
-            else
-            {
-                if (player.pos.x > -10)
-                {
-                    player.jump = 1;
-                    player.jumpjump = 0;
-                }
-                else
-                {
-                    player.jump == 0;
-                    player.jumpjump = 0;
-                }
-                player.fall = 1;
-                dash = Reposo(time, player.v0, player.y0, player.pos.y);
-            }
-        }
-
-        //** camara ********************************************************************************************************************************
-        camara.target.y = player.pos.y;
-        if (player.pos.y > 100)
-        {
-            camara.target.y = CAMY;
-            camara.offset.y = CAMY;
-            camara.target.x = player.pos.x + 25;
-        }
-        else
-        {
-            camara.offset.y = RANCHO / 12.5;
-            camara.target.x = player.pos.x + 25;
-        }
-
-        //** intput ********************************************************************************************************************************
-        if (!dash) // right left
-        {
-            if (IsKeyDown(KEY_RIGHT))
-            {
-                if (player.pos.x < 1280)
-                {
-                    player.pos.x += VX;
-                    lookR = 1;
-                    lookL = 0;
-                }
-            }
-            else
-            {
-                if (IsKeyDown(KEY_LEFT))
-                {
-                    if (player.pos.x > plat[platc - 1].pos.x - 610)
-                    {
-                        player.pos.x -= VX;
-                        lookR = 0;
-                        lookL = 1;
-                    }
-                }
-            }
-        }
-
-        if (!dash) // up down
-        {
-            if (IsKeyPressed(KEY_UP))
-            {
-                if (player.jump)
-                {
-                    PlaySound(brinco);
-                    Reposo(time, player.v0, player.y0, player.pos.y);
-                    Salto(time, player.v0, player.y0, player.pos.y);
-                    player.fall = 1;
-                    if (player.jumpjump) //! doblesalto
-                    {
-                        PlaySound(brinco);
-                        player.jump = 1;
-                        player.jumpjump = 0;
-                    }
-                    else
-                    {
-                        player.jump = 0;
-                    }
-                    for (j = 0; j < MAXPLAT; j++)
-                    {
-                        if (plat[j].status)
-                        {
-                            plat[j].flag = 0;
-                        }
-                    }
-                    bsuelo = 0;
-                    bdown = 0;
-                }
-            }
-            else
-            {
-                if (IsKeyPressed(KEY_DOWN))
-                {
-                    for (j = 0; j < MAXPLAT; j++)
-                    {
-                        if (plat[j].flag)
-                        {
-                            // if(IsKeyPressedRepeat(KEY_DOWN))
+                            if (pieza[2].pos.y == SUELO - pieza[2].pos.height)
                             {
-                                player.fall = 1;
-                                igncolision = 0;
-                                bdown = 0;
+
+                                if (!fin)
+                                {
+                                    time = 0;
+                                }
+                                fin = 1;
+                                LimpiaEnemigosLvl1(shark, tort, ang);
+                                if (time > 300)
+                                {
+                                    cinemaPuzleNivel1();
+                                }
+                                // CloseWindow();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!fin)
+        {
+            // reaiusta posicion si sale de limites *********************************************************************************************
+            if (player.pos.y < 25)
+            {
+                player.pos.y = 25;
+            }
+            else
+            {
+                if (player.pos.y > SUELO - player.pos.height)
+                {
+                    player.pos.y = SUELO - player.pos.height;
+                }
+                else
+                {
+                    if (player.pos.x < 0)
+                    {
+                        player.pos.x = 0;
+                    }
+                    else
+                    {
+                        if (player.pos.x > RANCHO - player.pos.width)
+                        {
+                            player.pos.x = RANCHO - player.pos.width;
+                        }
+                    }
+                }
+            }
+
+            //** piezas ****************************************************************************************************************************
+            for (j = 0; j < 3; j++)
+            {
+                // drop
+                if (!pieza[j].listo)
+                {
+                    if (!pieza[j].status)
+                    {
+                        if (CheckPlayerColision(player.pos, pieza[j].pos))
+                        {
+                            pieza[j].status = 1;
+                            pieza[j].listo = 1;
+                        }
+                    }
+                }
+
+                // recolleccion
+                if (!pieza[j].listo)
+                {
+                    if (pieza[j].status)
+                    {
+                        if (CheckPlayerColision(player.pos, pieza[j].pos))
+                        {
+                            pieza[j].status = 0;
+                            pieza[j].pos.y = SUELO - pieza[j].pos.height;
+                            piezac++;
+                            printf("\npiezac = %d\n", piezac);
+                            switch (piezac)
+                            {
+                            case 1:
+                                pieza[j].pos.x = 900;
+                                break;
+                            case 2:
+                                pieza[j].pos.x = 950;
+                                break;
+                            case 3:
+                                pieza[j].pos.x = 1000;
+                                break;
+                            }
+                            j = 3;
+                        }
+                    }
+                }
+            }
+
+            // movimiento piezas
+            if (time > 600)
+            {
+                if (!pieza[0].listo)
+                {
+                    if (pieza[0].pos.y < plat[0].y - pieza[0].pos.height)
+                    {
+                        pieza[0].pos.y += 4;
+                    }
+                    else
+                    {
+                        if (piezac < 1)
+                        {
+                            pieza[0].pos.y = plat[0].y - pieza[0].pos.height;
+                        }
+                    }
+                }
+                if (time > 1200)
+                {
+                    if (!pieza[1].listo)
+                    {
+                        if (pieza[1].pos.y < plat[1].y - pieza[1].pos.height)
+                        {
+                            pieza[1].pos.y += 4;
+                        }
+                        else
+                        {
+                            if (piezac < 2)
+                            {
+                                pieza[1].pos.y = plat[1].y - pieza[1].pos.height;
+                            }
+                        }
+                    }
+
+                    if (time > 1800)
+                    {
+                        if (!pieza[2].listo)
+                        {
+                            if (pieza[2].pos.y < plat[2].y - pieza[2].pos.height)
+                            {
+                                pieza[2].pos.y += 4;
+                            }
+                            else
+                            {
+                                if (piezac < 3)
+                                {
+                                    pieza[2].pos.y = plat[2].y - pieza[2].pos.height;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //** enemigos **
+            //** tiburones ******************************************************************************************************************************
+            for (i = 0; i < MAXSHARK; i++)
+            {
+                // comportameinto
+                if (shark[i].status)
+                {
+                    // movimiento enemigo **si sale de la pantalla se elimina**
+                    if (shark[i].right)
+                    { // movimiento
+                        if (shark[i].pos.y < 75)
+                        {
+                            shark[i].pos.x -= SHARKSPEED;
+                        }
+                        else
+                        {
+                            if (shark[i].pos.y > SUELO - 50 - shark[i].pos.height)
+                            {
+                                shark[i].pos.x -= SHARKSPEED;
+                            }
+                            else
+                            {
+                                PosicionObieto(shark[i].v.vx, shark[i].v.vy, shark[i].pos);
+                            }
+                        }
+
+                        // eliminacion
+                        if (shark[i].pos.x < 0 - shark[i].pos.width)
+                        {
+                            shark[i].status = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (shark[i].left)
+                        { // movimiento
+                            if (shark[i].pos.y < 75)
+                            {
+                                shark[i].pos.x += SHARKSPEED;
+                            }
+                            else
+                            {
+                                if (shark[i].pos.y > SUELO - 50 - shark[i].pos.height)
+                                {
+                                    shark[i].pos.x += SHARKSPEED;
+                                }
+                                else
+                                {
+                                    PosicionObieto(shark[i].v.vx, shark[i].v.vy, shark[i].pos);
+                                }
+                            }
+                            // eliminacion
+                            if (shark[i].pos.x > RANCHO + shark[i].pos.width)
+                            {
+                                shark[i].status = 0;
+                            }
+                        }
+                    }
+
+                    // Colision con golpe
+                    if (hit)
+                    {
+                        for (j = 0; j < MAXHIT; j++)
+                        {
+                            if (CheckMobColision(shark[i].pos, hit[j]))
+                            {
+                                shark[i].status = 0;
+                            }
+                        }
+                    }
+                    // Colision con iugador
+                    if (shark[i].status)
+                    {
+                        if (player.vida.time > INVULERABILIDAD)
+                        {
+                            if (CheckPlayerColision(player.pos, shark[i].pos))
+                            {
+                                if (player.vida.num < 1)
+                                {
+                                    piezac = 0;
+                                    time = 0;
+                                    muerteLvl1(player, shark, tort, ang, pieza, plat);
+                                }
+                                else
+                                {
+                                    player.vida.num--;
+                                    player.vida.time = 0;
+                                }
+                                i = MAXSHARK;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // generacion
+                    random = (rand() % 50) + 1;
+                    if (random == 1)
+                    {
+                        shark[i].right = rand() % 2;
+                        random = rand() % 30;
+                        if (shark[i].right)
+                        {
+                            shark[i].status = 1;
+                            CalculaComponentesVelocidad(SHARKSPEED, float(random + 165), shark[i].v);
+                            shark[i].pos.x = RANCHO;
+                            shark[i].pos.y = (rand() % 550) + 50;
+                            shark[i].left = 0;
+                        }
+                        else
+                        {
+                            shark[i].status = 1;
+                            CalculaComponentesVelocidad(SHARKSPEED, float(random + 345), shark[i].v);
+                            shark[i].pos.x = 0 - shark[i].pos.width;
+                            shark[i].pos.y = (rand() % 550) + 50;
+                            shark[i].left = 1;
+                        }
+                    }
+                }
+            }
+
+            //** tortugas ******************************************************************************************************************************
+            for (i = 0; i < MAXTORTUGA; i++)
+            {
+                // comportameinto
+                if (tort[i].status)
+                {
+                    // movimiento enemigo **si sale de la pantalla se elimina**
+                    if (tort[i].right)
+                    { // movimiento
+                        tort[i].pos.x -= TORTUGASPEED;
+                        if (tort[i].pos.x <= 0 - tort[i].pos.height)
+                        {
+                            tort[i].status = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (tort[i].left)
+                        { // movimiento
+                            tort[i].pos.x += TORTUGASPEED;
+                            // eliminacion
+                            if (tort[i].pos.x > RANCHO + tort[i].pos.width)
+                            {
+                                tort[i].status = 0;
+                            }
+                        }
+                    }
+
+                    // Colision con golpe
+                    if (hit)
+                    {
+                        for (j = 0; j < MAXHIT; j++)
+                        {
+                            if (CheckMobColision(tort[i].pos, hit[j]))
+                            {
+                                tort[i].status = 0;
+                            }
+                        }
+                    }
+                    // Colision con iugador
+                    if (tort[i].status)
+                    {
+                        if (player.vida.time > INVULERABILIDAD)
+                        {
+                            if (CheckPlayerColision(player.pos, tort[i].pos))
+                            {
+                                if (player.vida.num < 1)
+                                {
+                                    piezac = 0;
+                                    time = 0;
+                                    muerteLvl1(player, shark, tort, ang, pieza, plat);
+                                }
+                                else
+                                {
+                                    player.vida.num--;
+                                    player.vida.time = 0;
+                                }
+                                i = MAXTORTUGA;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // generacion
+                    random = (rand() % 100) + 1;
+                    if (random == 1)
+                    {
+                        tort[i].right = rand() % 2;
+                        if (tort[i].right)
+                        {
+                            tort[i].status = 1;
+                            tort[i].pos.x = RANCHO;
+                            tort[i].pos.y = (rand() % 550) + 50;
+                            tort[i].left = 0;
+                        }
+                        else
+                        {
+                            tort[i].status = 1;
+                            tort[i].pos.x = 0 - tort[i].pos.width;
+                            tort[i].pos.y = (rand() % 550) + 50;
+                            tort[i].left = 1;
+                        }
+                    }
+                }
+            }
+
+            //** anguilas *********************************************************************************************************************************
+            for (i = 0; i < MAXANGUILA; i++)
+            {
+                // comportameinto
+                if (ang[i].status)
+                {
+                    // movimiento enemigo **si sale de la pantalla se elimina**
+                    if (ang[i].right)
+                    { // movimiento
+                        if (ang[i].pos.y < 75)
+                        {
+                            ang[i].pos.x -= ANGUILASPEED;
+                        }
+                        else
+                        {
+                            if (ang[i].pos.y > SUELO - 50 - ang[i].pos.height)
+                            {
+                                ang[i].pos.x -= ANGUILASPEED;
+                            }
+                            else
+                            {
+                                PosicionObieto(ang[i].v.vx, ang[i].v.vy, ang[i].pos);
+                            }
+                        }
+
+                        // eliminacion
+                        if (ang[i].pos.x < 0 - ang[i].pos.width)
+                        {
+                            ang[i].status = 0;
+                            ang[i].hit.status = 0;
+                        }
+
+                        //** generacion ataque enemigo ************************************************************************************************
+                        random = (rand() % 20) + 1;
+                        if (random == 1)
+                        {
+                            if (!ang[i].hit.status)
+                            {
+                                if (ang[i].pos.x <= player.pos.x + player.pos.width + 200)
+                                {
+                                    if (ang[i].pos.x >= player.pos.x - 200)
+                                    {
+                                        if (ang[i].pos.y <= player.pos.y + player.pos.height + 200)
+                                        {
+                                            if (ang[i].pos.y >= player.pos.y - 200)
+                                            {
+                                                // random=rand()%MAXANGUILAHIT;
+                                                AngElectro(ang[i]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //** comporamiento descarga electrica ************************************************************************************
+                        if (ang[i].status)
+                        {
+                            if (ang[i].hit.status)
+                            {
+                                if (ang[i].hit.time < 120)
+                                {
+                                    ang[i].hit.pos.y = ang[i].pos.y - ang[i].pos.height;
+                                    ang[i].hit.pos.x = ang[i].pos.x - 21;
+                                    ang[i].hit.time++;
+
+                                    // colision con jugador
+                                    if (player.vida.time > INVULERABILIDAD)
+                                    {
+                                        if (CheckPlayerColision(player.pos, ang[i].hit.pos))
+                                        {
+                                            if (player.vida.num < 1)
+                                            {
+                                                piezac = 0;
+                                                time = 0;
+                                                muerteLvl1(player, shark, tort, ang, pieza, plat);
+                                            }
+                                            else
+                                            {
+                                                player.vida.num--;
+                                                player.vida.time = 0;
+                                            }
+                                            i = MAXANGUILA;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    ang[i].hit.status = 0;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ang[i].left)
+                        { // movimiento
+                            if (ang[i].pos.y < 75)
+                            {
+                                ang[i].pos.x += ANGUILASPEED;
+                            }
+                            else
+                            {
+                                if (ang[i].pos.y > SUELO - 50 - ang[i].pos.height)
+                                {
+                                    ang[i].pos.x += ANGUILASPEED;
+                                }
+                                else
+                                {
+                                    PosicionObieto(ang[i].v.vx, ang[i].v.vy, ang[i].pos);
+                                }
+                            }
+                            // eliminacion
+                            if (ang[i].pos.x > RANCHO + ang[i].pos.width)
+                            {
+                                ang[i].status = 0;
+                            }
+                        }
+                    }
+
+                    // Colision con golpe
+                    if (hit)
+                    {
+                        for (j = 0; j < MAXHIT; j++)
+                        {
+                            if (CheckMobColision(ang[i].pos, hit[j]))
+                            {
+                                ang[i].status = 0;
+                                ang[i].hit.status = 0;
+                            }
+                        }
+                    }
+
+                    // Colision con iugador
+                    if (ang[i].status)
+                    {
+                        if (player.vida.time > INVULERABILIDAD)
+                        {
+                            if (CheckPlayerColision(player.pos, ang[i].pos))
+                            {
+                                if (player.vida.num < 1)
+                                {
+                                    piezac = 0;
+                                    time = 0;
+                                    muerteLvl1(player, shark, tort, ang, pieza, plat);
+                                }
+                                else
+                                {
+                                    player.vida.num--;
+                                    player.vida.time = 0;
+                                }
+                                i = MAXANGUILA;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // generacion
+                    random = (rand() % 50) + 1;
+                    if (random == 1)
+                    {
+                        ang[i].right = rand() % 2;
+                        if (ang[i].right)
+                        {
+                            ang[i].status = 1;
+                            ang[i].pos.x = RANCHO;
+                            ang[i].pos.y = (rand() % 550) + 60;
+                            CalculaComponentesVelocidad(ANGUILASPEED, CalculaAnguloAnguila(ang[i].pos, player.pos), ang[i].v);
+                            ang[i].left = 0;
+                        }
+                        else
+                        {
+                            ang[i].status = 1;
+                            ang[i].pos.x = 0 - ang[i].pos.width;
+                            ang[i].pos.y = (rand() % 550) + 60;
+                            CalculaComponentesVelocidad(ANGUILASPEED, CalculaAnguloAnguila(ang[i].pos, player.pos), ang[i].v);
+                            ang[i].left = 1;
+                        }
+                    }
+                }
+            }
+
+            //** dash **************************************************************************************************************************
+            if (player.dash)
+            {
+                if (player.timeDash < 20)
+                {
+                    if (lookR)
+                    {
+                        if (lookUp)
+                        {
+                            player.pos.x += VDDIAGONAL;
+                            player.pos.y -= VDDIAGONAL;
+                        }
+                        else
+                        {
+                            if (lookDown)
+                            {
+                                player.pos.x += VDDIAGONAL;
+                                player.pos.y += VDDIAGONAL;
+                            }
+                            else
+                            {
+                                player.pos.x += VD;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (lookL)
+                        {
+                            if (lookUp)
+                            {
+                                player.pos.x -= VDDIAGONAL;
+                                player.pos.y -= VDDIAGONAL;
+                            }
+                            else
+                            {
+                                if (lookDown)
+                                {
+                                    player.pos.x -= VDDIAGONAL;
+                                    player.pos.y += VDDIAGONAL;
+                                }
+                                else
+                                {
+                                    player.pos.x -= VD;
+                                }
                             }
                         }
                         else
                         {
-                            bdown = 1;
-                            player.fall = 1;
-                            c = 0;
+                            if (lookUp)
+                            {
+                                player.pos.y -= VD;
+                            }
+                            else
+                            {
+                                if (lookDown)
+                                {
+                                    player.pos.y += VD;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    lookDown = 0;
+                    lookUp = 0;
+                    player.dash = 0;
+                }
+            }
+
+            //** hit ********************************************************************************************************************************
+            for (i = 0; i < MAXHIT; i++)
+            {
+                //** movimiento del disparo ***********************************************************************************
+                if (hit[i].status)
+                {
+                    PosicionObieto(hit[i].v.vx, hit[i].v.vy, hit[i].pos);
+
+                    //** Eliminacion del proyectil *******************************************************************************
+                    // si se paso del borde izquierdo
+                    if (hit[i].pos.x < 0 - hit[i].pos.width)
+                    {
+                        hit[i].status = 0;
+                    }
+                    else
+                    {
+                        // si se paso del borde derecho
+                        if (hit[i].pos.x > RANCHO)
+                        {
+                            hit[i].status = 0;
+                        }
+                    }
+
+                    if (hit[i].pos.y < 0)
+                    {
+                        hit[i].status = 0;
+                    }
+                    else
+                    {
+                        if (hit[i].pos.y > RALTO)
+                        {
+                            hit[i].status = 0;
                         }
                     }
                 }
             }
-        }
 
-        // hit
-        if (IsKeyPressed(KEY_X))
-        {
-            if (IsKeyDown(KEY_UP))
+            //** input *****************************************************************************************************************************
+            if (!player.dash) // right left
             {
-                hithit.width = ALTOP + 30;
-                hithit.height = 90;
-                hit = 1;
-                dash = 0;
-                player.fall = 1;
-                lookUp = 1;
-                lookDown = 0;
-            }
-            else
-            {
-                if (IsKeyDown(KEY_DOWN))
+                if (IsKeyDown(KEY_RIGHT))
                 {
-                    hithit.width = ALTOP + 30;
-                    hithit.height = 90;
-                    hit = 1;
-                    dash = 0;
-                    player.fall = 1;
-                    lookDown = 1;
-                    lookUp = 0;
+                    player.x0 = player.pos.x;
+                    player.pos.x += VX;
+                    lookR = 1;
+                    lookL = 0;
                 }
                 else
                 {
-                    hithit.width = 90;
-                    hithit.height = ALTOP + 30;
-                    hit = 1;
-                    dash = 0;
-                    player.fall = 1;
-                    lookDown = 0;
-                    lookUp = 0;
+                    if (IsKeyDown(KEY_LEFT))
+                    {
+                        player.x0 = player.pos.x;
+                        player.pos.x -= VX;
+                        lookR = 1;
+                        lookL = 0;
+                    }
                 }
             }
-        }
 
-        // dash KEY C
-        if (player.pos.x < 1250)
-        {
-            if (player.pos.x > plat[platc - 1].pos.x - 590)
+            if (!player.dash) // up down
             {
-                if (player.timeDash > 80)
+                if (IsKeyDown(KEY_UP))
                 {
-                    if (!dash)
+                    player.pos.y -= VY;
+                }
+                else
+                {
+                    if (IsKeyDown(KEY_DOWN))
                     {
-                        if (IsKeyPressed(KEY_C))
+                        player.pos.y += VY;
+                    }
+                }
+            }
+
+            // dash KEY C
+            if (player.timeDash > 80)
+            {
+                if (!player.dash)
+                {
+                    if (IsKeyPressed(KEY_C))
+                    {
+                        Direccioniugador(lookL, lookR, lookUp, lookDown, player);
+                        player.dash = 1;
+                        player.timeDash = 0;
+                    }
+                }
+            }
+
+            // hit
+            if (IsKeyDown(KEY_X))
+            {
+                for (i = 0; i < MAXHIT; i++)
+                {
+                    Direccioniugador(lookL, lookR, lookUp, lookDown, player);
+                    if (/*Buff*/ 1) //** Meiora ******************************************************************************************************
+                    {
+                        if (player.AtkC > VATAQUE)
                         {
-                            dash = 1;
-                            player.timeDash = 0;
-                            Reposo(time, player.v0, player.y0, player.pos.y);
-                            player.fall = 0;
-                            player.jump = 0;
-                            player.jumpjump = 0;
+                            if (hit[i].status == 0)
+                            {
+                                hit[i].status = 1;
+                                player.AtkC = 0;
+                                InicializaProyectil(lookL, lookR, lookUp, lookDown, player, hit[i]);
+                                CalculaComponentesVelocidad(VPROYECTIL, 45 * hit[i].direccion, hit[i].v);
+                                // printf("Direccion = %d l = %d r = %d up = %d down = %d \n",hit[i].direccion,lookL,lookR,lookUp,lookDown);
+                                i = MAXHIT;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (player.AtkC > VATAQUEBUFF)
+                        {
+                            if (hit[i].status == 0)
+                            {
+                                hit[i].status = 1;
+                                player.AtkC = 0;
+                                InicializaProyectil(lookL, lookR, lookUp, lookDown, player, hit[i]);
+                                CalculaComponentesVelocidad(VPROYECTIL, 45 * hit[i].direccion, hit[i].v);
+                                // printf("Direccion = %d l = %d r = %d up = %d down = %d \n",hit[i].direccion,lookL,lookR,lookUp,lookDown);
+                                i = MAXHIT;
+                            }
                         }
                     }
                 }
@@ -934,244 +1056,285 @@ int main()
 
             if (currentFrame > 5)
                 currentFrame = 0;
-            framesPajaro.x = (float)currentFrame * (float)pajaro.width / 6;
-            framesPajaroizq.x = (float)currentFrame * (float)pajaroizq.width / 6;
-            framesReposo.x = (float)currentFrame * (float)reposo.width / 4;
-            framesReposoizq.x = (float)currentFrame * (float)reposoizq.width / 4;
+            framesTortuga.x = (float)currentFrame * (float)tortuga.width / 6;
+            framesTortugaizq.x = (float)currentFrame * (float)tortugaizq.width / 6;
         }
 
-        if (player.fall)
+        for (i = 0; i < MAXHIT; i++)
         {
-            framesSalto++;
-            if (framesSalto >= (60 / framesSpeed))
+            if (hit[i].status)
             {
-                framesSalto = 0;
-                currentSalto++;
-
-                if (currentSalto > 3)
-                    currentSalto = 0;
-                frameSalto.x = (float)currentSalto * (float)salto.width / 4;
-                frameSaltoder.x = (float)currentSalto * (float)saltoder.width / 4;
-            }
-            if (lookL)
-            {
-                DrawTextureRec(salto, frameSalto, Vector2{player.pos.x - 80, player.pos.y - 60}, WHITE);
-            }
-            if (lookR)
-            {
-                DrawTextureRec(saltoder, frameSalto, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
+                DrawRectangleRec(hit[i].pos, RED);
             }
         }
-        else
+        // suelo
+        DrawRectangle(0, SUELO, 1280, 70, DARKGREEN);
+
+        // vida
+        for (i = 1; i <= player.vida.num; i++)
         {
-            if (IsKeyDown(KEY_RIGHT))
-            {
-                framesPersonaje++;
-                framesSalto = 0;
-                if (framesPersonaje >= (60 / framesSpeed))
-                {
-                    framesPersonaje = 0;
-                    currentPersonaje++;
-
-                    if (currentPersonaje > 5)
-                    {
-                        currentPersonaje = 0;
-                        PlaySound(paso);
-                    }
-                    framesCaminar.x = (float)currentPersonaje * (float)caminar.width / 6;
-                }
-                DrawTextureRec(caminar, framesCaminar, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
-            }
-            else if (IsKeyDown(KEY_LEFT))
-            {
-                framesPersonaje++;
-                if (framesPersonaje >= (60 / framesSpeed))
-                {
-                    framesPersonaje = 0;
-                    currentPersonaje++;
-
-                    if (currentPersonaje > 5)
-                    {
-                        currentPersonaje = 0;
-                        PlaySound(paso);
-                    }
-                    framesCaminarizq.x = (float)currentPersonaje * (float)caminarizq.width / 6;
-                }
-                DrawTextureRec(caminarizq, framesCaminarizq, Vector2{player.pos.x - 80, player.pos.y - 60}, WHITE);
-            }
-            else
-            {
-                framesPersonaje = 0;
-                if (lookL)
-                {
-                    DrawTextureRec(reposoizq, framesReposoizq, Vector2{player.pos.x - 82, player.pos.y - 60}, WHITE);
-                }
-                if (lookR)
-                {
-                    DrawTextureRec(reposo, framesReposo, Vector2{player.pos.x - 20, player.pos.y - 60}, WHITE);
-                }
-            }
+            DrawRectangleRec(player.vida.pos, RED);
+            player.vida.pos.x += 25 + player.vida.pos.width;
         }
-
-        // plataformas
-        for (j = 0; j < platc; j++)
-        {
-            DrawTexture(plataforma, plat[j].pos.x, plat[j].pos.y, WHITE);
-        }
-
+        player.vida.pos.x = 25;
         // enemigos
-
-        for (j = 0; j < MAXAVE; j++)
+        for (i = 0; i < MAXSHARK; i++)
         {
-
-            if (ave[j].status)
+            if (shark[i].status)
             {
-                if (ave[j].left)
+                DrawRectangleRec(shark[i].pos, GRAY);
+            }
+        }
+        for (i = 0; i < MAXTORTUGA; i++)
+        {
+            if (tort[i].status)
+            {
+                if (tort[j].right)
                 {
-                    DrawTextureRec(pajaro, framesPajaro, Vector2{ave[j].pos.x, ave[j].pos.y - 50}, WHITE);
+                    printf("%d", tort[j].left);
+                    DrawTextureRec(tortugaizq, framesTortugaizq, Vector2{tort[i].pos.x, tort[i].pos.y}, WHITE);
                 }
-
-                if (ave[j].right)
+                else
                 {
-                    DrawTextureRec(pajaroizq, framesPajaro, Vector2{ave[j].pos.x, ave[j].pos.y - 50}, WHITE);
+                    printf("%d", tort[j].left);
+                    if (tort[j].left)
+                        DrawTextureRec(tortuga, framesTortuga, Vector2{tort[i].pos.x, tort[i].pos.y}, WHITE);
                 }
             }
         }
-        for (j = 0; j < MAXEGG; j++)
+        for (i = 0; i < MAXANGUILA; i++)
         {
-            if (egg[j].status)
+            if (ang[i].status)
             {
-                DrawTextureRec(huevo, framesHuevo, Vector2{egg[j].pos.x, egg[j].pos.y}, WHITE);
-            }
-        }
-        for (j = 0; j < MAXCAR; j++)
-        {
-            if (car[j].status)
-            {
-                DrawTextureRec(carro, framesCarro, Vector2{car[j].pos.x, car[j].pos.y}, WHITE);
+                if (ang[i].hit.status)
+                {
+                    DrawRectangleRec(ang[i].hit.pos, YELLOW);
+                }
+                DrawRectangleRec(ang[i].pos, DARKGRAY);
             }
         }
         // piezas
-        for (j = 0; j < 3; j++)
+        for (i = 0; i < 3; i++)
         {
-            if (pieza[j].status)
+            if (pieza[i].status)
             {
-                DrawTextureRec(piezas[j], framePiezas[j], Vector2{pieza[j].pos.x, pieza[j].pos.y}, WHITE);
+                DrawRectangleRec(pieza[i].pos, ORANGE);
             }
         }
-        if (hit)
+        // plataformas
+        for (i = 0; i < MAXPLAT; i++)
         {
-            if (lookR)
-            {
-                if (lookDown || lookUp)
-                {
-                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y + 7}, WHITE);
-                }
-                else
-                {
-                    DrawTextureRec(escudo, frameEscudo, {hithit.x + 25, hithit.y + 7}, WHITE);
-                }
-            }
-            if (lookL)
-            {
-                if (lookUp)
-                {
-                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y - 7}, WHITE);
-                }
-                else if (lookDown)
-                {
-                    DrawTextureRec(escudoh, frameEscudoh, {hithit.x - 15, hithit.y  + 7}, WHITE);
-                }
-                else
-                {
-                    DrawTextureRec(escudo, frameEscudo, {hithit.x - 15, hithit.y + 7}, WHITE);
-                }
-            }
+            DrawRectangleRec(plat[i], DARKGREEN);
         }
-        PlayMusicStream(nivel2);
-        UpdateMusicStream(nivel2);
-
         EndMode2D();
         EndDrawing();
     }
 
-    UnloadSound(dolor);
-    UnloadTexture(back);
-    UnloadTexture(front);
-    UnloadTexture(middle);
-    UnloadTexture(ground);
-    UnloadTexture(carro);
-    UnloadTexture(plataforma);
-    UnloadTexture(saltoder);
-    UnloadTexture(salto);
-    UnloadTexture(pajaroizq);
-    UnloadTexture(caminar);
-    UnloadTexture(caminarizq);
-    UnloadTexture(reposoizq);
-    UnloadTexture(huevo);
-    UnloadTexture(pajaro);
-    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
 
-float velocidad(float v0, float time)
+void Direccioniugador(int &L, int &R, int &Up, int &Down, Tplayer player)
 {
-    return (v0 + 2 * G * time);
-}
-
-int ColisionPlat(Tplayer player, Tplat plat)
-{
-    if (player.pos.x <= plat.pos.x + plat.pos.width) // Si esta tocando el lado derecho de la plataforma n
+    if (IsKeyDown(KEY_RIGHT))
     {
-        if (plat.pos.x <= player.pos.x + ANCHOP) // si esta tocando el lado izquierdo de la platforma n
+        if (IsKeyDown(KEY_UP))
         {
-            if (player.pos.y + player.pos.height <= (plat.pos.y + 30))
+            R = 1;
+            Up = 1;
+            Down = 0;
+            L = 0;
+        }
+        else
+        {
+            if (IsKeyDown(KEY_DOWN))
             {
-                if (player.pos.y + player.pos.height >= plat.pos.y)
+                R = 1;
+                Up = 0;
+                Down = 1;
+                L = 0;
+            }
+            else
+            {
+                R = 1;
+                Up = 0;
+                Down = 0;
+                L = 0;
+            }
+        }
+    }
+    else
+    {
+        if (IsKeyDown(KEY_LEFT))
+        {
+            if (IsKeyDown(KEY_UP))
+            {
+                R = 0;
+                Up = 1;
+                Down = 0;
+                L = 1;
+            }
+            else
+            {
+                if (IsKeyDown(KEY_DOWN))
                 {
-                    return 1;
+                    R = 0;
+                    Up = 0;
+                    Down = 1;
+                    L = 1;
+                }
+                else
+                {
+                    R = 0;
+                    Up = 0;
+                    Down = 0;
+                    L = 1;
+                }
+            }
+        }
+        else
+        {
+            if (IsKeyDown(KEY_UP))
+            {
+                R = 0;
+                Up = 1;
+                Down = 0;
+                L = 0;
+            }
+            else
+            {
+                if (IsKeyDown(KEY_DOWN))
+                {
+                    R = 0;
+                    Up = 0;
+                    Down = 1;
+                    L = 0;
+                }
+                else
+                {
+                    if (player.x0 <= player.pos.x)
+                    {
+                        R = 1;
+                        Up = 0;
+                        Down = 0;
+                        L = 0;
+                    }
+                    else
+                    {
+                        R = 0;
+                        Up = 0;
+                        Down = 0;
+                        L = 1;
+                    }
                 }
             }
         }
     }
-    return 0;
 }
 
-int Reposo(float &time, float &v0, int &y0, int y)
+void InicializaProyectil(int L, int R, int Up, int Down, Tplayer player, Thit &hit)
 {
-    time = 0;
-    v0 = 0;
-    y0 = y;
-    return 0;
-}
-
-int Salto(float &time, float &v0, int &y0, int y)
-{
-    time = 0;
-    y0 = y;
-    v0 = VS;
-    return 0;
-}
-
-int Posicion(int y0, float v0, float time, int g)
-{
-    return (y0 + v0 * time + (g ? GD : G) * time * time);
-}
-
-void CalculaPosEnemigo(Tave &mob)
-{
-    if (mob.right)
+    hit.pos.y = player.pos.y + player.pos.height / 4;
+    hit.pos.x = player.pos.x + player.pos.width / 2;
+    if (R)
     {
-        mob.pos.x -= 6;
+        if (Up)
+        {
+            hit.direccion = 1;
+        }
+        else
+        {
+            if (Down)
+            {
+                hit.direccion = 7;
+            }
+            else
+            {
+                hit.direccion = 0;
+            }
+        }
     }
     else
     {
-        if (mob.left)
+        if (L)
         {
-            mob.pos.x += 6;
+            if (Up)
+            {
+                hit.direccion = 3;
+            }
+            else
+            {
+                if (Down)
+                {
+                    hit.direccion = 5;
+                }
+                else
+                {
+                    hit.direccion = 4;
+                }
+            }
+        }
+        else
+        {
+            if (Up)
+            {
+                hit.direccion = 2;
+            }
+            else
+            {
+                if (Down)
+                {
+                    hit.direccion = 6;
+                }
+            }
         }
     }
+}
+
+void CalculaComponentesVelocidad(float velocidad, float grados, Tvel &v)
+{
+    if (grados >= 360)
+    {
+        grados -= 360;
+    }
+
+    v.vy = velocidad * sin(Radianes(grados));
+    v.vx = sqrt((pow(velocidad, 2) - pow(v.vy, 2)));
+    if (grados <= 90)
+    {
+        v.vy = -v.vy;
+    }
+    else
+    {
+        if (grados <= 180)
+        {
+            v.vx = -v.vx;
+            v.vy = -v.vy;
+        }
+        else
+        {
+            if (grados <= 270)
+            {
+                v.vx = -v.vx;
+                v.vy = -v.vy;
+            }
+            else
+            {
+                v.vy = -v.vy;
+            }
+        }
+    }
+}
+
+float Radianes(float grados)
+{
+    return (grados * M_PI / 180);
+}
+
+void PosicionObieto(float vx, float vy, Trec &pos)
+{
+    pos.x += vx;
+    pos.y += vy;
 }
 
 int CheckPlayerColision(Trec player, Trec mob)
@@ -1191,36 +1354,16 @@ int CheckPlayerColision(Trec player, Trec mob)
     }
     return 0;
 }
-/*
-int CheckPiezaColision(Trec player,Trec mob) //duplicado para probar sin daño
-{
 
-    if(player.x<(mob.x+mob.width))
-    {
-        if((player.x+player.width)>mob.x)
-        {
-            if(player.y<(mob.y+mob.height))
-            {
-                if((player.y+player.height)>mob.y)
-                {
-                    return 1;
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-*/
 int CheckMobColision(Trec mob, Thit hit)
 {
-    if (mob.x < (hit.x + hit.width))
+    if (mob.x < (hit.pos.x + hit.pos.width))
     {
-        if ((mob.x + mob.width) > hit.x)
+        if ((mob.x + mob.width) > hit.pos.x)
         {
-            if (mob.y < (hit.y + hit.height))
+            if (mob.y < (hit.pos.y + hit.pos.height))
             {
-                if ((mob.y + mob.height) > hit.y)
+                if ((mob.y + mob.height) > hit.pos.y)
                 {
                     return 1;
                 }
@@ -1230,27 +1373,146 @@ int CheckMobColision(Trec mob, Thit hit)
     return 0;
 }
 
-void DropEgg(Tave mob, Tegg &egg)
+void LimpiaEnemigosLvl1(Tshark shark[], Ttortu tort[], Tangui ang[])
 {
-    if (!egg.status)
+    int i;
+    for (i = 0; i < MAXSHARK; i++)
     {
-        egg.time = 0;
-        egg.y0 = mob.pos.y;
-        egg.pos.y = mob.pos.y;
-        egg.pos.x = mob.pos.x + 14;
-        egg.status = 1;
+        shark[i].status = 0;
+    }
+    for (i = 0; i < MAXTORTUGA; i++)
+    {
+        tort[i].status = 0;
+    }
+    for (i = 0; i < MAXANGUILA; i++)
+    {
+        ang[i].status = 0;
+        ang[i].hit.status = 0;
     }
 }
 
-void LimpiaEnemigos(Tave ave[], Tcar car[])
+float CalculaAnguloAnguila(Trec ang, Trec player)
+{
+    float difx = fabs(player.x + player.width / 2 - ang.x);
+    float dify = fabs(player.y + player.height / 2 - ang.y);
+    float a = atan2(difx, dify);
+    a = a * 180 / M_PI;
+    if (player.x > ang.x)
+    {
+        if (player.y > ang.y)
+        {
+            return (270 + a);
+        }
+        else
+        {
+            return (90 - a);
+        }
+    }
+    else
+    {
+        if (player.y > ang.y)
+        {
+            return (270 - a);
+        }
+        else
+        {
+            return (90 + a);
+        }
+    }
+    return 0;
+}
+
+void AngElectro(Tangui &ang)
+{
+    ang.hit.pos.y = ang.pos.y - ang.pos.height;
+    ang.hit.pos.x = ang.pos.x - 21;
+    ang.hit.status = 1;
+    ang.hit.time = 0;
+}
+
+void muerteLvl1(Tplayer &player, Tshark shark[], Ttortu tort[], Tangui ang[], Tpart pieza[], Trec plat[])
 {
     int j;
-    for (j = 0; j < MAXAVE; j++)
+    player.pos.x = 400;   // Posicion incial
+    player.pos.y = SUELO; //""
+    player.timeDash = 70;
+    player.vida.num = MAXVIDA;
+    LimpiaEnemigosLvl1(shark, tort, ang);
+    for (j = 0; j < 3; j++)
     {
-        ave[j].status = 0;
+        pieza[j].status = 1;
+        pieza[j].listo = 0;
+        pieza[j].pos.x = plat[j].x + plat[j].width / 2 - pieza[j].pos.width / 2;
+        pieza[j].pos.y = -300;
     }
-    for (j = 0; j < MAXCAR; j++)
+}
+
+void cinemaPuzleNivel1(void)
+{
+    int i, j;
+    int random;
+    Ttab tabla[RENGLONES1][COLUMNAS1];
+    //+ - * /
+    char operadores[4][2] = {"+", "-", "*", "/"};
+
+    for (i = 0; i < RENGLONES1; i++)
     {
-        car[j].status = 0;
+        tabla[i][COLUMNAS1].opDown[0] = '=';
+        tabla[i][COLUMNAS1].opDown[1] = '\0';
+    }
+    for (i = 0; i < COLUMNAS1; i++)
+    {
+        tabla[RENGLONES1][i].opDown[0] = '=';
+        tabla[RENGLONES1][i].opDown[1] = '\0';
+    }
+
+    for (i = 0; i < RENGLONES1; i++)
+    {
+        for (j = 0; j < COLUMNAS1; j++)
+        {
+            if (i == RENGLONES1 - 1)
+            {
+            }
+            if (j = COLUMNAS1 - 1)
+            {
+            }
+            random = rand() % 10;
+            if (random % 2 == 0)
+            {
+                if (j < COLUMNAS1 - 1)
+                {
+
+                    tabla[i][j].status = 1;
+                    tabla[i][j].num = rand() % 20;
+                    if (i < RENGLONES1 - 1)
+                    {
+                        if (j < COLUMNAS1 - 1)
+                        {
+                            strcpy(tabla[i][j].opDown, operadores[rand() % 4]);
+                            strcpy(tabla[i][j].opRight, operadores[rand() % 4]);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tabla[i][j].status = 0;
+                tabla[i][j].num = rand() % 20;
+                if (i < RENGLONES1 - 1)
+                {
+                    if (j < COLUMNAS1 - 1)
+                    {
+                        strcpy(tabla[i][j].opDown, operadores[rand() % 4]);
+                        strcpy(tabla[i][j].opRight, operadores[rand() % 4]);
+                    }
+                }
+            }
+        }
+    }
+    ClearBackground(WHITE);
+    while (1)
+    {
+
+        printf("\nGanaste\n");
     }
 }
